@@ -1,21 +1,355 @@
-<!DOCTYPE HTML>
-<html lang="ko">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>PIGNOSE Calander</title>
-	<link rel="stylesheet" href="src/css/pignose.calender.css" />
-	<script type="text/javascript" src="src/vender/jquery-3.1.1.min.js"></script>
-	<script type="text/javascript" src="src/vender/moment.min.js"></script>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no" />
+	<meta property="og:url" content="http://www.pigno.se/barn/PIGNOSE-Calender">
+	<meta property="og:type" content="product" />
+	<meta property="og:title" content="PIGNOSE Calender" />
+	<meta property="og:description" content="HyperModel helps you make related model design with jQuery." />
+	<meta property="og:image" content="http://www.pigno.se/barn/PIGNOSE-HyperModel/demo/img/cover@250.png" />
+	<meta property="og:site_name" content="PIGNOSE" />
+	<title>JQuery HyperModel</title>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="demo/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="demo/css/prism.css" />
+	<link rel="stylesheet" type="text/css" href="demo/css/calender-style.css" />
+	<link rel="stylesheet" type="text/css" href="src/css/pignose.calender.css" />
+	<style type="text/css">
+		@import url(https://fonts.googleapis.com/css?family=Raleway);
+		@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+		html, body {
+			position: relative;
+			height: 100%;
+		}
+
+		#wrapper {
+			padding-bottom: 40px;
+		}
+
+		.center {
+			text-align: center;
+		}
+
+		.header {
+			max-width: 1200px;
+			width: 80%;
+			margin: 0 auto;
+			padding-top: 40px;
+			padding-bottom: 40px;
+			margin-bottom: 40px;
+			text-align: center;
+		}
+
+		.header h1 {
+			margin-bottom: 20px;
+			font-size: 24px;
+			font-weight: 400;
+			font-family: 'Raleway', 'helvetica', 'sans-serif';
+			color: #333333;
+		}
+
+		.article {
+			max-width: 1200px;
+			width: 80%;
+			margin: 0 auto;
+			margin-top: 40px;
+			padding-top: 40px;
+			border-top: 1px solid #efefef;
+			font-family: 'Raleway', 'helvetica', 'sans-serif';
+			text-align: center;
+		}
+
+		.article h3 {
+			margin-bottom: 40px;
+		}
+
+		.article table {
+			font-size: 115%;
+			text-align: left;
+		}
+
+		.article pre {
+			font-size: 115%;
+		}
+
+        .article ul {
+            display: inline-block;
+            font-size: 115%;
+            font-weight: 600;
+            margin: 20px 0;
+        }
+
+        .article ul li {
+            margin: 10px 0;
+        }
+
+		.box {
+			display: none;
+			max-width: 360px;
+			margin: 0 auto;
+			font-weight: 600;
+			margin-top: 2em;
+			padding: 1.6em;
+			background-color: #fafafa;
+			border: 1px solid #d8d8d8;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+			-o-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+			-moz-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+			-webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+		}
+	</style>
+	<script type="text/javascript" src="demo/js/jquery.latest.min.js"></script>
+	<script type="text/javascript" src="demo/js/jquery-ui.latest.js"></script>
+	<script type="text/javascript" src="demo/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="demo/js/prism.min.js"></script>
+	<script type="text/javascript" src="vender/moment.min.js"></script>
 	<script type="text/javascript" src="src/js/pignose.calender.js"></script>
 	<script type="text/javascript">
 	//<![CDATA[
 	$(function() {
-		$('.calender').pignoseCalender();
+		$('.calender').pignoseCalender({
+			select: function(date, obj) {
+				$('.box').show().text('You selected ' + (date === null? 'null':date.format('YYYY-MM-DD')) + '.');
+			}
+		});
 	});
 	//]]>
 	</script>
 </head>
 <body>
-	<div class="calender"></div>
+	<div id="wrapper">
+		<div class="header">
+			<img src="demo/img/pignose-logo.jpg" alt="" />
+			<h1>PIGNOSE Calender</h1>
+			<a href="https://github.com/KennethanCeyer/HyperModel" target="_blank" class="btn btn-primary">View project on Github</a> <a href="https://github.com/KennethanCeyer/HyperModel/archive/master.zip" target="_blank" class="btn btn-info">Download zip</a>
+		</div>
+		<div class="article">
+			<h3>Calender</h3>
+            <h4>PIGNOSE Calender is beautiful and eidetic jQuery plguin.</h4>
+            <div class="calender"></div>
+			<div class="box">
+				test
+			</div>
+		</div>
+        <div class="article">
+			<h3>Dependency</h3>
+            <h4>This plugin has dependencies some javascript library.</h4>
+            <p>Check belows and import it.</p>
+            <ul>
+                <li>jQuery core library</li>
+                <li>Moment library</li>
+            </ul>
+        </div>
+		<div id="content" class="article">
+			<h3>Options</h3>
+			<table class="table table-striped table-hover">
+                <colgroup>
+                    <col style="width: 120px;">
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                </colgroup>
+				<thead>
+					<tr>
+						<th colspan="2">name</th>
+						<th>type</th>
+						<th>description</th>
+                        <th>default</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>time</td>
+                        <td>animate</td>
+						<td class="center"><span class="label label-primary">number</span></td>
+						<td>The line animation time when either window resize event be fired or user playing with drag&amp;drop.</td>
+						<td>300</td>
+					</tr>
+					<tr>
+						<td>time</td>
+                        <td>frame</td>
+						<td class="center"><span class="label label-primary">number</span></td>
+						<td>The dash line's dash moving total seconds.</td>
+						<td>3000</td>
+					</tr>
+					<tr>
+						<td>time</td>
+                        <td>highlight</td>
+						<td class="center"><span class="label label-primary">number</span></td>
+						<td>Highlight holding time. The line will be disappeared when time be ended.</td>
+						<td>3000</td>
+					</tr>
+					<tr>
+						<td colspan="2">grad</td>
+						<td class="center"><span class="label label-primary">number</span></td>
+						<td>The gradient of line 0.1(curve), 10(straight)</td>
+						<td>1.75</td>
+					</tr>
+					<tr>
+						<td colspan="2">strokeSpeed</td>
+						<td class="center"><span class="label label-primary">number</span></td>
+						<td>How many dash line moves one second.</td>
+						<td>500</td>
+					</tr>
+					<tr>
+						<td colspan="2">strokeColor</td>
+						<td class="center"><span class="label label-primary">string</span></td>
+						<td>Default line color (rgba, rgb, hash color).</td>
+						<td>rgba(192, 192, 192, .6)</td>
+					</tr>
+					<tr>
+						<td colspan="2">strokeDashColor</td>
+						<td class="center"><span class="label label-primary">string</span></td>
+						<td>Dash line color (rgba, rgb, hash color).</td>
+						<td>rgba(192, 192, 192, .95)</td>
+					</tr>
+					<tr>
+						<td colspan="2">strokeHighlightColor</td>
+						<td class="center"><span class="label label-primary">string</span></td>
+						<td>Highlighted line color.</td>
+						<td>rgba(200, 206, 255, .6)</td>
+					</tr>
+					<tr>
+						<td colspan="2">strokeHighlightDashColor</td>
+						<td class="center"><span class="label label-primary">string</span></td>
+						<td>Highlighted dash line color.</td>
+						<td>rgba(178, 192, 255, 1)</td>
+					</tr>
+					<tr>
+						<td colspan="2">strokeWidth</td>
+						<td class="center"><span class="label label-primary">number</span></td>
+						<td>Default line thickness (px).</td>
+						<td>1</td>
+					</tr>
+					<tr>
+						<td colspan="2">strokeDashWidth</td>
+						<td class="center"><span class="label label-primary">number</span></td>
+						<td>Dash line thickness (px).</td>
+						<td>1</td>
+					</tr>
+					<tr>
+						<td colspan="2">strokeHighlightWidth</td>
+						<td class="center"><span class="label label-primary">number</span></td>
+						<td>Highlighted line thickness (px).</td>
+						<td>1</td>
+					</tr>
+					<tr>
+						<td colspan="2">strokeDashWeight</td>
+						<td class="center"><span class="label label-primary">number</span></td>
+						<td>Each of dash dottes's length (px).</td>
+						<td>8</td>
+					</tr>
+                    <tr>
+						<td colspan="2">strokeDashMargin</td>
+						<td class="center"><span class="label label-primary">number</span></td>
+						<td>Gap about each of dash line's dottes (px).</td>
+						<td>6</td>
+					</tr>
+                    <tr>
+						<td colspan="2">update</td>
+						<td class="center"><span class="label label-primary">function</span></td>
+						<td>This <span class="label label-default">update</span> callback will be fired when you change the position of elements(like grid or property) with draging and drop.</td>
+						<td>null</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+        <div id="content" class="article">
+			<h3>Methods</h3>
+            <h4>You can use the method like <span class="label label-default">$element.hypermodel('Method Name', arguments);</span> format.</h4>
+			<table class="table table-striped table-hover">
+				<thead>
+					<tr>
+						<th>name</th>
+						<th>type</th>
+						<th>description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+                        <td>add</td>
+						<td class="center"><span class="label label-primary">function</span></td>
+						<td><span class="label label-default">$element</span> will be added, but not be connected yet.</td>
+					</tr>
+                    <tr>
+                        <td>connect($target)</td>
+						<td class="center"><span class="label label-primary">function</span></td>
+						<td><span class="label label-default">$element</span> will be connected with $target.</td>
+					</tr>
+                    <tr>
+                        <td>highlight($target)</td>
+						<td class="center"><span class="label label-primary">function</span></td>
+						<td>The line which be matched between <span class="label label-default">$element</span> and <span class="label label-default">$target</span> will be highlighted.</td>
+					</tr>
+                    <tr>
+                        <td>remove()</td>
+						<td class="center"><span class="label label-primary">function</span></td>
+						<td><span class="label label-default">$element</span> will be removed, And all of connections which belong in the $element also be removed.</td>
+					</tr>
+                    <tr>
+                        <td>repaint()</td>
+						<td class="center"><span class="label label-primary">function</span></td>
+						<td>Browser will repaint the lines at correct position.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div id="bower" class="article">
+			<h3>bower</h3>
+			<blockquote><p>If you use bower.</p></blockquote>
+			<pre><code class="language-bash">bower install hypermodel</code></pre>
+		</div>
+		<div id="npm" class="article">
+			<h3>npm</h3>
+			<blockquote><p>If you use npm.</p></blockquote>
+			<pre><code class="language-bash">npm install hypermodel</code></pre>
+		</div>
+		<div id="sample" class="article">
+			<h3>sample</h3>
+			<ul class="nav nav-tabs tab">
+				<li role="presentation" class="active"><a href="#html" data-toggle="tab" aria-controls="html">HTML</a></li>
+				<li role="presentation"><a href="#javascript" data-toggle="tab" aria-controls="javascript">Javascript</a></li>
+				<li role="presentation"><a href="#css" data-toggle="tab" aria-controls="css">CSS</a></li>
+			</ul>
+			<div class="tab-content">
+				<div role="tabpanel" class="tab-pane active" id="html">
+					<pre><code class="language-markup">&lt;div class=&quot;hypermodel-container&quot;&gt;&lt;/div&gt;</code></pre>
+				</div>
+				<div role="tabpanel" class="tab-pane" id="javascript">
+					<pre><code class="language-js">$(function() {
+    $('.hypermodel-container').hypermodel({
+        time: {
+            animate: 300,    // The line animation time when either window resize event be fired or user playing with drag&drop.
+            frame: 3000      // The dash line's dash moving total seconds.
+        },
+        grad: 1,             // The gradient of line 0.1(curve), 10(straight).
+        strokeSpeed: 500,    // How many dash line moves one second.
+        strokeColor: 'rgba(192, 192, 192, .5)',     // Default line color (rgba, rgb, hash color).
+        strokeDashColor: 'rgba(60, 180, 148, .65)', // Dash line color (rgba, rgb, hash color).
+        strokeWidth: 1,      // Default line thickness (px).
+        strokeDashWidth: 1,  // Dash line thickness (px).
+        strokeDashWeight: 8, // Each of dash dottes's length (px).
+        strokeDashMargin: 6  // Gap about each of dash line's dottes (px).
+    });
+});</code></pre>
+				</div>
+				<div role="tabpanel" class="tab-pane" id="css">
+					<pre><code class="language-css">.hypermodel-container {
+    background-color: #f8f8f8;
+    border: 1px solid #d8d8d8;
+    font-size: 115%;
+    overflow: hidden;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .25);
+}
+
+.hypermodel-container .hypermodel-area {
+    margin: 40px;
+}</code></pre>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
