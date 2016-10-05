@@ -157,6 +157,9 @@
 
 				for(var idx in obj.activeDates) {
 					var date = obj.activeDates[idx];
+					if(typeof date !== 'string') {
+						continue;
+					}
 					$target.find('.active-dates').append('<span class="label label-default">' + date + '</span>');
 				}
 			}
