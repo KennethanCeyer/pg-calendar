@@ -1,4 +1,4 @@
-# HyperModel
+# PIGNOSE Calender
 
 Beautiful and eidetic jQuery date picker plguin.
 
