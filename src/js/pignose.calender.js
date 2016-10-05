@@ -1,6 +1,6 @@
 /************************************************************************************************************
  *
- * @ Version 1.1.1
+ * @ Version 1.1.2
  * @ PIGNOSE Calender
  * @ Date Oct 05. 2016
  * @ Author PIGNOSE
@@ -220,7 +220,7 @@ var ComponentClass = Helper.GetClass(ComponentName);
 							}
 
 							$unitList = $unitList.add($unit);
-							$unit.bind('click', function(evnet) {
+							$unit.bind('click', function(event) {
 								event.preventDefault();
 								event.stopPropagation();
 								var $this = $(this);
