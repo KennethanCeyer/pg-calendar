@@ -1,239 +1,119 @@
-/************************************************************************************************************
- *
- * @ Version 1.0.0
- * @ PIGNOSE Calender
- * @ Date Oct 05. 2016
- * @ Author PIGNOSE
- * @ Licensed under MIT.
- *
- ***********************************************************************************************************/
+.pignose-calender {
+	max-width: 360px;
+	border: 1px solid #d8d8d8;
+	font-size: 12px;
+}
 
-(function($) {
-	$.fn.pignoseCalender = function(options) {
-		var pignoseParallaxSlider = {
-			init : function(options) {
-				var _this = this;
+.pignose-calender .pignose-calender-top {
+	height: 3.2em;
+	line-height: 3.2em;
+	border-bottom: 1px solid #d8d8d8;
+	position: relative;
+	overflow: hidden;
+}
 
-				this.settings = $.extend({
-					speed       : 1200,
-					interval    : 3000,
-					direction   : 'right',
-					easing      : 'easeInOutExpo',
-					diffTime    : 300,
-					controlAnim : true,
-					pagination  : true,
-					auto        : true,
-					isLocal     : true,
-					play        : null,
-					pause       : null,
-					next        : null,
-					prev        : null,
-					afterMoved  : null
-				}, options);
+.pignose-calender .pignose-calender-top .pignose-calender-top-date {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	line-height: 3.2em;
+	text-align: center;
+}
 
-				if(typeof $.easing         === 'undefined' &&
-				   typeof window['easing'] === 'undefined'
-				) {
-					this.settings.easing = '';
-				}
+.pignose-calender .pignose-calender-top .pignose-calender-top-nav {
+	display: block;
+	width: 7px;
+	height: 12px;
+	background: url('../image/icon_navs.png') no-repeat 0 0 scroll transparent;
+	position: relative;
+	text-indent: -1000px;
+	z-index: 5;
+	margin-top: 1.05em;
+	overflow: hidden;
+}
 
-				return this.each(function() {
-					var $view   = $(this);
-					var $visual = $(this).children('.slide-visual');
-					var $slide  = $visual.children('.slide-group');
-					var $script = $visual.find('.script-group').wrap('<div class="script-inner"></div>');
-					var $target = (_this.settings.isLocal === true)? $view:$(document);
-					var $pagination;
-					var t;
+.pignose-calender .pignose-calender-top .pignose-calender-top-nav.pignose-calender-top-prev {
+	float: left;
+	background-position: 0 0;
+	margin-left: 1.6em;
+}
 
-					$view.addClass('pignose-parallaxslider');
+.pignose-calender .pignose-calender-top .pignose-calender-top-nav.pignose-calender-top-next {
+	float: right;
+	background-position: -7px 0;
+	margin-right: 1.6em;
+}
 
-					if(typeof _this.settings.play !== 'undefined' &&
-					   _this.settings.play !== null
-					) {
-						$target.find(_this.settings.play).unbind('click.slideControlHandler').bind('click.slideControlHandler', function(event) {
-							if(t) {
-								try {
-									clearInterval(t);
-								}
-								catch (e) {}
-							}
-							t = setInterval(function() {pignoseParallaxSlider.move.apply(_this, new Array(_this.settings.direction))}, _this.settings.interval);
-							event.preventDefault();
-						});
-					}
+.pignose-calender .pignose-calender-header {
+	margin-top: 1.2em;
+	font-weight: 600;
+	overflow: hidden;
+}
 
-					if(typeof _this.settings.pause !== 'undefined' &&
-					   _this.settings.pause !== null
-					) {
-						$target.find(_this.settings.pause).unbind('click.slideControlHandler').bind('click.slideControlHandler', function(event) {
-							if(t) {
-								try {
-									clearInterval(t);
-								}
-								catch (e) {}
-							}
-							t = null;
-							event.preventDefault();
-						});
-					}
+.pignose-calender .pignose-calender-header {
+	padding: 0 1.2em;
+}
 
-					if(typeof _this.settings.prev !== 'undefined' &&
-					   _this.settings.play !== null
-					) {
-						$target.find(_this.settings.prev).unbind('click.slideControlHandler').bind('click.slideControlHandler', function(event) {
-							pignoseParallaxSlider.move.apply(_this, new Array(((_this.settings.direction == 'left')? 'right':'left'), 1, true));
-							event.preventDefault();
-						});
-					}
+.pignose-calender .pignose-calender-body {
+	padding: 1.2em;
+}
 
-					if(typeof _this.settings.next !== 'undefined' &&
-					   _this.settings.play !== null
-					) {
-						$target.find(_this.settings.next).unbind('click.slideControlHandler').bind('click.slideControlHandler', function(event) {
-							pignoseParallaxSlider.move.apply(_this, new Array(_this.settings.direction, 1, true));
-							event.preventDefault();
-						});
-					}
+.pignose-calender .pignose-calender-header .pignose-calender-week {
+	float: left;
+	width: 14.28%;
+	height: 2.8em;
+	text-align: center;
+	line-height: 2.8em;
+	box-sizing: border-box;
+	-o-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
 
-					$script.parent().after('<div class="script-tint"></div>');
+.pignose-calender .pignose-calender-header .pignose-calender-week:last-child {
+	width: 14.32%;
+}
 
-					$visual.append('<div class="slide_tint left">&nbsp;</div>')
-						   .append('<div class="slide_tint right">&nbsp;</div>');
+.pignose-calender .pignose-calender-body {
+}
 
-					_this.$slide  = $slide.data('type', 'slide');
-					_this.$script = $script.data('type', 'script');
-					_this.currIdx = 0;
+.pignose-calender .pignose-calender-body .pignose-calender-row {
+	overflow: hidden;
+}
 
-					if(_this.settings.pagination === true) {
-						$pagination = $('<div class="slide-pagination"></div>');
-						$pagination.appendTo($script.parent());
-						_this.$pagination = $pagination;
-					}
+.pignose-calender .pignose-calender-body .pignose-calender-row:last-child {
+}
 
-					$slide.add($script).each(function() {
-						var $li   = $(this).children('li');
-						var width = 0;
-						$li.clone().appendTo($(this)).addClass('slide-dummy');
-						$li.clone().prependTo($(this)).addClass('slide-dummy');
+.pignose-calender .pignose-calender-body .pignose-calender-row .pignose-calender-unit {
+	float: left;
+	display: block;
+	height: 2.8em;
+	width: 14.28%;
+	text-align: center;
+	line-height: 2.8em;
+	box-sizing: border-box;
+	-o-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
 
-						$li.each(function(idx) {
-							width += $li.width();
-							if($script.length > 0 &&
-							   _this.settings.pagination === true
-							) {
-								if($pagination.length > 0 && !$pagination.hasClass('completedPagination')) {
-									$page = $('<a href="#" class="btn-page">' + (idx + 1) + '번째 슬라이드 보기</a>');
-									if(idx == _this.currIdx) $page.addClass('on');
-									$page.bind('click.slideControlHandler', function(event) {
-										var offset    = ($(this).index() - _this.currIdx);
-										var direction = 'right';
-										if(offset < 0) {
-											direction = 'left';
-											offset *= -1;
-										}
-										pignoseParallaxSlider.move.apply(_this, new Array(direction, offset, true));
-										event.preventDefault();
-									});
-									$page.appendTo($pagination);
-								}
-							}
-						});
+.pignose-calender .pignose-calender-body .pignose-calender-row .pignose-calender-unit a {
+	display: inline-block;
+	width: 2.4em;
+	height: 2.4em;
+	border-radius: 50%;
+	background-color: #fafafa;
+	line-height: 2.4em;
+	text-align: center;
+	text-decoration: none;
+}
 
-						if($script.length > 0 &&
-						   _this.settings.pagination === true
-						) {
-							$pagination.addClass('completedPagination')
-						}
+.pignose-calender .pignose-calender-body .pignose-calender-row .pignose-calender-unit a:hover {
+	
+}
 
-						_this[$(this).data('type')] = {
-							offset     : width,
-							width      : width * 3,
-							widthOnce  : $li.outerWidth(true),
-							length     : $li.length
-						};
-
-						$(this).css({
-							display    : 'block',
-							width      : _this[$(this).data('type')].width + 'px',
-							marginLeft : -_this[$(this).data('type')].offset - ($li.outerWidth(true)) + 'px',
-							overflow   : 'hidden'
-						})
-						.children('li').css({
-							display    : 'block',
-							float      : 'left'
-						});
-					});
-
-					if(_this.settings.auto === true) {
-						t = setInterval(function() {pignoseParallaxSlider.move.apply(_this, new Array(_this.settings.direction))}, _this.settings.interval);
-					}
-				});
-			},
-			move : function(direction, index, custom) {
-				if(typeof this.$slide  === 'undefined') return false;
-				if(typeof this.$script === 'undefined') return false;
-				if(typeof index        === 'undefined' ||
-				          index        <=  0)           index = 1;
-				
-				var _this = this;
-				var time  = 0;
-
-				if((this.settings.controlAnim == true &&
-				   !this.$slide.is(':animated')) ||
-				   this.settings.controlAnim == false
-				) {
-					if(direction == 'right') {
-						_this.currIdx = (_this.currIdx + index) % _this.slide.length;
-						this.$slide.add(this.$script).each(function() {
-							var $this = $(this);
-							setTimeout(function() {
-								$this.stop(true, true).animate({marginLeft : -(_this[$this.data('type')].offset + _this[$this.data('type')].widthOnce * (1 + index)) + 'px'}, {
-									duration : _this.settings.speed,
-									easing   : _this.settings.easing,
-									complete : function() {
-										$(this).children('li').slice(0, index).appendTo($this);
-										$(this).css({marginLeft : -_this[$this.data('type')].offset - _this[$this.data('type')].widthOnce + 'px'});
-										if(typeof _this.settings.afterMoved === 'function') _this.settings.afterMoved();
-									}
-								});
-							}, time);
-							time += _this.settings.diffTime;
-						});
-					}
-					else if(direction == 'left') {
-						_this.currIdx = (_this.currIdx - index);
-						if(_this.currIdx < 0) _this.currIdx = _this.slide.length + _this.currIdx;
-						this.$slide.add(this.$script).each(function() {
-							var $this = $(this);
-							setTimeout(function() {
-								$this.stop(true, true).animate({marginLeft : -(_this[$this.data('type')].offset + _this[$this.data('type')].widthOnce * (1 - index)) + 'px'}, {
-									duration : _this.settings.speed,
-									easing   : _this.settings.easing,
-									complete : function() {
-										$(this).children('li').slice(-index).prependTo($this);
-										$(this).css({marginLeft : -_this[$this.data('type')].offset - _this[$this.data('type')].widthOnce + 'px'});
-										if(typeof _this.settings.afterMoved === 'function') _this.settings.afterMoved();
-									}
-								});
-							}, time);
-							time += _this.settings.diffTime;
-						});
-					}
-
-					if(_this.settings.pagination === true) {
-						this.$pagination.children('.btn-page').eq(_this.currIdx).addClass('on').siblings('.on').removeClass('on');
-					}
-				}
-			}
-		};
-
-		if(pignoseParallaxSlider[options]) {
-			return pignoseParallaxSlider[options].apply(this, Array.prototype.slice.call(arguments, 1));
-		} else if (typeof options === 'object' || !options) {
-			return pignoseParallaxSlider.init.apply(this, arguments);
-		} else {
-			console.log('Occurred error of an null method call');
-		}
-	};
-})(jQuery)
+.pignose-calender .pignose-calender-body .pignose-calender-row .pignose-calender-unit:last-child {
+	width: 14.32%;
+}

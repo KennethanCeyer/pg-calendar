@@ -81,7 +81,7 @@ Helper.GetSubClass = function(name) {
 
 var ComponentClass = Helper.GetClass(ComponentName);
 (function($) {
-	var _clenderTopClass = Helper.GetSubClass('Top');
+	var _calenderTopClass = Helper.GetSubClass('Top');
 	var _calenderHeaderClass = Helper.GetSubClass('Header');
 	var _calenderBodyClass = Helper.GetSubClass('Body');
 
@@ -105,48 +105,84 @@ var ComponentClass = Helper.GetClass(ComponentName);
 												</div>\
 												<div class="{2}"></div>\
 												<div class="{3}"></div>\
-											  </div>', ComponentClass, _clenderTopClass, _calenderHeaderClass, _calenderBodyClass))
+											  </div>', ComponentClass, _calenderTopClass, _calenderHeaderClass, _calenderBodyClass))
 				};
+
+				for(var idx in _this.settings.weeks) {
+					var week = _this.settings.weeks[idx];
+					var $unit = $(Helper.Format('<div class="{0}">{1}</div>', Helper.GetSubClass('Week'), week));
+					$unit.appendTo(_this.global.calender.find('.' + _calenderHeaderClass));
+				}
 
 				return this.each(function() {
 					var $this = $(this);
 					var dateManager = new DateManager(_this.settings.date);
 
-					_this.global.calender.appendTo($this);
+					var rendering = function() {
+						_this.global.calender.appendTo($this.empty());
+						_this.global.calender.find('.' + _calenderTopClass + '-date').text(Helper.Format('{0}/{1}', dateManager.year, dateManager.month));
 
-					for(var idx in _this.settings.weeks) {
-						var week = _this.settings.weeks[idx];
-						var $unit = $(Helper.Format('<div class="{0}">{1}</div>', Helper.GetSubClass('Week'), week));
-						$unit.appendTo(_this.global.calender.find('.' + _calenderHeaderClass));
-					}
+						var $calenderBody = _this.global.calender.find('.' + _calenderBodyClass).empty();
 
-					var firstDate = DateManager.Convert(dateManager.year, dateManager.month, dateManager.firstDay);
-					var firstWeekday = firstDate.weekday();
+						var firstDate = DateManager.Convert(dateManager.year, dateManager.month, dateManager.firstDay);
+						var firstWeekday = firstDate.weekday();
+						var $unitList = $();
+						console.log(firstDate, firstWeekday);
 
-					for(var i=0; i<=firstWeekday; i++) {
-						var $unit = $(Helper.Format('<div class="{0}"></div>', Helper.GetSubClass('Unit')));
-						$unit.appendTo(_this.global.calender.find('.' + _calenderBodyClass));
-					}
+						for(var i=0; i<firstWeekday; i++) {
+							var $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('Unit'), _this.settings.weeks[i].toLowerCase()));
+							$unitList = $unitList.add($unit);
+						}
 
-					for(var i=dateManager.firstDay; i<=dateManager.lastDay; i++) {
-						var iDate = DateManager.Convert(dateManager.year, dateManager.month, i);
-						var $unit = $(Helper.Format('<div class="{0} {0}-date" data-date="{1}">{2}</div>', Helper.GetSubClass('Unit'), iDate.format('YYYY-MM-DD'), i));
-						$unit.appendTo(_this.global.calender.find('.' + _calenderBodyClass));
-						$unit.bind('click', function(evnet) {
+						for(var i=dateManager.firstDay; i<=dateManager.lastDay; i++) {
+							var iDate = DateManager.Convert(dateManager.year, dateManager.month, i);
+							var $unit = $(Helper.Format('<div class="{0} {0}-date {0}-{3}" data-date="{1}"><a href="#">{2}</span></div>', Helper.GetSubClass('Unit'), iDate.format('YYYY-MM-DD'), i, _this.settings.weeks[iDate.weekday()].toLowerCase()));
+							$unitList = $unitList.add($unit);
+							$unit.bind('click', function(evnet) {
+								event.preventDefault();
+								event.stopPropagation();
+								var $this = $(this);
+								console.log($this.data('date'));
+							});
+						}
+
+						var lastDate = DateManager.Convert(dateManager.year, dateManager.month, dateManager.lastDay);
+						var lastWeekday = lastDate.weekday();
+
+						for(var i=lastWeekday+1;i<=6;i++) {
+							var $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('Unit'), _this.settings.weeks[i].toLowerCase()));
+							$unitList = $unitList.add($unit);
+						}
+
+						var $row = null;
+						$unitList.each(function(i, e) {
+							if(i % 7 == 0 || i + 1 >= $unitList.length) {
+								if($row != null) {
+									$row.appendTo($calenderBody);
+								}
+
+								if(i + 1 < $unitList.length) {
+									$row = $(Helper.Format('<div class="{0}"></div>', Helper.GetSubClass('Row')));
+								}
+							}
+							$row.append($(this));
+						});
+
+						_this.global.calender.find('.' + _calenderTopClass + '-nav').bind('click', function(event) {
 							event.preventDefault();
 							event.stopPropagation();
 							var $this = $(this);
-							console.log($this.data('date'));
+							if($this.hasClass(_calenderTopClass + '-prev')) {
+								dateManager = new DateManager(dateManager.date.add(-1, 'months'));
+								rendering();
+							}
+							else if($this.hasClass(_calenderTopClass + '-next')) {
+								dateManager = new DateManager(dateManager.date.add(1, 'months'));
+								rendering();
+							}
 						});
-					}
-
-					var lastDate = DateManager.Convert(dateManager.year, dateManager.month, dateManager.lastDay);
-					var lastWeekday = lastDate.weekday();
-
-					for(var i=lastWeekday+1;i<=6;i++) {
-						var $unit = $(Helper.Format('<div class="{0}"></div>', Helper.GetSubClass('Unit')));
-						$unit.appendTo(_this.global.calender.find('.' + _calenderBodyClass));
-					}
+					};
+					rendering();
 				});
 			}
 		};
