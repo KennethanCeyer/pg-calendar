@@ -18,6 +18,17 @@ The datepicker supports responsive and mobile environment.
 
 ----
 
+### Overview
+
+See our supported features.
+
+- Responsive and mobile friendly display.
+- Multiple range datepicker.
+- The toogle controll each of date buttons.
+- Multiple languages are supported, (en, ko, fr, ch, de, jp).
+
+----
+
 ### Question
 
 If you found something problem of this plugin, or you have some question.
