@@ -9,7 +9,7 @@
 	<meta property="og:description" content="HyperModel helps you make related model design with jQuery." />
 	<meta property="og:image" content="http://www.pigno.se/barn/PIGNOSE-HyperModel/demo/img/cover@250.png" />
 	<meta property="og:site_name" content="PIGNOSE" />
-	<title>JQuery HyperModel</title>
+	<title>PIGNOSE Calender</title>
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="demo/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="demo/css/prism.css" />
@@ -64,6 +64,12 @@
 			margin-bottom: 40px;
 		}
 
+		.article h5 {
+			margin-top: 60px;
+			font-size: 130%;
+			font-weight: 600;
+		}
+
 		.article table {
 			font-size: 115%;
 			text-align: left;
@@ -97,6 +103,18 @@
 			-o-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
 			-moz-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
 			-webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+			overflow: hidden;
+		}
+
+		.box .active-dates .label {
+			margin: 0 .4em;
+			white-space: normal;
+			word-break: break-word;
+			line-height: 2.4;
+		}
+
+		.box.box-languages .label {
+			font-size: 100%;
 		}
 	</style>
 	<script type="text/javascript" src="demo/js/jquery.latest.min.js"></script>
@@ -110,8 +128,46 @@
 	$(function() {
 		$('.calender').pignoseCalender({
 			select: function(date, obj) {
-				$('.box').show().text('You selected ' + (date === null? 'null':date.format('YYYY-MM-DD')) + '.');
+				obj.calender.parent().next().show().text('You selected ' + 
+				(date[0] === null? 'null':date[0].format('YYYY-MM-DD')) +
+				'.');
 			}
+		});
+
+		$('.multi-select-calender').pignoseCalender({
+			multiple: true,
+			select: function(date, obj) {
+				obj.calender.parent().next().show().text('You selected ' + 
+					(date[0] === null? 'null':date[0].format('YYYY-MM-DD')) +
+					'~' +
+					(date[1] === null? 'null':date[1].format('YYYY-MM-DD')) +
+					'.');
+			}
+		});
+
+		$('.toggle-calender').pignoseCalender({
+			toggle: true,
+			select: function(date, obj) {
+				var $target = obj.calender.parent().next().show().html('You selected ' + 
+				(date[0] === null? 'null':date[0].format('YYYY-MM-DD')) + 
+				'.' +
+				'<br /><br />' +
+				'<strong>Active dates</strong><br /><br />' +
+				'<div class="active-dates"></div>');
+
+				for(var idx in obj.activeDates) {
+					var date = obj.activeDates[idx];
+					$target.find('.active-dates').append('<span class="label label-default">' + date + '</span>');
+				}
+			}
+		});
+		
+		$('.language-calender').each(function() {
+			var $this = $(this);
+			var lang = $this.data('lang');
+			$this.pignoseCalender({
+				lang: lang
+			});
 		});
 	});
 	//]]>
@@ -122,14 +178,47 @@
 		<div class="header">
 			<img src="demo/img/pignose-logo.jpg" alt="" />
 			<h1>PIGNOSE Calender</h1>
-			<a href="https://github.com/KennethanCeyer/HyperModel" target="_blank" class="btn btn-primary">View project on Github</a> <a href="https://github.com/KennethanCeyer/HyperModel/archive/master.zip" target="_blank" class="btn btn-info">Download zip</a>
+			<a href="https://github.com/KennethanCeyer/PIGNOSE-Calender" target="_blank" class="btn btn-primary">View project on Github</a> <a href="https://github.com/KennethanCeyer/PIGNOSE-Calender/archive/master.zip" target="_blank" class="btn btn-info">Download zip</a>
 		</div>
 		<div class="article">
 			<h3>Calender</h3>
-            <h4>PIGNOSE Calender is beautiful and eidetic jQuery plguin.</h4>
+            <h4>PIGNOSE Calender is beautiful and eidetic jQuery date picker plguin.</h4>
             <div class="calender"></div>
-			<div class="box">
-				test
+			<div class="box"></div>
+		</div>
+		<div class="article">
+			<h3>Multi range Calender</h3>
+            <h4>PIGNOSE Calender supports multiple range picker.</h4>
+            <div class="multi-select-calender"></div>
+			<div class="box"></div>
+		</div>
+		<div class="article">
+			<h3>Toogle Calender</h3>
+            <h4>You can toggle date and get those dates as array.</h4>
+            <div class="toggle-calender"></div>
+			<div class="box"></div>
+		</div>
+		<div class="article">
+			<h3>I18N Support</h3>
+            <h4>PIGNOSE Calender supports various languages.</h4>
+
+			<h5>Korean</h5>
+            <div class="language-calender language-ko-calender" data-lang="ko"></div>
+
+			<h5>Germany</h5>
+            <div class="language-calender language-de-calender" data-lang="de"></div>
+
+			<h5>Chinese</h5>
+            <div class="language-calender language-ch-calender" data-lang="ch"></div>
+
+			<h5>Supported languages</h5>
+			<div class="box box-languages" style="display: block;">
+				<span class="label label-primary">en</span>
+				<span class="label label-primary">ko</span>
+				<span class="label label-primary">fr</span>
+				<span class="label label-primary">ch</span>
+				<span class="label label-primary">de</span>
+				<span class="label label-primary">jp</span>
 			</div>
 		</div>
         <div class="article">
@@ -161,97 +250,27 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>time</td>
-                        <td>animate</td>
-						<td class="center"><span class="label label-primary">number</span></td>
-						<td>The line animation time when either window resize event be fired or user playing with drag&amp;drop.</td>
-						<td>300</td>
-					</tr>
-					<tr>
-						<td>time</td>
-                        <td>frame</td>
-						<td class="center"><span class="label label-primary">number</span></td>
-						<td>The dash line's dash moving total seconds.</td>
-						<td>3000</td>
-					</tr>
-					<tr>
-						<td>time</td>
-                        <td>highlight</td>
-						<td class="center"><span class="label label-primary">number</span></td>
-						<td>Highlight holding time. The line will be disappeared when time be ended.</td>
-						<td>3000</td>
-					</tr>
-					<tr>
-						<td colspan="2">grad</td>
-						<td class="center"><span class="label label-primary">number</span></td>
-						<td>The gradient of line 0.1(curve), 10(straight)</td>
-						<td>1.75</td>
-					</tr>
-					<tr>
-						<td colspan="2">strokeSpeed</td>
-						<td class="center"><span class="label label-primary">number</span></td>
-						<td>How many dash line moves one second.</td>
-						<td>500</td>
-					</tr>
-					<tr>
-						<td colspan="2">strokeColor</td>
+						<td colspan="2">lang</td>
 						<td class="center"><span class="label label-primary">string</span></td>
-						<td>Default line color (rgba, rgb, hash color).</td>
-						<td>rgba(192, 192, 192, .6)</td>
+						<td>A language to set to the Calender.</td>
+						<td>en</td>
 					</tr>
 					<tr>
-						<td colspan="2">strokeDashColor</td>
-						<td class="center"><span class="label label-primary">string</span></td>
-						<td>Dash line color (rgba, rgb, hash color).</td>
-						<td>rgba(192, 192, 192, .95)</td>
+						<td colspan="2">toggle</td>
+						<td class="center"><span class="label label-primary">boolean</span></td>
+						<td>If you set true this option, You can use toggle on your Calender.</td>
+						<td>false</td>
+					</tr>
+						<td colspan="2">multiple</td>
+						<td class="center"><span class="label label-primary">boolean</span></td>
+						<td>If you set true this option, You can use multiple picker on your Calender.</td>
+						<td>false</td>
 					</tr>
 					<tr>
-						<td colspan="2">strokeHighlightColor</td>
-						<td class="center"><span class="label label-primary">string</span></td>
-						<td>Highlighted line color.</td>
-						<td>rgba(200, 206, 255, .6)</td>
-					</tr>
-					<tr>
-						<td colspan="2">strokeHighlightDashColor</td>
-						<td class="center"><span class="label label-primary">string</span></td>
-						<td>Highlighted dash line color.</td>
-						<td>rgba(178, 192, 255, 1)</td>
-					</tr>
-					<tr>
-						<td colspan="2">strokeWidth</td>
-						<td class="center"><span class="label label-primary">number</span></td>
-						<td>Default line thickness (px).</td>
-						<td>1</td>
-					</tr>
-					<tr>
-						<td colspan="2">strokeDashWidth</td>
-						<td class="center"><span class="label label-primary">number</span></td>
-						<td>Dash line thickness (px).</td>
-						<td>1</td>
-					</tr>
-					<tr>
-						<td colspan="2">strokeHighlightWidth</td>
-						<td class="center"><span class="label label-primary">number</span></td>
-						<td>Highlighted line thickness (px).</td>
-						<td>1</td>
-					</tr>
-					<tr>
-						<td colspan="2">strokeDashWeight</td>
-						<td class="center"><span class="label label-primary">number</span></td>
-						<td>Each of dash dottes's length (px).</td>
-						<td>8</td>
-					</tr>
-                    <tr>
-						<td colspan="2">strokeDashMargin</td>
-						<td class="center"><span class="label label-primary">number</span></td>
-						<td>Gap about each of dash line's dottes (px).</td>
-						<td>6</td>
-					</tr>
-                    <tr>
-						<td colspan="2">update</td>
+						<td colspan="2">select</td>
 						<td class="center"><span class="label label-primary">function</span></td>
-						<td>This <span class="label label-default">update</span> callback will be fired when you change the position of elements(like grid or property) with draging and drop.</td>
-						<td>null</td>
+						<td>This callback will be called when you select a date on calender.</td>
+						<td></td>
 					</tr>
 				</tbody>
 			</table>
@@ -269,29 +288,9 @@
 				</thead>
 				<tbody>
 					<tr>
-                        <td>add</td>
+                        <td>select</td>
 						<td class="center"><span class="label label-primary">function</span></td>
-						<td><span class="label label-default">$element</span> will be added, but not be connected yet.</td>
-					</tr>
-                    <tr>
-                        <td>connect($target)</td>
-						<td class="center"><span class="label label-primary">function</span></td>
-						<td><span class="label label-default">$element</span> will be connected with $target.</td>
-					</tr>
-                    <tr>
-                        <td>highlight($target)</td>
-						<td class="center"><span class="label label-primary">function</span></td>
-						<td>The line which be matched between <span class="label label-default">$element</span> and <span class="label label-default">$target</span> will be highlighted.</td>
-					</tr>
-                    <tr>
-                        <td>remove()</td>
-						<td class="center"><span class="label label-primary">function</span></td>
-						<td><span class="label label-default">$element</span> will be removed, And all of connections which belong in the $element also be removed.</td>
-					</tr>
-                    <tr>
-                        <td>repaint()</td>
-						<td class="center"><span class="label label-primary">function</span></td>
-						<td>Browser will repaint the lines at correct position.</td>
+						<td>You can click day by using this method, First argument must be <span class="label label-primary">integer</span> type.</td>
 					</tr>
 				</tbody>
 			</table>
@@ -299,54 +298,29 @@
 		<div id="bower" class="article">
 			<h3>bower</h3>
 			<blockquote><p>If you use bower.</p></blockquote>
-			<pre><code class="language-bash">bower install hypermodel</code></pre>
+			<pre><code class="language-bash">bower install pg-calender</code></pre>
 		</div>
 		<div id="npm" class="article">
 			<h3>npm</h3>
 			<blockquote><p>If you use npm.</p></blockquote>
-			<pre><code class="language-bash">npm install hypermodel</code></pre>
+			<pre><code class="language-bash">npm install pg-calender</code></pre>
 		</div>
 		<div id="sample" class="article">
 			<h3>sample</h3>
 			<ul class="nav nav-tabs tab">
 				<li role="presentation" class="active"><a href="#html" data-toggle="tab" aria-controls="html">HTML</a></li>
 				<li role="presentation"><a href="#javascript" data-toggle="tab" aria-controls="javascript">Javascript</a></li>
-				<li role="presentation"><a href="#css" data-toggle="tab" aria-controls="css">CSS</a></li>
 			</ul>
 			<div class="tab-content">
 				<div role="tabpanel" class="tab-pane active" id="html">
-					<pre><code class="language-markup">&lt;div class=&quot;hypermodel-container&quot;&gt;&lt;/div&gt;</code></pre>
+					<pre><code class="language-markup">&lt;div class=&quot;calender&quot;&gt;&lt;/div&gt;</code></pre>
 				</div>
 				<div role="tabpanel" class="tab-pane" id="javascript">
 					<pre><code class="language-js">$(function() {
-    $('.hypermodel-container').hypermodel({
-        time: {
-            animate: 300,    // The line animation time when either window resize event be fired or user playing with drag&drop.
-            frame: 3000      // The dash line's dash moving total seconds.
-        },
-        grad: 1,             // The gradient of line 0.1(curve), 10(straight).
-        strokeSpeed: 500,    // How many dash line moves one second.
-        strokeColor: 'rgba(192, 192, 192, .5)',     // Default line color (rgba, rgb, hash color).
-        strokeDashColor: 'rgba(60, 180, 148, .65)', // Dash line color (rgba, rgb, hash color).
-        strokeWidth: 1,      // Default line thickness (px).
-        strokeDashWidth: 1,  // Dash line thickness (px).
-        strokeDashWeight: 8, // Each of dash dottes's length (px).
-        strokeDashMargin: 6  // Gap about each of dash line's dottes (px).
-    });
+    $('.calender').pignoseCalender({
+		lang: 'en'
+	});
 });</code></pre>
-				</div>
-				<div role="tabpanel" class="tab-pane" id="css">
-					<pre><code class="language-css">.hypermodel-container {
-    background-color: #f8f8f8;
-    border: 1px solid #d8d8d8;
-    font-size: 115%;
-    overflow: hidden;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, .25);
-}
-
-.hypermodel-container .hypermodel-area {
-    margin: 40px;
-}</code></pre>
 				</div>
 			</div>
 		</div>

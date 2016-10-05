@@ -166,6 +166,30 @@
 	-webkit-transition: background-color .3s ease, color .3s ease;
 }
 
+.pignose-calender .pignose-calender-body .pignose-calender-row .pignose-calender-unit a:active {
+	background-color: #d8d8d8;
+}
+
+.pignose-calender .pignose-calender-body .pignose-calender-row .pignose-calender-unit.pignose-calender-unit-range a {
+	background-color: #f1f1f1;
+	border-radius: 0;
+	width: 100%;
+}
+
+.pignose-calender .pignose-calender-body .pignose-calender-row .pignose-calender-unit.pignose-calender-unit-range.pignose-calender-unit-range-first a {
+	border-top-left-radius: 1.2em;
+	border-bottom-left-radius: 1.2em;
+}
+
+.pignose-calender .pignose-calender-body .pignose-calender-row .pignose-calender-unit.pignose-calender-unit-range.pignose-calender-unit-range-last a {
+	border-top-right-radius: 1.2em;
+	border-bottom-right-radius: 1.2em;
+}
+
+.pignose-calender .pignose-calender-body .pignose-calender-row .pignose-calender-unit.pignose-calender-unit-toggle a {
+	color: #cccccc !important;
+}
+
 .pignose-calender .pignose-calender-body .pignose-calender-row .pignose-calender-unit.pignose-calender-unit-active a {
 	background-color: #2fabb7;
 	color: #ffffff !important;
