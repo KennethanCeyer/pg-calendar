@@ -1,6 +1,6 @@
 /************************************************************************************************************
  *
- * @ Version 1.1.3
+ * @ Version 1.1.4
  * @ PIGNOSE Calender
  * @ Date Oct 05. 2016
  * @ Author PIGNOSE
@@ -255,7 +255,7 @@ var ComponentClass = Helper.GetClass(ComponentName);
 									$unit.addClass(activeClass).addClass(activePositionClasses[1]);
 								}
 							} else {
-								if(!!$.inArray(iDate.format('YYYY-MM-DD'), local.storage.activeDates) === true) {
+								if(!!$.inArray(iDate.format('YYYY-MM-DD'), local.storage.activeDates) === true && local.storage.activeDates.length > 0) {
 									$unit.addClass(toggleClass);
 								}
 							}
