@@ -2,7 +2,7 @@
 
 Beautiful and eidetic jQuery date picker plguin.
 
-[![Join the chat at https://gitter.im/KennethanCeyer/PIGNOSE](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/KennethanCeyer/PIGNOSE?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![npm version](https://badge.fury.io/js/pg-calender.svg)](https://badge.fury.io/js/pg-calender) [![Bower version](https://badge.fury.io/bo/pg-calender.svg)](https://badge.fury.io/bo/pg-calender) [![Join the chat at https://gitter.im/KennethanCeyer/PIGNOSE](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/KennethanCeyer/PIGNOSE?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ----
 
@@ -14,7 +14,7 @@ The datepicker supports responsive and mobile environment.
 
 [Check demo page](http://www.pigno.se/barn/PIGNOSE-Calender)
 
-![PIGNOSE-Calender](http://www.nhpcw.com/upload/PIGNOSE-Calender-Deploy_100616030540.jpg)
+![PIGNOSE-Calender](http://www.nhpcw.com/upload/PIGNOSE%2BCalender_100616032812.png)
 
 ----
 
