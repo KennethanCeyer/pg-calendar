@@ -118,7 +118,6 @@
 		}
 	</style>
 	<script type="text/javascript" src="demo/js/jquery.latest.min.js"></script>
-	<script type="text/javascript" src="demo/js/jquery-ui.latest.js"></script>
 	<script type="text/javascript" src="demo/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="demo/js/prism.min.js"></script>
 	<script type="text/javascript" src="vender/moment.min.js"></script>
@@ -127,6 +126,15 @@
 	//<![CDATA[
 	$(function() {
 		$('.calender').pignoseCalender({
+			select: function(date, obj) {
+				obj.calender.parent().next().show().text('You selected ' + 
+				(date[0] === null? 'null':date[0].format('YYYY-MM-DD')) +
+				'.');
+			}
+		});
+
+		$('.calender-dark').pignoseCalender({
+			theme: 'dark',
 			select: function(date, obj) {
 				obj.calender.parent().next().show().text('You selected ' + 
 				(date[0] === null? 'null':date[0].format('YYYY-MM-DD')) +
@@ -190,13 +198,19 @@
 			<div class="box"></div>
 		</div>
 		<div class="article">
-			<h3>Multi range Calender</h3>
+			<h3>Dark theme support</h3>
+            <h4>Dark theme type supports, And we have a plan to add other themes.</h4>
+            <div class="calender-dark"></div>
+			<div class="box"></div>
+		</div>
+		<div class="article">
+			<h3>Multiple range Calender</h3>
             <h4>PIGNOSE Calender supports multiple range picker.</h4>
             <div class="multi-select-calender"></div>
 			<div class="box"></div>
 		</div>
 		<div class="article">
-			<h3>Toogle Calender</h3>
+			<h3>Toggle Calender</h3>
             <h4>You can toggle date and get those dates as array.</h4>
             <div class="toggle-calender"></div>
 			<div class="box"></div>
@@ -208,7 +222,7 @@
 			<h5>Korean</h5>
             <div class="language-calender language-ko-calender" data-lang="ko"></div>
 
-			<h5>Germany</h5>
+			<h5>Deutsche</h5>
             <div class="language-calender language-de-calender" data-lang="de"></div>
 
 			<h5>Chinese</h5>

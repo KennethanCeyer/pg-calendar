@@ -1,20 +1,24 @@
 /************************************************************************************************************
  *
- * @ Version 1.1.4
  * @ PIGNOSE Calender
- * @ Date Oct 05. 2016
+ * @ Date Oct 08. 2016
  * @ Author PIGNOSE
  * @ Licensed under MIT.
  *
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalender';
+var ComponentVersion = '1.2.1';
+
+window[ComponentName] = {
+	VERSION: ComponentVersion
+};
 
 /************************************************************************************************************
  *
- * @ Version 1.0.0
+ * @ Version 1.0.1
  * @ PIGNOSE PLUGIN HELPER
- * @ Date Oct 05. 2016
+ * @ Date Oct 08. 2016
  * @ Author PIGNOSE
  * @ Licensed under MIT.
  *
@@ -43,40 +47,56 @@ DateManager.Convert = function(year, month, day) {
 function Helper() {
 };
 
-Helper.Format = function(format) {
-	if(typeof format === 'undefined' || format === '' || arguments.length <= 1) {
-		return '';
-	} else {
-		var args = Array.prototype.slice.call(arguments, 1);
-		for(var idx in args) {
-			var value = args[idx];
-			format = format.replace(new RegExp(('((?!\\\\)?\\{' + idx + '(?!\\\\)?\\})'), 'g'), value);
+!(function() {
+	var m_formatCache = {};
+	var m_classCache = {};
+	Helper.Format = function(format) {
+		if(typeof format === 'undefined' || format === '' || arguments.length <= 1) {
+			return '';
+		} else {
+			var args = Array.prototype.slice.call(arguments, 1);
+			var key = format + args.join('');
+			if(typeof m_formatCache[key] !== 'undefined') {
+				return m_formatCache[key]
+			} else {
+				for(var idx in args) {
+					var value = args[idx];
+					format = format.replace(new RegExp(('((?!\\\\)?\\{' + idx + '(?!\\\\)?\\})'), 'g'), value);
+				}
+			}
 		}
-	}
-	return format;
-};
+		m_formatCache[key] = format;
+		return format;
+	};
 
-Helper.GetClass = function(name) {
-	var chars = name.split('');
-	var className = '';
-	for(var idx in chars) {
-		var char = chars[idx];
-		if(typeof char !== 'string') {
-			continue;
+	Helper.GetClass = function(name) {
+		var key = ComponentName + name;
+		if(typeof m_classCache[key] !== 'undefined') {
+			return m_classCache[key];
+		} else {
+			var chars = name.split('');
+			var className = '';
+			for(var idx in chars) {
+				var char = chars[idx];
+				if(typeof char !== 'string') {
+					continue;
+				}
+
+				if(/[A-Z]/.test(char) === true) {
+					className += '-';
+					char = char.toString().toLowerCase();
+				}
+				className += char.toString();
+			}
+			m_classCache[key] = className;
+			return className;
 		}
+	};
 
-		if(/[A-Z]/.test(char) === true) {
-			className += '-';
-			char = char.toString().toLowerCase();
-		}
-		className += char.toString();
-	}
-	return className;
-};
-
-Helper.GetSubClass = function(name) {
-	return Helper.GetClass(Helper.Format('{0}{1}', ComponentName, name));
-};
+	Helper.GetSubClass = function(name) {
+		return Helper.GetClass(Helper.Format('{0}{1}', ComponentName, name));
+	};
+} ());
 
 /************************************************************************************************************
  *
@@ -119,6 +139,11 @@ if(typeof Array.prototype.filter === 'undefined') {
  ***********************************************************************************************************/
 
 var ComponentClass = Helper.GetClass(ComponentName);
+var ComponentPreference = {
+	supports: {
+		themes: ['light', 'dark']
+	}
+};
 (function($) {
 	'use strict';
 	var _calenderTopClass = Helper.GetSubClass('Top');
@@ -159,6 +184,7 @@ var ComponentClass = Helper.GetClass(ComponentName);
 				var _this = this;
 				this.settings = $.extend({
 					lang: 'en',
+					theme: 'light',
 					date: moment(),
 					format: 'YYYY-MM-DD',
 					weeks: languagePack.weeks.en,
@@ -175,8 +201,13 @@ var ComponentClass = Helper.GetClass(ComponentName);
 					this.settings.months = languagePack.months[this.settings.lang];
 				}
 
+				if(this.settings.theme !== 'light' &&
+				   !!$.inArray(this.settings.theme, ComponentPreference.supports.themes) === false) {
+					this.settings.theme = 'light';
+				}
+
 				this.global = {
-					calender: $(Helper.Format('<div class="{0}">\
+					calender: $(Helper.Format('<div class="{0} {0}-{4}">\
 												<div class="{1}">\
 													<a href="#" class="{1}-nav {1}-prev">\
 														<span class="{1}-icon"></span>\
@@ -193,7 +224,7 @@ var ComponentClass = Helper.GetClass(ComponentName);
 												</div>\
 												<div class="{2}"></div>\
 												<div class="{3}"></div>\
-											  </div>', ComponentClass, _calenderTopClass, _calenderHeaderClass, _calenderBodyClass))
+											  </div>', ComponentClass, _calenderTopClass, _calenderHeaderClass, _calenderBodyClass, this.settings.theme))
 				};
 
 				for(var idx in _this.settings.weeks) {
@@ -206,17 +237,61 @@ var ComponentClass = Helper.GetClass(ComponentName);
 					$unit.appendTo(_this.global.calender.find('.' + _calenderHeaderClass));
 				}
 
+				var rangeClass = Helper.GetSubClass('UnitRange');
+				var rangeFirstClass = Helper.GetSubClass('UnitRangeFirst');
+				var rangeLastClass = Helper.GetSubClass('UnitRangeLast');
+				var activeClass = Helper.GetSubClass('UnitActive');
+				var activePositionClasses = [Helper.GetSubClass('UnitFirstActive'), Helper.GetSubClass('UnitSecondActive')];
+				var toggleClass = Helper.GetSubClass('UnitToggle');
+
 				return this.each(function() {
 					var $this = $(this);
 					var dateManager = new DateManager(_this.settings.date);
 					var local = {
-						current: [dateManager.date, null],
+						current: [dateManager.date.clone(), null],
 						storage: {
 							activeDates: []
 						},
 						dateManager: dateManager
 					};
 					this.local = local;
+
+					var generateDateRange = function() {
+						if(local.current[0] === null || local.current[1] === null) {
+							return false;
+						}
+						var firstSelectDate = local.current[0].format('YYYY-MM-DD');
+						var lastSelectDate = local.current[1].format('YYYY-MM-DD');
+						var firstDate = moment(Math.max(local.current[0].valueOf(), dateManager.date.clone().startOf('month').valueOf()));
+						var lastDate = moment(Math.min(local.current[1].valueOf(), dateManager.date.clone().endOf('month').valueOf()));
+						var firstDateIsUndered = (firstDate.format('YYYY-MM-DD') !== firstSelectDate);
+						var lastDateIsOvered = (lastDate.format('YYYY-MM-DD') !== lastSelectDate);
+
+						if(firstDateIsUndered === false) {
+							firstDate.add(1, 'days');
+						}
+
+						if(lastDateIsOvered === false) {
+							lastDate.add(-1, 'days');
+						}
+
+						var firstDateFixed = firstDate.format('YYYY-MM-DD');
+						var lastDateFixed = lastDate.format('YYYY-MM-DD');
+
+						for(; firstDate.format('YYYY-MM-DD') <= lastDate.format('YYYY-MM-DD'); firstDate.add(1, 'days')) {
+							var date = firstDate.format('YYYY-MM-DD');
+							var isRange = true;
+							var $target = _this.global.calender.find(Helper.Format('.{0}[data-date="{1}"]', Helper.GetSubClass('Unit'), date)).addClass(rangeClass);
+
+							if(date === firstDateFixed) {
+								$target.addClass(rangeFirstClass);
+							}
+							
+							if(date === lastDateFixed) {
+								$target.addClass(rangeLastClass);
+							}
+						}
+					};
 
 					var rendering = function() {
 						_this.global.calender.appendTo($this.empty());
@@ -230,12 +305,6 @@ var ComponentClass = Helper.GetClass(ComponentName);
 						var firstDate = DateManager.Convert(dateManager.year, dateManager.month, dateManager.firstDay);
 						var firstWeekday = firstDate.weekday();
 						var $unitList = $();
-						var rangeClass = Helper.GetSubClass('UnitRange');
-						var rangeFirstClass = Helper.GetSubClass('UnitRangeFirst');
-						var rangeLastClass = Helper.GetSubClass('UnitRangeLast');
-						var activeClass = Helper.GetSubClass('UnitActive');
-						var activePositionClasses = [Helper.GetSubClass('UnitFirstActive'), Helper.GetSubClass('UnitSecondActive')];
-						var toggleClass = Helper.GetSubClass('UnitToggle');
 
 						for(var i=0; i<firstWeekday; i++) {
 							var $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('Unit'), languagePack.weeks.en[i].toLowerCase()));
@@ -246,7 +315,11 @@ var ComponentClass = Helper.GetClass(ComponentName);
 							var iDate = DateManager.Convert(dateManager.year, dateManager.month, i);
 							var $unit = $(Helper.Format('<div class="{0} {0}-date {0}-{3}" data-date="{1}"><a href="#">{2}</a></div>', Helper.GetSubClass('Unit'), iDate.format('YYYY-MM-DD'), i, languagePack.weeks.en[iDate.weekday()].toLowerCase()));
 
-							if(_this.settings.toggle === false) {
+							if(_this.settings.toggle === true) {
+								if(!!$.inArray(iDate.format('YYYY-MM-DD'), local.storage.activeDates) === true && local.storage.activeDates.length > 0) {
+									$unit.addClass(toggleClass);
+								}
+							} else if (_this.settings.multiple === true) {
 								if((local.current[0] !== null && iDate.format('YYYY-MM-DD') === local.current[0].format('YYYY-MM-DD'))) {
 									$unit.addClass(activeClass).addClass(activePositionClasses[0]);
 								}
@@ -255,8 +328,8 @@ var ComponentClass = Helper.GetClass(ComponentName);
 									$unit.addClass(activeClass).addClass(activePositionClasses[1]);
 								}
 							} else {
-								if(!!$.inArray(iDate.format('YYYY-MM-DD'), local.storage.activeDates) === true && local.storage.activeDates.length > 0) {
-									$unit.addClass(toggleClass);
+								if((local.current[0] !== null && iDate.format('YYYY-MM-DD') === local.current[0].format('YYYY-MM-DD'))) {
+									$unit.addClass(activeClass).addClass(activePositionClasses[0]);
 								}
 							}
 
@@ -320,7 +393,8 @@ var ComponentClass = Helper.GetClass(ComponentName);
 										$this.addClass(activeClass).addClass(activePositionClasses[position]);
 										local.current[position] = moment($this.data('date'));
 
-										if(position == 1) {
+										if(local.current[0] !== null &&
+										   local.current[1] !== null) {
 											if(local.current[0].diff(local.current[1]) > 0) {
 												var tmp = local.current[0];
 												local.current[0] = local.current[1];
@@ -334,24 +408,8 @@ var ComponentClass = Helper.GetClass(ComponentName);
 													}
 												});
 											}
-										}
 
-										if(local.current[0] !== null &&
-										   local.current[1] !== null) {
-											var firstDay = parseInt(local.current[0].format('DD'), 10);
-											var lastDay = parseInt(local.current[1].format('DD'), 10);
-											for(var i = firstDay + 1; i<lastDay; i++) {
-												var date = DateManager.Convert(dateManager.year, dateManager.month, i).format('YYYY-MM-DD');
-												var $target = _this.global.calender.find(Helper.Format('.{0}[data-date="{1}"]', Helper.GetSubClass('Unit'), date)).addClass(rangeClass);
-
-												if(i === firstDay + 1) {
-													$target.addClass(rangeFirstClass);
-												}
-												
-												if(i === lastDay - 1) {
-													$target.addClass(rangeLastClass);
-												}
-											}
+											generateDateRange.call();
 										}
 									}
 								}
@@ -390,14 +448,19 @@ var ComponentClass = Helper.GetClass(ComponentName);
 							event.stopPropagation();
 							var $this = $(this);
 							if($this.hasClass(_calenderTopClass + '-prev')) {
-								dateManager = new DateManager(dateManager.date.add(-1, 'months'));
+								dateManager = new DateManager(dateManager.date.clone().add(-1, 'months'));
 								rendering();
 							}
 							else if($this.hasClass(_calenderTopClass + '-next')) {
-								dateManager = new DateManager(dateManager.date.add(1, 'months'));
+								dateManager = new DateManager(dateManager.date.clone().add(1, 'months'));
 								rendering();
 							}
 						});
+
+						if(_this.settings.multiple === true) {
+							_this.global.calender.find('.' + rangeClass).removeClass(rangeClass).removeClass(rangeFirstClass).removeClass(rangeLastClass);
+							generateDateRange.call();
+						}
 					};
 					rendering();
 				});
