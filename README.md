@@ -20,12 +20,13 @@ The datepicker supports responsive and mobile environment.
 
 ### Overview
 
-See our supported features.
+See our features which we are supported.
 
 - Responsive and mobile friendly display.
-- Multiple range datepicker.
-- The toogle controll each of date buttons.
+- Multiple range datepicker support.
+- The toogle controll each of date buttons are supported.
 - Multiple languages are supported, (en, ko, fr, ch, de, jp).
+- Theme system supports (light, dark).
 
 ----
 
