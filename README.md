@@ -1,6 +1,6 @@
 # PIGNOSE Calender
 
-Beautiful and eidetic jQuery date picker plguin.
+Beautiful and eidetic jQuery date picker plugin.
 
 [![npm version](https://badge.fury.io/js/pg-calender.svg)](https://badge.fury.io/js/pg-calender) [![Bower version](https://badge.fury.io/bo/pg-calender.svg)](https://badge.fury.io/bo/pg-calender) [![Join the chat at https://gitter.im/KennethanCeyer/PIGNOSE](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/KennethanCeyer/PIGNOSE?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -24,7 +24,7 @@ See our features which we are supported.
 
 - Responsive and mobile friendly display.
 - Multiple range datepicker support.
-- The toogle controll each of date buttons are supported.
+- The toggle controll each of date buttons are supported.
 - Multiple languages are supported, (en, ko, fr, ch, de, jp).
 - Theme system supports (light, dark).
 
