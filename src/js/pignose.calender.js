@@ -8,7 +8,7 @@
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalender';
-var ComponentVersion = '1.2.1';
+var ComponentVersion = '1.2.2';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
