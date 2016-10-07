@@ -8,13 +8,13 @@ Beautiful and eidetic jQuery date picker plugin.
 
 ### Getting started
 
-PIGNOSE-calendar helps you make more simple and eidetic datepicker in jQuery.
+PIGNOSE-Calendar helps you make more simple and eidetic datepicker in jQuery.
 
 The datepicker supports responsive and mobile environment.
 
-[Check demo page](http://www.pigno.se/barn/PIGNOSE-calendar)
+[Check demo page](http://www.pigno.se/barn/PIGNOSE-Calendar)
 
-![PIGNOSE-calendar](http://www.nhpcw.com/upload/PIGNOSE%2Bcalendar_100616032812.png)
+![PIGNOSE-calendar](http://www.nhpcw.com/upload/PIGNOSE%2BCalendar_100616032812.png)
 
 ----
 
@@ -34,4 +34,4 @@ See our features which we are supported.
 
 If you found something problem of this plugin, or you have some question.
 
-Please send me a message to use either [gitter](https://gitter.im/KennethanCeyer/PIGNOSE) or [Github issue](https://github.com/KennethanCeyer/PIGNOSE-calendar/issues). (gitter url is on the top of the manual)
+Please send me a message to use either [gitter](https://gitter.im/KennethanCeyer/PIGNOSE) or [Github issue](https://github.com/KennethanCeyer/PIGNOSE-Calendar/issues). (gitter url is on the top of the manual)

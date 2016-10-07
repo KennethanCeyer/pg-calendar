@@ -20,7 +20,7 @@ module.exports = function (grunt) {
             },
             dist: {
                 files: {
-                    'dist/pignose.calender.min.js': ['src/js/**.js']
+                    'dist/pignose.calendar.min.js': ['src/js/**.js']
                 }
             },
         },
@@ -34,7 +34,7 @@ module.exports = function (grunt) {
           },
           dist: {
             files: {
-              'dist/pignose.calender.css': ['src/css/**.css']
+              'dist/pignose.calendar.css': ['src/css/**.css']
             }
           }
         },

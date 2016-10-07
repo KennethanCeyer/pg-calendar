@@ -1,5 +1,5 @@
 {
-  "name": "pg-calender",
+  "name": "pg-calendar",
   "description": "Beautiful and eidetic jQuery date picker plguin.",
   "main": "index.html",
   "authors": [
@@ -16,7 +16,7 @@
     "jquery",
     "plugin"
   ],
-  "homepage": "https://github.com/KennethanCeyer/PIGNOSE-Calender",
+  "homepage": "https://github.com/KennethanCeyer/PIGNOSE-Calendar",
   "moduleType": [
     "node"
   ],

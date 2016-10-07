@@ -3,18 +3,18 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 	<meta name="viewport" content="width=device-width, user-scalable=no" />
-	<meta property="og:url" content="http://www.pigno.se/barn/PIGNOSE-Calender">
+	<meta property="og:url" content="http://www.pigno.se/barn/PIGNOSE-Calendar">
 	<meta property="og:type" content="product" />
-	<meta property="og:title" content="PIGNOSE Calender" />
-	<meta property="og:description" content="PIGNOSE Calender is beautiful and eidetic jQuery date picker plguin." />
+	<meta property="og:title" content="PIGNOSE Calendar" />
+	<meta property="og:description" content="PIGNOSE Calendar is beautiful and eidetic jQuery date picker plguin." />
 	<meta property="og:image" content="http://www.pigno.se/barn/PIGNOSE-HyperModel/demo/img/cover@250.png" />
 	<meta property="og:site_name" content="PIGNOSE" />
-	<title>PIGNOSE Calender</title>
+	<title>PIGNOSE Calendar</title>
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="demo/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="demo/css/prism.css" />
-	<link rel="stylesheet" type="text/css" href="demo/css/calender-style.css" />
-	<link rel="stylesheet" type="text/css" href="src/css/pignose.calender.css" />
+	<link rel="stylesheet" type="text/css" href="demo/css/calendar-style.css" />
+	<link rel="stylesheet" type="text/css" href="src/css/pignose.calendar.css" />
 	<style type="text/css">
 		@import url(https://fonts.googleapis.com/css?family=Raleway);
 		@import url(https://fonts.googleapis.com/css?family=Open+Sans);
@@ -121,31 +121,31 @@
 	<script type="text/javascript" src="demo/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="demo/js/prism.min.js"></script>
 	<script type="text/javascript" src="vender/moment.min.js"></script>
-	<script type="text/javascript" src="src/js/pignose.calender.js"></script>
+	<script type="text/javascript" src="src/js/pignose.calendar.js"></script>
 	<script type="text/javascript">
 	//<![CDATA[
 	$(function() {
-		$('.calender').pignoseCalender({
+		$('.calendar').pignoseCalendar({
 			select: function(date, obj) {
-				obj.calender.parent().next().show().text('You selected ' + 
+				obj.calendar.parent().next().show().text('You selected ' + 
 				(date[0] === null? 'null':date[0].format('YYYY-MM-DD')) +
 				'.');
 			}
 		});
 
-		$('.calender-dark').pignoseCalender({
+		$('.calendar-dark').pignoseCalendar({
 			theme: 'dark',
 			select: function(date, obj) {
-				obj.calender.parent().next().show().text('You selected ' + 
+				obj.calendar.parent().next().show().text('You selected ' + 
 				(date[0] === null? 'null':date[0].format('YYYY-MM-DD')) +
 				'.');
 			}
 		});
 
-		$('.multi-select-calender').pignoseCalender({
+		$('.multi-select-calendar').pignoseCalendar({
 			multiple: true,
 			select: function(date, obj) {
-				obj.calender.parent().next().show().text('You selected ' + 
+				obj.calendar.parent().next().show().text('You selected ' + 
 					(date[0] === null? 'null':date[0].format('YYYY-MM-DD')) +
 					'~' +
 					(date[1] === null? 'null':date[1].format('YYYY-MM-DD')) +
@@ -153,10 +153,10 @@
 			}
 		});
 
-		$('.toggle-calender').pignoseCalender({
+		$('.toggle-calendar').pignoseCalendar({
 			toggle: true,
 			select: function(date, obj) {
-				var $target = obj.calender.parent().next().show().html('You selected ' + 
+				var $target = obj.calendar.parent().next().show().html('You selected ' + 
 				(date[0] === null? 'null':date[0].format('YYYY-MM-DD')) + 
 				'.' +
 				'<br /><br />' +
@@ -173,10 +173,10 @@
 			}
 		});
 		
-		$('.language-calender').each(function() {
+		$('.language-calendar').each(function() {
 			var $this = $(this);
 			var lang = $this.data('lang');
-			$this.pignoseCalender({
+			$this.pignoseCalendar({
 				lang: lang
 			});
 		});
@@ -187,46 +187,46 @@
 <body>
 	<div id="wrapper">
 		<div class="header">
-			<img src="demo/img/pignose-logo.jpg" alt="" />
-			<h1>PIGNOSE Calender</h1>
-			<a href="https://github.com/KennethanCeyer/PIGNOSE-Calender" target="_blank" class="btn btn-primary">View project on Github</a> <a href="https://github.com/KennethanCeyer/PIGNOSE-Calender/archive/master.zip" target="_blank" class="btn btn-info">Download zip</a>
+			<img src="demo/img/pignose-logo.png" alt="" />
+			<h1>PIGNOSE Calendar</h1>
+			<a href="https://github.com/KennethanCeyer/PIGNOSE-Calendar" target="_blank" class="btn btn-primary">View project on Github</a> <a href="https://github.com/KennethanCeyer/PIGNOSE-Calendar/archive/master.zip" target="_blank" class="btn btn-info">Download zip</a>
 		</div>
 		<div class="article">
-			<h3>Calender</h3>
-            <h4>PIGNOSE Calender is beautiful and eidetic jQuery date picker plguin.</h4>
-            <div class="calender"></div>
+			<h3>Calendar</h3>
+            <h4>PIGNOSE Calendar is beautiful and eidetic jQuery date picker plguin.</h4>
+            <div class="calendar"></div>
 			<div class="box"></div>
 		</div>
 		<div class="article">
 			<h3>Dark theme support</h3>
             <h4>Dark theme type supports, And we have a plan to add other themes.</h4>
-            <div class="calender-dark"></div>
+            <div class="calendar-dark"></div>
 			<div class="box"></div>
 		</div>
 		<div class="article">
-			<h3>Multiple range Calender</h3>
-            <h4>PIGNOSE Calender supports multiple range picker.</h4>
-            <div class="multi-select-calender"></div>
+			<h3>Multiple range Calendar</h3>
+            <h4>PIGNOSE Calendar supports multiple range picker.</h4>
+            <div class="multi-select-calendar"></div>
 			<div class="box"></div>
 		</div>
 		<div class="article">
-			<h3>Toggle Calender</h3>
+			<h3>Toggle Calendar</h3>
             <h4>You can toggle date and get those dates as array.</h4>
-            <div class="toggle-calender"></div>
+            <div class="toggle-calendar"></div>
 			<div class="box"></div>
 		</div>
 		<div class="article">
 			<h3>I18N Support</h3>
-            <h4>PIGNOSE Calender supports various languages.</h4>
+            <h4>PIGNOSE Calendar supports various languages.</h4>
 
 			<h5>Korean</h5>
-            <div class="language-calender language-ko-calender" data-lang="ko"></div>
+            <div class="language-calendar language-ko-calendar" data-lang="ko"></div>
 
 			<h5>Deutsche</h5>
-            <div class="language-calender language-de-calender" data-lang="de"></div>
+            <div class="language-calendar language-de-calendar" data-lang="de"></div>
 
 			<h5>Chinese</h5>
-            <div class="language-calender language-ch-calender" data-lang="ch"></div>
+            <div class="language-calendar language-ch-calendar" data-lang="ch"></div>
 
 			<h5>Supported languages</h5>
 			<div class="box box-languages" style="display: block;">
@@ -269,24 +269,24 @@
 					<tr>
 						<td colspan="2">lang</td>
 						<td class="center"><span class="label label-primary">string</span></td>
-						<td>A language to set to the Calender.</td>
+						<td>A language to set to the Calendar.</td>
 						<td>en</td>
 					</tr>
 					<tr>
 						<td colspan="2">toggle</td>
 						<td class="center"><span class="label label-primary">boolean</span></td>
-						<td>If you set true this option, You can use toggle on your Calender.</td>
+						<td>If you set true this option, You can use toggle on your Calendar.</td>
 						<td>false</td>
 					</tr>
 						<td colspan="2">multiple</td>
 						<td class="center"><span class="label label-primary">boolean</span></td>
-						<td>If you set true this option, You can use multiple picker on your Calender.</td>
+						<td>If you set true this option, You can use multiple picker on your Calendar.</td>
 						<td>false</td>
 					</tr>
 					<tr>
 						<td colspan="2">select</td>
 						<td class="center"><span class="label label-primary">function</span></td>
-						<td>This callback will be called when you select a date on calender.</td>
+						<td>This callback will be called when you select a date on calendar.</td>
 						<td></td>
 					</tr>
 				</tbody>
@@ -315,12 +315,12 @@
 		<div id="bower" class="article">
 			<h3>bower</h3>
 			<blockquote><p>If you use bower.</p></blockquote>
-			<pre><code class="language-bash">bower install pg-calender</code></pre>
+			<pre><code class="language-bash">bower install pg-calendar</code></pre>
 		</div>
 		<div id="npm" class="article">
 			<h3>npm</h3>
 			<blockquote><p>If you use npm.</p></blockquote>
-			<pre><code class="language-bash">npm install pg-calender</code></pre>
+			<pre><code class="language-bash">npm install pg-calendar</code></pre>
 		</div>
 		<div id="sample" class="article">
 			<h3>sample</h3>
@@ -330,11 +330,11 @@
 			</ul>
 			<div class="tab-content">
 				<div role="tabpanel" class="tab-pane active" id="html">
-					<pre><code class="language-markup">&lt;div class=&quot;calender&quot;&gt;&lt;/div&gt;</code></pre>
+					<pre><code class="language-markup">&lt;div class=&quot;calendar&quot;&gt;&lt;/div&gt;</code></pre>
 				</div>
 				<div role="tabpanel" class="tab-pane" id="javascript">
 					<pre><code class="language-js">$(function() {
-    $('.calender').pignoseCalender({
+    $('.calendar').pignoseCalendar({
 		lang: 'en'
 	});
 });</code></pre>
