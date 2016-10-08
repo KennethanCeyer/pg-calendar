@@ -186,8 +186,8 @@
 				'<strong>Active dates</strong><br /><br />' +
 				'<div class="active-dates"></div>');
 
-				for(var idx in obj.activeDates) {
-					var date = obj.activeDates[idx];
+				for(var idx in obj.storage.activeDates) {
+					var date = obj.storage.activeDates[idx];
 					if(typeof date !== 'string') {
 						continue;
 					}
