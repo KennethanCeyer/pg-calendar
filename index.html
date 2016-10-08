@@ -90,6 +90,20 @@
             margin: 10px 0;
         }
 
+		.input-calendar {
+			display: block;
+			width: 100%;
+			max-width: 360px;
+			margin: 0 auto;
+			height: 3.2em;
+			padding: 0 1.2em;
+			border: 1px solid #d8d8d8;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+			-o-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+			-moz-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+			-webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+		}
+
 		.box {
 			display: none;
 			max-width: 360px;
@@ -126,6 +140,15 @@
 	//<![CDATA[
 	$(function() {
 		$('.calendar').pignoseCalendar({
+			select: function(date, obj) {
+				obj.calendar.parent().next().show().text('You selected ' + 
+				(date[0] === null? 'null':date[0].format('YYYY-MM-DD')) +
+				'.');
+			}
+		});
+
+		$('.input-calendar').pignoseCalendar({
+			buttons: true,
 			select: function(date, obj) {
 				obj.calendar.parent().next().show().text('You selected ' + 
 				(date[0] === null? 'null':date[0].format('YYYY-MM-DD')) +
@@ -195,6 +218,12 @@
 			<h3>Calendar</h3>
             <h4>PIGNOSE Calendar is beautiful and eidetic jQuery date picker plguin.</h4>
             <div class="calendar"></div>
+			<div class="box"></div>
+		</div>
+		<div class="article">
+			<h3>Calendar</h3>
+            <h4>You can use calendar by input power ups.</h4>
+            <input type="text" class="input-calendar" />
 			<div class="box"></div>
 		</div>
 		<div class="article">
@@ -273,6 +302,24 @@
 						<td>en</td>
 					</tr>
 					<tr>
+						<td colspan="2">theme</td>
+						<td class="center"><span class="label label-primary">string</span></td>
+						<td>A theme to set to the Calendar. (light, dark).</td>
+						<td>light</td>
+					</tr>
+					<tr>
+						<td colspan="2">format</td>
+						<td class="center"><span class="label label-primary">string</span></td>
+						<td>The date format that you want to print to input element by value.</td>
+						<td>YYYY-MM-DD</td>
+					</tr>
+					<tr>
+						<td colspan="2">buttons</td>
+						<td class="center"><span class="label label-primary">boolean</span></td>
+						<td>If you are using input type calendar, You can add button controller for confirm by user.</td>
+						<td>false</td>
+					</tr>
+					<tr>
 						<td colspan="2">toggle</td>
 						<td class="center"><span class="label label-primary">boolean</span></td>
 						<td>If you set true this option, You can use toggle on your Calendar.</td>
@@ -304,6 +351,11 @@
 					</tr>
 				</thead>
 				<tbody>
+					<tr>
+                        <td>set</td>
+						<td class="center"><span class="label label-primary">function</span></td>
+						<td>You can set specific date that you want for using on calendar, The argument type must be <span class="label label-primary">Options.format</span> type that you gave (default format are YYYY-MM-DD).</td>
+					</tr>
 					<tr>
                         <td>select</td>
 						<td class="center"><span class="label label-primary">function</span></td>
