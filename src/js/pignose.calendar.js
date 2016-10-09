@@ -8,7 +8,7 @@
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.2.6';
+var ComponentVersion = '1.2.7';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
@@ -295,24 +295,28 @@ var ComponentPreference = {
 							event.stopPropagation();
 						});
 
-						$this.bind('focus', function() {
-							$this.blur();
-							$overlay.show();
-							$parent.show();
-							$window.unbind('resize.' + ComponentClass).bind('resize.' + ComponentClass, function() {
-								$parent.css({
-									marginLeft: - $parent.outerWidth() / 2,
-									marginTop: - $parent.outerHeight() / 2
-								});
-							}).triggerHandler('resize.' + ComponentClass);
-							$super[ComponentName]('set', $this.val());
-							setTimeout(function() {
-								$overlay.addClass(overlayActiveClass);
-								$parent.addClass(wrapperActiveClass);
-							}, 25);
-						});
+						$this
+							.bind('click', function(event) {
+								event.stopPropagation();
+								event.stopImmediatePropagation();
+								setTimeout(function() {
+									$overlay.show();
+									$parent.show();
+									$window.unbind('resize.' + ComponentClass).bind('resize.' + ComponentClass, function() {
+										$parent.css({
+											marginLeft: - $parent.outerWidth() / 2,
+											marginTop: - $parent.outerHeight() / 2
+										});
+									}).triggerHandler('resize.' + ComponentClass);
+									$super[ComponentName]('set', $this.val());
+									setTimeout(function() {
+										$overlay.addClass(overlayActiveClass);
+										$parent.addClass(wrapperActiveClass);
+									}, 25);
+								}, 25);
+							});
 
-						$document.unbind('click.' + ComponentClass).bind('click.' + ComponentClass, function() {
+						$overlay.bind('click.' + ComponentClass, function() {
 							$parent.trigger('cancel.' + ComponentClass);
 						});
 
@@ -578,14 +582,15 @@ var ComponentPreference = {
 					var dateSplit = date.split(',').map(function(e) {
 						return $.trim(e);
 					});
-					var dateArray = [
-						dateSplit[0] === null? null:moment(dateSplit[0]),
-						dateSplit[1] === null? null:moment(dateSplit[1])
-					];
 					this.each(function() {
 						var $this = $(this);
 						var local = $this[0][ComponentName];
 						var context = local.context;
+
+						var dateArray = [
+							dateSplit[0] === null? null:moment(dateSplit[0], context.settings.format),
+							dateSplit[1] === null? null:moment(dateSplit[1], context.settings.format)
+						];
 
 						local.dateManager = new DateManager(dateArray[0]);
 						if(context.settings.toggle === true) {
