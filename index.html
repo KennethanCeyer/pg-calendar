@@ -96,12 +96,35 @@
 			max-width: 360px;
 			margin: 0 auto;
 			height: 3.2em;
+			line-height: 3.2em;
+			font: inherit;
 			padding: 0 1.2em;
 			border: 1px solid #d8d8d8;
 			box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
 			-o-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
 			-moz-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
 			-webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+		}
+
+		.btn-calendar {
+			display: block;
+			width: 100%;
+			max-width: 360px;
+			height: 3.2em;
+			line-height: 3.2em;
+			background-color: #52555a;
+			margin: 0 auto;
+			font-weight: 600;
+			color: #ffffff !important;
+			text-decoration: none !important;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+			-o-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+			-moz-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+			-webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+		}
+
+		.btn-calendar:hover {
+			background-color: #5a6268;
 		}
 
 		.box {
@@ -149,10 +172,13 @@
 
 		$('.input-calendar').pignoseCalendar({
 			buttons: true,
-			select: function(date, obj) {
-				obj.calendar.parent().next().show().text('You selected ' + 
-				(date[0] === null? 'null':date[0].format('YYYY-MM-DD')) +
-				'.');
+		});
+
+		var $btn = $('.btn-calendar').pignoseCalendar({
+			modal: true,
+			buttons: true,
+			apply: function(date) {
+				$btn.next().show().text('You applied date ' + date + '.');
 			}
 		});
 
@@ -221,9 +247,15 @@
 			<div class="box"></div>
 		</div>
 		<div class="article">
-			<h3>Calendar</h3>
+			<h3>Input type</h3>
             <h4>You can use calendar by input power ups.</h4>
             <input type="text" class="input-calendar" />
+			<div class="box"></div>
+		</div>
+		<div class="article">
+			<h3>Modal</h3>
+            <h4>You can display calendar by modal popup.</h4>
+            <a href="#" class="btn-calendar">Open Modal</a>
 			<div class="box"></div>
 		</div>
 		<div class="article">
@@ -314,6 +346,12 @@
 						<td>YYYY-MM-DD</td>
 					</tr>
 					<tr>
+						<td colspan="2">modal</td>
+						<td class="center"><span class="label label-primary">boolean</span></td>
+						<td>If you want display calendar as modal, You can use by setting modal option to true.</td>
+						<td>false</td>
+					</tr>
+					<tr>
 						<td colspan="2">buttons</td>
 						<td class="center"><span class="label label-primary">boolean</span></td>
 						<td>If you are using input type calendar, You can add button controller for confirm by user.</td>
@@ -325,6 +363,7 @@
 						<td>If you set true this option, You can use toggle on your Calendar.</td>
 						<td>false</td>
 					</tr>
+					<tr>
 						<td colspan="2">multiple</td>
 						<td class="center"><span class="label label-primary">boolean</span></td>
 						<td>If you set true this option, You can use multiple picker on your Calendar.</td>
@@ -333,7 +372,13 @@
 					<tr>
 						<td colspan="2">select</td>
 						<td class="center"><span class="label label-primary">function</span></td>
-						<td>This callback will be called when you select a date on calendar.</td>
+						<td>This callback will be called when you select a date on calendar (date click).</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td colspan="2">apply</td>
+						<td class="center"><span class="label label-primary">function</span></td>
+						<td>This callback will be called when you apply a date on calendar. (OK button click).</td>
 						<td></td>
 					</tr>
 				</tbody>

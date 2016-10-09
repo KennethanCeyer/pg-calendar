@@ -8,7 +8,7 @@
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.2.7';
+var ComponentVersion = '1.2.8';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
@@ -197,6 +197,13 @@ var ComponentPreference = {
 					multiple: false,
 					toggle: false,
 					buttons: false,
+					modal: false,
+
+					/********************************************
+					 * CALLBACK
+					 *******************************************/
+					select: null,
+					apply: null
 				}, options);
 
 				if(this.settings.lang !== 'en' &&
@@ -249,7 +256,7 @@ var ComponentPreference = {
 					var $parent = $this;
 					var local = {
 						calendar: $(_this.global.calendarHtml),
-						input: false,
+						input: $this.is('input'),
 						renderer: null,
 						current: [null, null],
 						storage: {
@@ -278,9 +285,7 @@ var ComponentPreference = {
 						$calendarButton.appendTo(local.calendar);
 					}
 
-					if($this.is('input')) {
-						local.input = true;
-
+					if(local.input === true || _this.settings.modal === true) {
 						var wrapperActiveClass = Helper.GetSubClass('WrapperActive');
 						var overlayActiveClass = Helper.GetSubClass('WrapperOverlayActive');
 						var $overlay = $('.' + Helper.GetSubClass('WrapperOverlay'));
@@ -297,6 +302,7 @@ var ComponentPreference = {
 
 						$this
 							.bind('click', function(event) {
+								event.preventDefault();
 								event.stopPropagation();
 								event.stopImmediatePropagation();
 								setTimeout(function() {
@@ -314,6 +320,10 @@ var ComponentPreference = {
 										$parent.addClass(wrapperActiveClass);
 									}, 25);
 								}, 25);
+							})
+							.bind('focus', function(event) {
+								var $this = $(this);
+								$this.blur();
 							});
 
 						$overlay.bind('click.' + ComponentClass, function() {
@@ -377,19 +387,22 @@ var ComponentPreference = {
 								var $this = $(this);
 								if($this.hasClass(_calendarButtonClass + '-apply')) {
 									$super.trigger('apply.' + ComponentName, local);
-									if(local.input === true) {
-										if(_this.settings.toggle === true) {
-											$super.val(local.storage.activeDates.join(', '));
-										} else if(_this.settings.multiple === true) {
-											$super.val(
-												(local.current[0] === null? null:local.current[0].format(_this.settings.format)) + ', ' +
-												(local.current[1] === null? null:local.current[1].format(_this.settings.format))
-											);
-										} else {
-											$super.val(local.current[0] === null? null:moment(local.current[0]).format(_this.settings.format));
-										}
-										$parent.triggerHandler('apply.' + ComponentClass);
+									var value = null
+									if(_this.settings.toggle === true) {
+										value = local.storage.activeDates.join(', ');
+									} else if(_this.settings.multiple === true) {
+										value = (local.current[0] === null? null:local.current[0].format(_this.settings.format)) + ', ' +
+												(local.current[1] === null? null:local.current[1].format(_this.settings.format));
+									} else {
+										value = local.current[0] === null? null:moment(local.current[0]).format(_this.settings.format);
 									}
+									if(local.input === true) {
+										$super.val(value).triggerHandler('change');
+									}
+									if(typeof _this.settings.apply === 'function') {
+										_this.settings.apply.call($super, value);
+									}
+									$parent.triggerHandler('apply.' + ComponentClass);
 								} else {
 									$parent.triggerHandler('cancel.' + ComponentClass);
 								}
