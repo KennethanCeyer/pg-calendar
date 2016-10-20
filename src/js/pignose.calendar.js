@@ -1,14 +1,14 @@
 /************************************************************************************************************
  *
  * @ PIGNOSE Calendar
- * @ Date Oct 09. 2016
+ * @ Date Oct 21. 2016
  * @ Author PIGNOSE
  * @ Licensed under MIT.
  *
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.2.8';
+var ComponentVersion = '1.2.9';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
@@ -191,6 +191,7 @@ var ComponentPreference = {
 					theme: 'light',
 					date: moment(),
 					format: 'YYYY-MM-DD',
+					disabledDates: [],
 					weeks: languagePack.weeks.en,
 					monthsLong: languagePack.monthsLong.en,
 					months: languagePack.months.en,
@@ -422,22 +423,27 @@ var ComponentPreference = {
 
 						for(var i=local.dateManager.firstDay; i<=local.dateManager.lastDay; i++) {
 							var iDate = DateManager.Convert(local.dateManager.year, local.dateManager.month, i);
+							var iDateFormat = iDate.format('YYYY-MM-DD');
 							var $unit = $(Helper.Format('<div class="{0} {0}-date {0}-{3}" data-date="{1}"><a href="#">{2}</a></div>', Helper.GetSubClass('Unit'), iDate.format('YYYY-MM-DD'), i, languagePack.weeks.en[iDate.weekday()].toLowerCase()));
 
+							if($.inArray(iDateFormat, _this.settings.disabledDates) !== -1) {
+								$unit.addClass(Helper.GetSubClass('UnitDisabled'));
+							}
+
 							if(_this.settings.toggle === true) {
-								if($.inArray(iDate.format('YYYY-MM-DD'), local.storage.activeDates) !== -1 && local.storage.activeDates.length > 0) {
+								if($.inArray(iDateFormat, local.storage.activeDates) !== -1 && local.storage.activeDates.length > 0) {
 								   $unit.addClass(toggleClass);
 								}
 							} else if (_this.settings.multiple === true) {
-								if((local.current[0] !== null && iDate.format('YYYY-MM-DD') === local.current[0].format('YYYY-MM-DD'))) {
+								if((local.current[0] !== null && iDateFormat === local.current[0].format('YYYY-MM-DD'))) {
 									$unit.addClass(activeClass).addClass(activePositionClasses[0]);
 								}
 								
-								if((local.current[1] !== null && iDate.format('YYYY-MM-DD') === local.current[1].format('YYYY-MM-DD'))) {
+								if((local.current[1] !== null && iDateFormat === local.current[1].format('YYYY-MM-DD'))) {
 									$unit.addClass(activeClass).addClass(activePositionClasses[1]);
 								}
 							} else {
-								if((local.current[0] !== null && iDate.format('YYYY-MM-DD') === local.current[0].format('YYYY-MM-DD'))) {
+								if((local.current[0] !== null && iDateFormat === local.current[0].format('YYYY-MM-DD'))) {
 									$unit.addClass(activeClass).addClass(activePositionClasses[0]);
 								}
 							}
@@ -446,8 +452,13 @@ var ComponentPreference = {
 							$unit.bind('click', function(event) {
 								event.preventDefault();
 								event.stopPropagation();
+
 								var $this = $(this);
 								var position = 0;
+
+								if($this.hasClass(Helper.GetSubClass('UnitDisabled'))) {
+									return false;
+								}
 
 								if(local.input === true && _this.settings.multiple === false && _this.settings.buttons === false) {
 									var date = $this.data('date');

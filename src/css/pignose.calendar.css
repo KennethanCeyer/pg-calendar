@@ -170,6 +170,11 @@
 	-webkit-transition: background-color .3s ease, color .3s ease;
 }
 
+.pignose-calendar .pignose-calendar-body .pignose-calendar-row .pignose-calendar-unit.pignose-calendar-unit-disabled a {
+	color: #979c9e !important;
+	background-color: #f1f1f1;
+}
+
 .pignose-calendar .pignose-calendar-body .pignose-calendar-row .pignose-calendar-unit a:active {
 	background-color: #d8d8d8;
 }
@@ -178,6 +183,11 @@
 	background-color: #f1f1f1;
 	border-radius: 0;
 	width: 100%;
+}
+
+.pignose-calendar .pignose-calendar-body .pignose-calendar-row .pignose-calendar-unit.pignose-calendar-unit-range.pignose-calendar-unit-disabled a {
+	color: #b2b9bb !important;
+	background-color: #e1e1e1;
 }
 
 .pignose-calendar .pignose-calendar-body .pignose-calendar-row .pignose-calendar-unit.pignose-calendar-unit-range.pignose-calendar-unit-range-first a {
@@ -367,6 +377,11 @@
 	color: #51cfd2;
 }
 
+.pignose-calendar.pignose-calendar-dark .pignose-calendar-body .pignose-calendar-row .pignose-calendar-unit.pignose-calendar-unit-disabled a {
+	color: #868e8f !important;
+	background-color: #5d6365;
+}
+
 .pignose-calendar.pignose-calendar-dark .pignose-calendar-body .pignose-calendar-row .pignose-calendar-unit.pignose-calendar-unit-active a {
 	background-color: #36bec2;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, .75);
@@ -377,6 +392,11 @@
 
 .pignose-calendar.pignose-calendar-dark .pignose-calendar-body .pignose-calendar-row .pignose-calendar-unit.pignose-calendar-unit-range a {
 	background-color: #5a5d62;
+}
+
+.pignose-calendar.pignose-calendar-dark .pignose-calendar-body .pignose-calendar-row .pignose-calendar-unit.pignose-calendar-unit-range.pignose-calendar-unit-disabled a {
+	color: #727a7c !important;
+	background-color: #4f5558;
 }
 
 .pignose-calendar.pignose-calendar-dark .pignose-calendar-body .pignose-calendar-row .pignose-calendar-unit.pignose-calendar-unit-toggle a {

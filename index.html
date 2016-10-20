@@ -106,6 +106,31 @@
 			-webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
 		}
 
+		.guide {
+			padding: 1.2em 1.6em;
+			max-width: 360px;
+			margin: 1.6em auto;
+			background-color: #f8f8f8;
+			line-height: 2;
+		}
+
+		.guide h5 {
+			margin: 0;
+			padding: 0;
+			font-size: 110%;
+		}
+
+		.guide .guide-dates {
+			margin-top: 1.6em;
+			text-align: center;
+		}
+
+		.guide .guide-dates span {
+			display: inline-block;
+			vertical-align: middle;
+			width: 33%;
+		}
+
 		.btn-calendar {
 			display: block;
 			width: 100%;
@@ -162,49 +187,71 @@
 	<script type="text/javascript">
 	//<![CDATA[
 	$(function() {
-		$('.calendar').pignoseCalendar({
-			select: function(date, obj) {
-				obj.calendar.parent().next().show().text('You selected ' + 
-				(date[0] === null? 'null':date[0].format('YYYY-MM-DD')) +
-				'.');
+		function onClickHandler(date, obj) {
+			/**
+			 * @date is an array which be included dates(clicked date at first index)
+			 * @obj is an object which stored calendar interal data.
+			 * @obj.calendar is an element reference.
+			 * @obj.storage.activeDates is all toggled data, If you use toggle type calendar.
+			 */
+
+			var $calendar = obj.calendar;
+			var $box = $calendar.parent().siblings('.box').show();
+			var text = 'You choose date ';
+
+			if(date[0] !== null) {
+				text += date[0].format('YYYY-MM-DD');
 			}
+
+			if(date[0] !== null && date[1] !== null) {
+				text += ' ~ ';
+			} else if(date[0] === null && date[1] == null) {
+				text += 'nothing';
+			}
+
+			if(date[1] !== null) {
+				text += date[1].format('YYYY-MM-DD');
+			}
+
+			$box.text(text);
+		}
+
+		// Default Calendar
+		$('.calendar').pignoseCalendar({
+			select: onClickHandler
 		});
 
+		// Input Calendar
 		$('.input-calendar').pignoseCalendar({
-			buttons: true,
+			buttons: true, // It means you can give bottom button controller to the modal which be opened when you click.
 		});
 
+		// Calendar modal
 		var $btn = $('.btn-calendar').pignoseCalendar({
-			modal: true,
+			modal: true, // It means modal will be showed when you click the target button.
 			buttons: true,
 			apply: function(date) {
 				$btn.next().show().text('You applied date ' + date + '.');
 			}
 		});
 
+		// Color theme type Calendar
 		$('.calendar-dark').pignoseCalendar({
-			theme: 'dark',
-			select: function(date, obj) {
-				obj.calendar.parent().next().show().text('You selected ' + 
-				(date[0] === null? 'null':date[0].format('YYYY-MM-DD')) +
-				'.');
-			}
+			theme: 'dark', // light, dark
+			select: onClickHandler
 		});
 
+		// Multiple picker type Calendar
 		$('.multi-select-calendar').pignoseCalendar({
 			multiple: true,
-			select: function(date, obj) {
-				obj.calendar.parent().next().show().text('You selected ' + 
-					(date[0] === null? 'null':date[0].format('YYYY-MM-DD')) +
-					'~' +
-					(date[1] === null? 'null':date[1].format('YYYY-MM-DD')) +
-					'.');
-			}
+			select: onClickHandler
 		});
 
+		// Toggle type Calendar
 		$('.toggle-calendar').pignoseCalendar({
 			toggle: true,
 			select: function(date, obj) {
+
 				var $target = obj.calendar.parent().next().show().html('You selected ' + 
 				(date[0] === null? 'null':date[0].format('YYYY-MM-DD')) + 
 				'.' +
@@ -221,7 +268,37 @@
 				}
 			}
 		});
-		
+
+		// Disabled date settings.
+		!(function() {
+			// IIFE Closure
+			var times = 30;
+			var disabledDates = [];
+			for(var i=0; i<times; /* Do not increase index */) {
+				var year = moment().year();
+				var month = 0;
+				var day = parseInt(Math.random() * 364 + 1);
+				var date = moment().year(year).month(month).date(day).format('YYYY-MM-DD');
+				if($.inArray(date, disabledDates) === -1) {
+					disabledDates.push(date);
+					i++;
+				}
+			}
+
+			disabledDates.sort();
+
+			var $dates = $('.disabled-dates-calendar').siblings('.guide').find('.guide-dates');
+			for (var idx in disabledDates) {
+				$dates.append('<span>' + disabledDates[idx] + '</span>');
+			}
+
+			$('.disabled-dates-calendar').pignoseCalendar({
+				select: onClickHandler,
+				disabledDates: disabledDates
+			});
+		} ());
+
+		// I18N Calendar
 		$('.language-calendar').each(function() {
 			var $this = $(this);
 			var lang = $this.data('lang');
@@ -274,6 +351,16 @@
 			<h3>Toggle Calendar</h3>
             <h4>You can toggle date and get those dates as array.</h4>
             <div class="toggle-calendar"></div>
+			<div class="box"></div>
+		</div>
+		<div class="article">
+			<h3>Disabled dates Calendar</h3>
+            <h4>You can turn off the specific dates.</h4>
+			<div class="guide">
+				<h5>You turned off dates below [random]</h5>
+				<div class="guide-dates"></div>
+			</div>
+            <div class="disabled-dates-calendar"></div>
 			<div class="box"></div>
 		</div>
 		<div class="article">
@@ -368,6 +455,12 @@
 						<td class="center"><span class="label label-primary">boolean</span></td>
 						<td>If you set true this option, You can use multiple picker on your Calendar.</td>
 						<td>false</td>
+					</tr>
+					<tr>
+						<td colspan="2">disabledDates</td>
+						<td class="center"><span class="label label-primary">array</span></td>
+						<td>You can disable dates by using a date array formatted like 'YYYY-MM-DD' strings.</td>
+						<td>[]</td>
 					</tr>
 					<tr>
 						<td colspan="2">select</td>
