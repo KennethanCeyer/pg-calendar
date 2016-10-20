@@ -26,6 +26,7 @@ See our features which we are supported.
 - Multiple range datepicker support.
 - Input type controller support.
 - The toggle controll each of date buttons are supported.
+- You can disable specific dates.
 - Multiple languages are supported, (en, ko, fr, ch, de, jp).
 - Theme system supports (light, dark).
 
