@@ -8,7 +8,7 @@
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.2.9';
+var ComponentVersion = '1.2.10';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
@@ -197,6 +197,7 @@ var ComponentPreference = {
 					months: languagePack.months.en,
 					multiple: false,
 					toggle: false,
+					reverse: false,
 					buttons: false,
 					modal: false,
 
@@ -249,7 +250,8 @@ var ComponentPreference = {
 				var rangeLastClass = Helper.GetSubClass('UnitRangeLast');
 				var activeClass = Helper.GetSubClass('UnitActive');
 				var activePositionClasses = [Helper.GetSubClass('UnitFirstActive'), Helper.GetSubClass('UnitSecondActive')];
-				var toggleClass = Helper.GetSubClass('UnitToggle');
+				var toggleActiveClass = Helper.GetSubClass('UnitToggleActive');
+				var toggleInactiveClass = Helper.GetSubClass('UnitToggleInactive');
 
 				return this.each(function() {
 					var $this = $(this);
@@ -270,6 +272,12 @@ var ComponentPreference = {
 					};
 					local.current[0] = local.dateManager.date.clone();
 					this.local = local;
+
+					if(_this.settings.reverse === true) {
+						local.calendar.addClass(Helper.GetSubClass('Reverse'));
+					} else {
+						local.calendar.addClass(Helper.GetSubClass('Default'));
+					}
 
 					for(var idx in _this.settings.weeks) {
 						var week = _this.settings.weeks[idx];
@@ -432,7 +440,9 @@ var ComponentPreference = {
 
 							if(_this.settings.toggle === true) {
 								if($.inArray(iDateFormat, local.storage.activeDates) !== -1 && local.storage.activeDates.length > 0) {
-								   $unit.addClass(toggleClass);
+								   $unit.addClass(toggleActiveClass);
+								} else {
+									$unit.addClass(toggleInactiveClass);
 								}
 							} else if (_this.settings.multiple === true) {
 								if((local.current[0] !== null && iDateFormat === local.current[0].format('YYYY-MM-DD'))) {
@@ -475,7 +485,7 @@ var ComponentPreference = {
 									local.current[position] = moment(date);
 									if(match.length < 1) {
 										local.storage.activeDates.push(date);
-										$this.addClass(toggleClass);
+										$this.addClass(toggleActiveClass).removeClass(toggleInactiveClass);
 									} else {
 										var index = 0;
 										for(var idx in local.storage.activeDates) {
@@ -486,7 +496,7 @@ var ComponentPreference = {
 											}
 										}
 										local.storage.activeDates.splice(index, 1);
-										$this.removeClass(toggleClass);
+										$this.removeClass(toggleActiveClass).addClass(toggleInactiveClass);
 									}
 								} else {
 									if(_this.settings.multiple === true) {

@@ -200,7 +200,11 @@
 	border-bottom-right-radius: 1.2em;
 }
 
-.pignose-calendar .pignose-calendar-body .pignose-calendar-row .pignose-calendar-unit.pignose-calendar-unit-toggle a {
+.pignose-calendar.pignose-calendar-default .pignose-calendar-body .pignose-calendar-row .pignose-calendar-unit.pignose-calendar-unit-toggle-active a {
+	color: #cccccc !important;
+}
+
+.pignose-calendar.pignose-calendar-reverse .pignose-calendar-body .pignose-calendar-row .pignose-calendar-unit.pignose-calendar-unit-toggle-inactive a {
 	color: #cccccc !important;
 }
 
