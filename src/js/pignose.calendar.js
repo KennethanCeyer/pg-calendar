@@ -1,14 +1,14 @@
 /************************************************************************************************************
  *
  * @ PIGNOSE Calendar
- * @ Date Oct 21. 2016
+ * @ Date Oct 22. 2016
  * @ Author PIGNOSE
  * @ Licensed under MIT.
  *
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.2.10';
+var ComponentVersion = '1.2.11';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
@@ -191,6 +191,7 @@ var ComponentPreference = {
 					theme: 'light',
 					date: moment(),
 					format: 'YYYY-MM-DD',
+					enabledDates: [],
 					disabledDates: [],
 					weeks: languagePack.weeks.en,
 					monthsLong: languagePack.monthsLong.en,
@@ -258,6 +259,7 @@ var ComponentPreference = {
 					var $super = $this;
 					var $parent = $this;
 					var local = {
+						initial: null,
 						calendar: $(_this.global.calendarHtml),
 						input: $this.is('input'),
 						renderer: null,
@@ -270,7 +272,7 @@ var ComponentPreference = {
 						calendarWrapperOverlayHtml: Helper.Format('<div class="{0}"></div>', Helper.GetSubClass('WrapperOverlay')),
 						context: _this
 					};
-					local.current[0] = local.dateManager.date.clone();
+					local.initial = local.current[0] = local.dateManager.date.clone();
 					this.local = local;
 
 					if(_this.settings.reverse === true) {
@@ -434,7 +436,9 @@ var ComponentPreference = {
 							var iDateFormat = iDate.format('YYYY-MM-DD');
 							var $unit = $(Helper.Format('<div class="{0} {0}-date {0}-{3}" data-date="{1}"><a href="#">{2}</a></div>', Helper.GetSubClass('Unit'), iDate.format('YYYY-MM-DD'), i, languagePack.weeks.en[iDate.weekday()].toLowerCase()));
 
-							if($.inArray(iDateFormat, _this.settings.disabledDates) !== -1) {
+							if(_this.settings.enabledDates.length > 0 && $.inArray(iDateFormat, _this.settings.enabledDates) === -1) {
+								$unit.addClass(Helper.GetSubClass('UnitDisabled'));
+							} else if(_this.settings.enabledDates.length < 1 && $.inArray(iDateFormat, _this.settings.disabledDates) !== -1) {
 								$unit.addClass(Helper.GetSubClass('UnitDisabled'));
 							}
 
@@ -453,7 +457,9 @@ var ComponentPreference = {
 									$unit.addClass(activeClass).addClass(activePositionClasses[1]);
 								}
 							} else {
-								if((local.current[0] !== null && iDateFormat === local.current[0].format('YYYY-MM-DD'))) {
+								if((local.current[0] !== null && iDateFormat === local.current[0].format('YYYY-MM-DD')) &&
+									$.inArray(local.current[0].format('YYYY-MM-DD'), _this.settings.disabledDates) === -1 &&
+									(_this.settings.enabledDates.length < 1 || $.inArray(local.current[0].format('YYYY-MM-DD'), _this.settings.enabledDates) !== -1)) {
 									$unit.addClass(activeClass).addClass(activePositionClasses[0]);
 								}
 							}
@@ -465,100 +471,103 @@ var ComponentPreference = {
 
 								var $this = $(this);
 								var position = 0;
+								var date = $this.data('date');
 
 								if($this.hasClass(Helper.GetSubClass('UnitDisabled'))) {
 									return false;
 								}
 
 								if(local.input === true && _this.settings.multiple === false && _this.settings.buttons === false) {
-									var date = $this.data('date');
 									$super.val(moment(date).format(_this.settings.format));
 									$parent.triggerHandler('apply.' + ComponentClass);
 									return false;
 								}
 
-								if(_this.settings.toggle === true) {
-									var date = $this.data('date');
-									var match = local.storage.activeDates.filter(function(e, i) {
-										return e == date;
-									});
-									local.current[position] = moment(date);
-									if(match.length < 1) {
-										local.storage.activeDates.push(date);
-										$this.addClass(toggleActiveClass).removeClass(toggleInactiveClass);
-									} else {
-										var index = 0;
-										for(var idx in local.storage.activeDates) {
-											var targetDate = local.storage.activeDates[idx];
-											if(date == targetDate) {
-												index = idx;
-												break;
-											}
-										}
-										local.storage.activeDates.splice(index, 1);
-										$this.removeClass(toggleActiveClass).addClass(toggleInactiveClass);
-									}
+								if(local.initial !== null && local.initial.format('YYYY-MM-DD') === date) {
 								} else {
-									if(_this.settings.multiple === true) {
-										local.calendar.find('.' + rangeClass).removeClass(rangeClass).removeClass(rangeFirstClass).removeClass(rangeLastClass);
-									}
-
-									if($this.hasClass(activeClass)) {
-										if(_this.settings.multiple === true) {
-											if($this.hasClass(activePositionClasses[0])) {
-												position = 0;
-											} else if(activePositionClasses[1]) {
-												position = 1;
+									if(_this.settings.toggle === true) {
+										var match = local.storage.activeDates.filter(function(e, i) {
+											return e == date;
+										});
+										local.current[position] = moment(date);
+										if(match.length < 1) {
+											local.storage.activeDates.push(date);
+											$this.addClass(toggleActiveClass).removeClass(toggleInactiveClass);
+										} else {
+											var index = 0;
+											for(var idx in local.storage.activeDates) {
+												var targetDate = local.storage.activeDates[idx];
+												if(date == targetDate) {
+													index = idx;
+													break;
+												}
 											}
+											local.storage.activeDates.splice(index, 1);
+											$this.removeClass(toggleActiveClass).addClass(toggleInactiveClass);
 										}
-										$this.removeClass(activeClass).removeClass(activePositionClasses[position]);
-										local.current[position] = null;
 									} else {
 										if(_this.settings.multiple === true) {
-											if(local.current[0] === null) {
-												position = 0;
-											} else if(local.current[1] === null) {
-												position = 1;
-											} else {
-												position = 0;
-												local.current[1] = null;
-												local.calendar.find('.' + activeClass + '.' + activePositionClasses[1]).removeClass(activeClass).removeClass(activePositionClasses[1]);
-											}
+											local.calendar.find('.' + rangeClass).removeClass(rangeClass).removeClass(rangeFirstClass).removeClass(rangeLastClass);
 										}
 
-										local.calendar.find('.' + activeClass + '.' + activePositionClasses[position]).removeClass(activeClass).removeClass(activePositionClasses[position]);
-										$this.addClass(activeClass).addClass(activePositionClasses[position]);
-										local.current[position] = moment($this.data('date'));
-
-										if(_this.settings.multiple === true &&
-										   local.current[0] !== null &&
-										   local.current[1] !== null) {
-											if(local.current[0].diff(local.current[1]) > 0) {
-												var tmp = local.current[0];
-												local.current[0] = local.current[1];
-												local.current[1] = tmp;
-												tmp = null;
-
-												local.calendar.find('.' + activeClass).each(function() {
-													for(var idx in activePositionClasses) {
-														var className = activePositionClasses[idx];
-														$(this).toggleClass(className);
-													}
-												});
+										if($this.hasClass(activeClass)) {
+											if(_this.settings.multiple === true) {
+												if($this.hasClass(activePositionClasses[0])) {
+													position = 0;
+												} else if(activePositionClasses[1]) {
+													position = 1;
+												}
+											}
+											$this.removeClass(activeClass).removeClass(activePositionClasses[position]);
+											local.current[position] = null;
+										} else {
+											if(_this.settings.multiple === true) {
+												if(local.current[0] === null) {
+													position = 0;
+												} else if(local.current[1] === null) {
+													position = 1;
+												} else {
+													position = 0;
+													local.current[1] = null;
+													local.calendar.find('.' + activeClass + '.' + activePositionClasses[1]).removeClass(activeClass).removeClass(activePositionClasses[1]);
+												}
 											}
 
-											if(local.input === true && _this.settings.buttons === false) {
-												$super.val(
-													(local.current[0] === null? null:local.current[0].format(_this.settings.format)) + ', ' +
-													(local.current[1] === null? null:local.current[1].format(_this.settings.format))
-												);
-												$parent.trigger('apply.' + ComponentClass); 
-											}
+											local.calendar.find('.' + activeClass + '.' + activePositionClasses[position]).removeClass(activeClass).removeClass(activePositionClasses[position]);
+											$this.addClass(activeClass).addClass(activePositionClasses[position]);
+											local.current[position] = moment(date);
 
-											generateDateRange.call();
+											if(_this.settings.multiple === true &&
+											   local.current[0] !== null &&
+											   local.current[1] !== null) {
+												if(local.current[0].diff(local.current[1]) > 0) {
+													var tmp = local.current[0];
+													local.current[0] = local.current[1];
+													local.current[1] = tmp;
+													tmp = null;
+
+													local.calendar.find('.' + activeClass).each(function() {
+														for(var idx in activePositionClasses) {
+															var className = activePositionClasses[idx];
+															$(this).toggleClass(className);
+														}
+													});
+												}
+
+												if(local.input === true && _this.settings.buttons === false) {
+													$super.val(
+														(local.current[0] === null? null:local.current[0].format(_this.settings.format)) + ', ' +
+														(local.current[1] === null? null:local.current[1].format(_this.settings.format))
+													);
+													$parent.trigger('apply.' + ComponentClass); 
+												}
+
+												generateDateRange.call();
+											}
 										}
 									}
 								}
+								local.initial = null;
 
 								if(typeof _this.settings.select === 'function') {
 									_this.settings.select.call($this, local.current, local);
