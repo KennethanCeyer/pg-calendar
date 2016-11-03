@@ -14,7 +14,7 @@ The datepicker supports responsive and mobile environment.
 
 [Check demo page](http://www.pigno.se/barn/PIGNOSE-Calendar)
 
-![PIGNOSE-calendar](http://www.nhpcw.com/upload/PIGNOSE-Calendar-1.2.3_100816055056.png)
+![PIGNOSE-calendar](http://www.pigno.se/barn/PIGNOSE-Calendar/demo/img/screenshot_main.png)
 
 ----
 
