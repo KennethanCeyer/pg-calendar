@@ -49,6 +49,16 @@
 			color: #333333;
 		}
 
+		.header .version-wrapper {
+			margin: 20px auto 0;
+			margin-top: 20px;
+			padding-top: 20px;
+			max-width: 320px;
+			width: 100%;
+			border-top: 1px solid #f8f8f8;
+			font-family: 'Raleway', 'helvetica', 'sans-serif';
+		}
+
 		.article {
 			max-width: 1200px;
 			width: 80%;
@@ -60,7 +70,32 @@
 			text-align: center;
 		}
 
-		.article h3 {
+		.article > h3 {
+			display: inline-block;
+			margin-bottom: 20px;
+			position: relative;
+			font-weight: 500;
+		}
+
+		.article > h3 span {
+			position: relative;
+			z-index: 10;
+		}
+
+		.article > h3:after {
+			display: block;
+			position: absolute;
+			content: '';
+			height: .3em;
+			border-radius: 0 .3em .3em 0;
+			top: 50%;
+			margin-top: -.15em;
+			right: -2em;
+			left: 20%;
+			background-color: #e1fff4;
+		}
+
+		.article h4 {
 			margin-bottom: 40px;
 		}
 
@@ -187,6 +222,7 @@
 	<script type="text/javascript">
 	//<![CDATA[
 	$(function() {
+		$('#wrapper .version').text('v' + pignoseCalendar.VERSION);
 		function onClickHandler(date, obj) {
 			/**
 			 * @date is an array which be included dates(clicked date at first index)
@@ -298,6 +334,12 @@
 			});
 		} ());
 
+		// Disabled Weekdays Calendar.
+		$('.disabled-weekdays-calendar').pignoseCalendar({
+			select: onClickHandler,
+			disabledWeekdays: [0, 6]
+		});
+
 		// I18N Calendar
 		$('.language-calendar').each(function() {
 			var $this = $(this);
@@ -316,45 +358,46 @@
 			<img src="demo/img/pignose-logo.png" alt="" />
 			<h1>PIGNOSE Calendar</h1>
 			<a href="https://github.com/KennethanCeyer/PIGNOSE-Calendar" target="_blank" class="btn btn-primary">View project on Github</a> <a href="https://github.com/KennethanCeyer/PIGNOSE-Calendar/archive/master.zip" target="_blank" class="btn btn-info">Download zip</a>
+			<h4 class="version-wrapper">Latest version <strong class="version"></strong></h4>
 		</div>
 		<div class="article">
-			<h3>Calendar</h3>
+			<h3><span>Calendar</span></h3>
             <h4>PIGNOSE Calendar is beautiful and eidetic jQuery date picker plguin.</h4>
             <div class="calendar"></div>
 			<div class="box"></div>
 		</div>
 		<div class="article">
-			<h3>Input type</h3>
+			<h3><span>Input type</span></h3>
             <h4>You can use calendar by input power ups.</h4>
             <input type="text" class="input-calendar" />
 			<div class="box"></div>
 		</div>
 		<div class="article">
-			<h3>Modal</h3>
+			<h3><span>Modal</span></h3>
             <h4>You can display calendar by modal popup.</h4>
             <a href="#" class="btn-calendar">Open Modal</a>
 			<div class="box"></div>
 		</div>
 		<div class="article">
-			<h3>Dark theme support</h3>
+			<h3><span>Dark theme support</span></h3>
             <h4>Dark theme type supports, And we have a plan to add other themes.</h4>
             <div class="calendar-dark"></div>
 			<div class="box"></div>
 		</div>
 		<div class="article">
-			<h3>Multiple range Calendar</h3>
+			<h3><span>Multiple range Calendar</span></h3>
             <h4>PIGNOSE Calendar supports multiple range picker.</h4>
             <div class="multi-select-calendar"></div>
 			<div class="box"></div>
 		</div>
 		<div class="article">
-			<h3>Toggle Calendar</h3>
+			<h3><span>Toggle Calendar</span></h3>
             <h4>You can toggle date and get those dates as array.</h4>
             <div class="toggle-calendar"></div>
 			<div class="box"></div>
 		</div>
 		<div class="article">
-			<h3>Disabled dates Calendar</h3>
+			<h3><span>Disabled Dates Calendar</span></h3>
             <h4>You can turn off the specific dates.</h4>
 			<div class="guide">
 				<h5>You turned off dates below [random]</h5>
@@ -364,13 +407,19 @@
 			<div class="box"></div>
 		</div>
 		<div class="article">
-			<h3>I18N Support</h3>
+			<h3><span>Disabled Weekdays Calendar</span></h3>
+            <h4>You can disable dates by specific weekday numbers (0 ~ 6, 0 is sunday).</h4>
+            <div class="disabled-weekdays-calendar"></div>
+			<div class="box"></div>
+		</div>
+		<div class="article">
+			<h3><span>I18N Support</span></h3>
             <h4>PIGNOSE Calendar supports various languages.</h4>
 
 			<h5>Korean</h5>
             <div class="language-calendar language-ko-calendar" data-lang="ko"></div>
 
-			<h5>Deutsche</h5>
+			<h5>Deutsch</h5>
             <div class="language-calendar language-de-calendar" data-lang="de"></div>
 
 			<h5>Chinese</h5>
@@ -387,7 +436,7 @@
 			</div>
 		</div>
         <div class="article">
-			<h3>Dependency</h3>
+			<h3><span>Dependency</span></h3>
             <h4>This plugin has dependencies some javascript library.</h4>
             <p>Check belows and import it.</p>
             <ul>
@@ -396,7 +445,7 @@
             </ul>
         </div>
 		<div id="content" class="article">
-			<h3>Options</h3>
+			<h3><span>Options</span></h3>
 			<table class="table table-striped table-hover">
                 <colgroup>
                     <col style="width: 120px;">
@@ -469,6 +518,12 @@
 						<td>[]</td>
 					</tr>
 					<tr>
+						<td colspan="2">disabledWeekdays</td>
+						<td class="center"><span class="label label-primary">array</span></td>
+						<td>You can disable by using a weekday number array (This is a sequential number start from 0 [sunday]).</td>
+						<td>[]</td>
+					</tr>
+					<tr>
 						<td colspan="2">select</td>
 						<td class="center"><span class="label label-primary">function</span></td>
 						<td>This callback will be called when you select a date on calendar (date click).</td>
@@ -484,7 +539,7 @@
 			</table>
 		</div>
         <div id="content" class="article">
-			<h3>Methods</h3>
+			<h3><span>Methods</span></h3>
             <h4>You can use the method like <span class="label label-default">$element.hypermodel('Method Name', arguments);</span> format.</h4>
 			<table class="table table-striped table-hover">
 				<thead>
@@ -509,17 +564,18 @@
 			</table>
 		</div>
 		<div id="bower" class="article">
-			<h3>bower</h3>
+			<h3><span>bower</span></h3>
 			<blockquote><p>If you use bower.</p></blockquote>
 			<pre><code class="language-bash">bower install pg-calendar</code></pre>
 		</div>
 		<div id="npm" class="article">
-			<h3>npm</h3>
+			<h3><span>npm</span></h3>
 			<blockquote><p>If you use npm.</p></blockquote>
 			<pre><code class="language-bash">npm install pg-calendar</code></pre>
 		</div>
 		<div id="sample" class="article">
-			<h3>sample</h3>
+			<h3><span>sample</span></h3>
+			<br />
 			<ul class="nav nav-tabs tab">
 				<li role="presentation" class="active"><a href="#html" data-toggle="tab" aria-controls="html">HTML</a></li>
 				<li role="presentation"><a href="#javascript" data-toggle="tab" aria-controls="javascript">Javascript</a></li>
