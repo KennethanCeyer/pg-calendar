@@ -1,14 +1,14 @@
 /************************************************************************************************************
  *
  * @ PIGNOSE Calendar
- * @ Date Oct 22. 2016
+ * @ Date Nov 03. 2016
  * @ Author PIGNOSE
  * @ Licensed under MIT.
  *
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.2.11';
+var ComponentVersion = '1.2.12';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
@@ -161,7 +161,7 @@ var ComponentPreference = {
 			ko: ['일', '월', '화', '수', '목', '금', '토'],
 			fr: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
 			ch: ['日', '月', '火', '水', '木', '金', '土'],
-			de: ['Mon', 'Die', 'Mit', 'Don', 'Fre', 'Sam', 'Son'],
+			de: ['MO', 'DI', 'MI', 'DO', 'FR', 'SA', 'SO'],
 			jp: ['日', '月', '火', '水', '木', '金', '土'],
 		},
 		monthsLong: {
@@ -193,6 +193,7 @@ var ComponentPreference = {
 					format: 'YYYY-MM-DD',
 					enabledDates: [],
 					disabledDates: [],
+					disabledWeekdays: [],
 					weeks: languagePack.weeks.en,
 					monthsLong: languagePack.monthsLong.en,
 					months: languagePack.months.en,
@@ -439,6 +440,12 @@ var ComponentPreference = {
 							if(_this.settings.enabledDates.length > 0 && $.inArray(iDateFormat, _this.settings.enabledDates) === -1) {
 								$unit.addClass(Helper.GetSubClass('UnitDisabled'));
 							} else if(_this.settings.enabledDates.length < 1 && $.inArray(iDateFormat, _this.settings.disabledDates) !== -1) {
+								$unit.addClass(Helper.GetSubClass('UnitDisabled'));
+							} else if(_this.settings.disabledWeekdays.length > 0 && $.inArray(iDate.weekday(), _this.settings.disabledWeekdays) !== -1 &&
+									  (
+										  _this.settings.enabledDates.length < 1 ||
+										  $.inArray(iDateFormat, _this.settings.enabledDates) === -1
+									  )) {
 								$unit.addClass(Helper.GetSubClass('UnitDisabled'));
 							}
 
