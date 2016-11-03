@@ -32,7 +32,7 @@ See our features which we are supported.
 
 ----
 
-### Contributes
+### Contributors
 
 We welcome your support, You can support to notice by send me github issue or using gitter.
 
