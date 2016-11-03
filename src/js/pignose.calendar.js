@@ -1,14 +1,14 @@
 /************************************************************************************************************
  *
  * @ PIGNOSE Calendar
- * @ Date Nov 03. 2016
+ * @ Date Nov 04. 2016
  * @ Author PIGNOSE
  * @ Licensed under MIT.
  *
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.2.13';
+var ComponentVersion = '1.2.14';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
@@ -161,7 +161,7 @@ var ComponentPreference = {
 			ko: ['일', '월', '화', '수', '목', '금', '토'],
 			fr: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
 			ch: ['日', '月', '火', '水', '木', '金', '土'],
-			de: ['MO', 'DI', 'MI', 'DO', 'FR', 'SA', 'SO'],
+			de: ['SO', 'MO', 'DI', 'MI', 'DO', 'FR', 'SA'],
 			jp: ['日', '月', '火', '水', '木', '金', '土'],
 			pt: ['Dom','Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
 		},
@@ -206,6 +206,8 @@ var ComponentPreference = {
 					reverse: false,
 					buttons: false,
 					modal: false,
+					minDate: null,
+					maxDate: null,
 
 					/********************************************
 					 * CALLBACK
@@ -445,12 +447,16 @@ var ComponentPreference = {
 								$unit.addClass(Helper.GetSubClass('UnitDisabled'));
 							} else if(_this.settings.enabledDates.length < 1 && $.inArray(iDateFormat, _this.settings.disabledDates) !== -1) {
 								$unit.addClass(Helper.GetSubClass('UnitDisabled'));
-							} else if(_this.settings.disabledWeekdays.length > 0 && $.inArray(iDate.weekday(), _this.settings.disabledWeekdays) !== -1 &&
-									  (
-										  _this.settings.enabledDates.length < 1 ||
-										  $.inArray(iDateFormat, _this.settings.enabledDates) === -1
-									  )) {
-								$unit.addClass(Helper.GetSubClass('UnitDisabled'));
+							} else if(_this.settings.enabledDates.length < 1 ||
+									  $.inArray(iDateFormat, _this.settings.enabledDates) === -1) {
+								if(_this.settings.disabledWeekdays.length > 0 && $.inArray(iDate.weekday(), _this.settings.disabledWeekdays) !== -1) {
+									$unit.addClass(Helper.GetSubClass('UnitDisabled'));
+								} else if(
+									(_this.settings.minDate !== null && moment(_this.settings.minDate).diff(iDate) > 0) ||
+									(_this.settings.maxDate !== null && moment(_this.settings.maxDate).diff(iDate) < 0)
+								) {
+									$unit.addClass(Helper.GetSubClass('UnitDisabled'));
+								}
 							}
 
 							if(_this.settings.toggle === true) {
@@ -459,19 +465,21 @@ var ComponentPreference = {
 								} else {
 									$unit.addClass(toggleInactiveClass);
 								}
-							} else if (_this.settings.multiple === true) {
-								if((local.current[0] !== null && iDateFormat === local.current[0].format('YYYY-MM-DD'))) {
-									$unit.addClass(activeClass).addClass(activePositionClasses[0]);
-								}
-								
-								if((local.current[1] !== null && iDateFormat === local.current[1].format('YYYY-MM-DD'))) {
-									$unit.addClass(activeClass).addClass(activePositionClasses[1]);
-								}
-							} else {
-								if((local.current[0] !== null && iDateFormat === local.current[0].format('YYYY-MM-DD')) &&
-									$.inArray(local.current[0].format('YYYY-MM-DD'), _this.settings.disabledDates) === -1 &&
-									(_this.settings.enabledDates.length < 1 || $.inArray(local.current[0].format('YYYY-MM-DD'), _this.settings.enabledDates) !== -1)) {
-									$unit.addClass(activeClass).addClass(activePositionClasses[0]);
+							} else if($unit.hasClass(Helper.GetSubClass('UnitDisabled')) === false) {
+								if(_this.settings.multiple === true) {
+									if((local.current[0] !== null && iDateFormat === local.current[0].format('YYYY-MM-DD'))) {
+										$unit.addClass(activeClass).addClass(activePositionClasses[0]);
+									}
+									
+									if((local.current[1] !== null && iDateFormat === local.current[1].format('YYYY-MM-DD'))) {
+										$unit.addClass(activeClass).addClass(activePositionClasses[1]);
+									}
+								} else {
+									if((local.current[0] !== null && iDateFormat === local.current[0].format('YYYY-MM-DD')) &&
+										$.inArray(local.current[0].format('YYYY-MM-DD'), _this.settings.disabledDates) === -1 &&
+										(_this.settings.enabledDates.length < 1 || $.inArray(local.current[0].format('YYYY-MM-DD'), _this.settings.enabledDates) !== -1)) {
+										$unit.addClass(activeClass).addClass(activePositionClasses[0]);
+									}
 								}
 							}
 

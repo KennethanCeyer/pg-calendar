@@ -340,6 +340,16 @@
 			disabledWeekdays: [0, 6]
 		});
 
+		// Disabled Range Calendar.
+		var minDate = moment().day(Math.min(moment().day(), 2 + 1)).format('YYYY-MM-DD');
+		var maxDate = moment().day(Math.max(moment().day(), 24 + 1)).format('YYYY-MM-DD');
+		console.log(minDate, maxDate);
+		$('.disabled-range-calendar').pignoseCalendar({
+			select: onClickHandler,
+			minDate: minDate,
+			maxDate: maxDate
+		});
+
 		// I18N Calendar
 		$('.language-calendar').each(function() {
 			var $this = $(this);
@@ -410,6 +420,12 @@
 			<h3><span>Disabled Weekdays Calendar</span></h3>
             <h4>You can disable dates by specific weekday numbers (0 ~ 6, 0 is sunday).</h4>
             <div class="disabled-weekdays-calendar"></div>
+			<div class="box"></div>
+		</div>
+		<div class="article">
+			<h3><span>Disabled Range Calendar</span></h3>
+            <h4>You can give disabled range(minimum, maximum) by date string(YYYY-MM-DD).</h4>
+            <div class="disabled-range-calendar"></div>
 			<div class="box"></div>
 		</div>
 		<div class="article">
@@ -526,6 +542,18 @@
 						<td class="center"><span class="label label-primary">array</span></td>
 						<td>You can disable by using a weekday number array (This is a sequential number start from 0 [sunday]).</td>
 						<td>[]</td>
+					</tr>
+					<tr>
+						<td colspan="2">minDate</td>
+						<td class="center"><span class="label label-primary">string</span></td>
+						<td>You can give a minimum disable date range by 'YYYY-MM-DD' formatted string.</td>
+						<td>null</td>
+					</tr>
+					<tr>
+						<td colspan="2">maxDate</td>
+						<td class="center"><span class="label label-primary">array</span></td>
+						<td>You can give a maximum disable date range by 'YYYY-MM-DD' formatted string.</td>
+						<td>null</td>
 					</tr>
 					<tr>
 						<td colspan="2">select</td>
