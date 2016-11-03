@@ -287,7 +287,6 @@
 		$('.toggle-calendar').pignoseCalendar({
 			toggle: true,
 			select: function(date, obj) {
-
 				var $target = obj.calendar.parent().next().show().html('You selected ' + 
 				(date[0] === null? 'null':date[0].format('YYYY-MM-DD')) + 
 				'.' +
@@ -343,7 +342,6 @@
 		// Disabled Range Calendar.
 		var minDate = moment().day(Math.min(moment().day(), 2 + 1)).format('YYYY-MM-DD');
 		var maxDate = moment().day(Math.max(moment().day(), 24 + 1)).format('YYYY-MM-DD');
-		console.log(minDate, maxDate);
 		$('.disabled-range-calendar').pignoseCalendar({
 			select: onClickHandler,
 			minDate: minDate,
