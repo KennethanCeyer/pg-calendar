@@ -1,14 +1,14 @@
 /************************************************************************************************************
  *
  * @ PIGNOSE Calendar
- * @ Date Nov 04. 2016
+ * @ Date Nov 05. 2016
  * @ Author PIGNOSE
  * @ Licensed under MIT.
  *
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.2.15';
+var ComponentVersion = '1.3.0';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
@@ -16,40 +16,52 @@ window[ComponentName] = {
 
 /************************************************************************************************************
  *
- * @ Version 1.0.1
+ * @ Version 1.0.2
  * @ PIGNOSE PLUGIN HELPER
- * @ Date Oct 08. 2016
+ * @ Date Nev 05. 2016
  * @ Author PIGNOSE
  * @ Licensed under MIT.
  *
  ***********************************************************************************************************/
-function DateManager(d) {
-	this.year = parseInt(d.format('YYYY'), 10);
-	this.month = parseInt(d.format('MM'), 10);
-	this.prevMonth = parseInt(d.clone().add(-1, 'months').format('MM'), 10);
-	this.nextMonth = parseInt(d.clone().add(1, 'months').format('MM'), 10);
-	this.day = parseInt(d.format('DD'), 10);
-	this.firstDay = 1;
-	this.lastDay = parseInt(d.clone().endOf('month').format('DD'), 10);
-	this.weekDay = d.weekday();
-	this.date = d;
-};
+var DateManager = (function() {
+	var m_dateCache = {};
+	var DateManager = function Constructor(d) {
+		this.year = parseInt(d.format('YYYY'), 10);
+		this.month = parseInt(d.format('MM'), 10);
+		this.prevMonth = parseInt(d.clone().add(-1, 'months').format('MM'), 10);
+		this.nextMonth = parseInt(d.clone().add(1, 'months').format('MM'), 10);
+		this.day = parseInt(d.format('DD'), 10);
+		this.firstDay = 1;
+		this.lastDay = parseInt(d.clone().endOf('month').format('DD'), 10);
+		this.weekDay = d.weekday();
+		this.date = d;
+	};
 
-DateManager.prototype.toString = function() {
-	return this.date.format('YYYY-MM-DD');
-};
+	DateManager.prototype.toString = function() {
+		return this.date.format('YYYY-MM-DD');
+	};
 
-DateManager.Convert = function(year, month, day) {
-	var date = Helper.Format('{0}-{1}-{2}', year, month, day);
-	return moment(date, 'YYYY-MM-DD');
-};
+	DateManager.Convert = function(year, month, day) {
+		var date = Helper.Format('{0}-{1}-{2}', year, month, day);
+		if(typeof m_dateCache[date] === 'undefined') {
+			m_dateCache[date] = moment(date, 'YYYY-MM-DD');
+		}
+		return m_dateCache[date];
+	};
 
-function Helper() {
-};
+	return DateManager
+}) ();
 
-!(function() {
+var Helper = (function() {
 	var m_formatCache = {};
 	var m_classCache = {};
+	var m_subClassCache = {};
+
+	var m_regex_upper = /[A-Z]/;
+
+	var Helper = function Constructor() {
+	};
+
 	Helper.Format = function(format) {
 		if(typeof format === 'undefined' || format === '' || arguments.length <= 1) {
 			return '';
@@ -59,7 +71,8 @@ function Helper() {
 			if(typeof m_formatCache[key] !== 'undefined') {
 				return m_formatCache[key]
 			} else {
-				for(var idx in args) {
+				var len = args.length;
+				for(var idx=0; idx<len; idx++) {
 					var value = args[idx];
 					format = format.replace(new RegExp(('((?!\\\\)?\\{' + idx + '(?!\\\\)?\\})'), 'g'), value);
 				}
@@ -75,28 +88,37 @@ function Helper() {
 			return m_classCache[key];
 		} else {
 			var chars = name.split('');
-			var className = '';
-			for(var idx in chars) {
+			var classNames = [], className;
+			var len = chars.length;
+			for(var idx=0, pos=0; idx<len; idx++) {
 				var char = chars[idx];
 				if(typeof char !== 'string') {
 					continue;
 				}
 
-				if(/[A-Z]/.test(char) === true) {
-					className += '-';
+				if(m_regex_upper.test(char) === true) {
+					classNames[pos++] = '-';
 					char = char.toString().toLowerCase();
 				}
-				className += char.toString();
+				classNames[pos++] = char;
 			}
+
+			className = classNames.join('');
 			m_classCache[key] = className;
 			return className;
 		}
 	};
 
 	Helper.GetSubClass = function(name) {
-		return Helper.GetClass(Helper.Format('{0}{1}', ComponentName, name));
+		if(typeof m_subClassCache[name] === 'undefined') {
+			m_subClassCache[name] = Helper.GetClass(Helper.Format('{0}{1}', ComponentName, name));
+		}
+		return m_subClassCache[name];
 	};
-} ());
+
+	return Helper;
+}) ();
+
 
 /************************************************************************************************************
  *
@@ -122,7 +144,7 @@ if(typeof Array.prototype.filter === 'undefined') {
 		var thisp = arguments[1];
 		for (var i = 0; i<len; i++) {
 			if (i in t) {
-				var val = t[i]; // in case fun mutates this
+				var val = t[i];
 				if (func.call(thisp, val, i, t)) {
 					res.push(val);
 				}
@@ -217,7 +239,7 @@ var ComponentPreference = {
 				}, options);
 
 				if(this.settings.lang !== 'en' &&
-				    $.inArray(this.settings.lang, languagePack.supports) !== -1) {
+				   $.inArray(this.settings.lang, languagePack.supports) !== -1) {
 					this.settings.weeks = languagePack.weeks[this.settings.lang];
 					this.settings.monthsLong = languagePack.monthsLong[this.settings.lang];
 					this.settings.months = languagePack.months[this.settings.lang];
@@ -279,6 +301,7 @@ var ComponentPreference = {
 						calendarWrapperOverlayHtml: Helper.Format('<div class="{0}"></div>', Helper.GetSubClass('WrapperOverlay')),
 						context: _this
 					};
+					var len;
 					local.initial = local.current[0] = local.dateManager.date.clone();
 					this.local = local;
 
@@ -287,8 +310,9 @@ var ComponentPreference = {
 					} else {
 						local.calendar.addClass(Helper.GetSubClass('Default'));
 					}
-
-					for(var idx in _this.settings.weeks) {
+					
+					len = _this.settings.weeks.length;
+					for(var idx=0; idx<len; idx++) {
 						var week = _this.settings.weeks[idx];
 						if(typeof week !== 'string') {
 							continue;
@@ -431,11 +455,15 @@ var ComponentPreference = {
 
 						var firstDate = DateManager.Convert(local.dateManager.year, local.dateManager.month, local.dateManager.firstDay);
 						var firstWeekday = firstDate.weekday();
-						var $unitList = $();
+						var $unitList = [], currentFormat = [
+								local.current[0] === null? null:local.current[0].format('YYYY-MM-DD'),
+								local.current[1] === null? null:local.current[1].format('YYYY-MM-DD')
+							], minDate = _this.settings.minDate === null? null:moment(_this.settings.minDate),
+							   maxDate = _this.settings.maxDate === null? null:moment(_this.settings.maxDate);
 
 						for(var i=0; i<firstWeekday; i++) {
 							var $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('Unit'), languagePack.weeks.en[i].toLowerCase()));
-							$unitList = $unitList.add($unit);
+							$unitList.push($unit);
 						}
 
 						for(var i=local.dateManager.firstDay; i<=local.dateManager.lastDay; i++) {
@@ -452,8 +480,8 @@ var ComponentPreference = {
 								if(_this.settings.disabledWeekdays.length > 0 && $.inArray(iDate.weekday(), _this.settings.disabledWeekdays) !== -1) {
 									$unit.addClass(Helper.GetSubClass('UnitDisabled'));
 								} else if(
-									(_this.settings.minDate !== null && moment(_this.settings.minDate).diff(iDate) > 0) ||
-									(_this.settings.maxDate !== null && moment(_this.settings.maxDate).diff(iDate) < 0)
+									(minDate !== null && minDate.diff(iDate) > 0) ||
+									(maxDate !== null && maxDate.diff(iDate) < 0)
 								) {
 									$unit.addClass(Helper.GetSubClass('UnitDisabled'));
 								}
@@ -467,23 +495,23 @@ var ComponentPreference = {
 								}
 							} else if($unit.hasClass(Helper.GetSubClass('UnitDisabled')) === false) {
 								if(_this.settings.multiple === true) {
-									if((local.current[0] !== null && iDateFormat === local.current[0].format('YYYY-MM-DD'))) {
+									if((currentFormat[0] !== null && iDateFormat === currentFormat[0])) {
 										$unit.addClass(activeClass).addClass(activePositionClasses[0]);
 									}
 									
-									if((local.current[1] !== null && iDateFormat === local.current[1].format('YYYY-MM-DD'))) {
+									if((currentFormat[1] !== null && iDateFormat === currentFormat[1])) {
 										$unit.addClass(activeClass).addClass(activePositionClasses[1]);
 									}
 								} else {
-									if((local.current[0] !== null && iDateFormat === local.current[0].format('YYYY-MM-DD')) &&
-										$.inArray(local.current[0].format('YYYY-MM-DD'), _this.settings.disabledDates) === -1 &&
-										(_this.settings.enabledDates.length < 1 || $.inArray(local.current[0].format('YYYY-MM-DD'), _this.settings.enabledDates) !== -1)) {
+									if((currentFormat[0] !== null && iDateFormat === currentFormat[0]) &&
+										$.inArray(currentFormat[0], _this.settings.disabledDates) === -1 &&
+										(_this.settings.enabledDates.length < 1 || $.inArray(currentFormat[0], _this.settings.enabledDates) !== -1)) {
 										$unit.addClass(activeClass).addClass(activePositionClasses[0]);
 									}
 								}
 							}
 
-							$unitList = $unitList.add($unit);
+							$unitList.push($unit);
 							$unit.bind('click', function(event) {
 								event.preventDefault();
 								event.stopPropagation();
@@ -506,7 +534,7 @@ var ComponentPreference = {
 								} else {
 									if(_this.settings.toggle === true) {
 										var match = local.storage.activeDates.filter(function(e, i) {
-											return e == date;
+											return e === date;
 										});
 										local.current[position] = moment(date);
 										if(match.length < 1) {
@@ -514,9 +542,9 @@ var ComponentPreference = {
 											$this.addClass(toggleActiveClass).removeClass(toggleInactiveClass);
 										} else {
 											var index = 0;
-											for(var idx in local.storage.activeDates) {
+											for(var idx=0; idx<local.storage.activeDates.length; idx++) {
 												var targetDate = local.storage.activeDates[idx];
-												if(date == targetDate) {
+												if(date === targetDate) {
 													index = idx;
 													break;
 												}
@@ -566,9 +594,10 @@ var ComponentPreference = {
 													tmp = null;
 
 													local.calendar.find('.' + activeClass).each(function() {
+														var $this = $(this);
 														for(var idx in activePositionClasses) {
 															var className = activePositionClasses[idx];
-															$(this).toggleClass(className);
+															$this.toggleClass(className);
 														}
 													});
 												}
@@ -599,22 +628,24 @@ var ComponentPreference = {
 
 						for(var i=lastWeekday+1;$unitList.length <= 7 * 5;i++) {
 							var $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('Unit'), languagePack.weeks.en[i % 7].toLowerCase()));
-							$unitList = $unitList.add($unit);
+							$unitList.push($unit);
 						}
 
 						var $row = null;
-						$unitList.each(function(i, e) {
-							if(i % 7 == 0 || i + 1 >= $unitList.length) {
-								if($row != null) {
+						var unitListLen = $unitList.length;
+						for(var i=0; i<unitListLen; i++) {
+							var e = $unitList[i];
+							if(i % 7 == 0 || i + 1 >= unitListLen) {
+								if($row !== null) {
 									$row.appendTo($calendarBody);
 								}
 
-								if(i + 1 < $unitList.length) {
+								if(i + 1 < unitListLen) {
 									$row = $(Helper.Format('<div class="{0}"></div>', Helper.GetSubClass('Row')));
 								}
 							}
-							$row.append($(this));
-						});
+							$row.append(e);
+						}
 
 						local.calendar.find('.' + _calendarTopClass + '-nav').bind('click', function(event) {
 							event.preventDefault();
