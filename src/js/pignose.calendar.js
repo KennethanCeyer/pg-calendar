@@ -1,14 +1,14 @@
 /************************************************************************************************************
  *
  * @ PIGNOSE Calendar
- * @ Date Nov 05. 2016
+ * @ Date Nov 08. 2016
  * @ Author PIGNOSE
  * @ Licensed under MIT.
  *
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.3.0';
+var ComponentVersion = '1.3.1';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
@@ -673,8 +673,10 @@ var ComponentPreference = {
 			set: function(date) {
 				if(typeof date !== 'undefined' && date !== null && date !== '') {
 					var dateSplit = date.split(',').map(function(e) {
-						return $.trim(e);
+						var f = $.trim(e);
+						return f === 'null'? null:f;
 					});
+
 					this.each(function() {
 						var $this = $(this);
 						var local = $this[0][ComponentName];
