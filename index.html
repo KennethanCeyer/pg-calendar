@@ -188,6 +188,20 @@
 			maxDate: maxDate
 		});
 
+		// Disabled Ranges Calendar.
+		$('.disabled-ranges-calendar').pignoseCalendar({
+			select: onClickHandler,
+			disabledRanges: [
+				['2016-10-05', '2016-10-21'],
+				['2016-11-01', '2016-11-07'],
+				['2016-11-19', '2016-11-21'],
+				['2016-12-05', '2016-12-08'],
+				['2016-12-17', '2016-12-18'],
+				['2016-12-29', '2016-12-30'],
+				['2017-01-10', '2017-01-20'],
+			]
+		});
+
 		// I18N Calendar
 		$('.language-calendar').each(function() {
 			var $this = $(this);
@@ -211,43 +225,43 @@
 			<a href="https://github.com/KennethanCeyer/PIGNOSE-Calendar" target="_blank" class="ui button primary">View project on Github</a> <a href="https://github.com/KennethanCeyer/PIGNOSE-Calendar/archive/master.zip" target="_blank" class="ui button teal">Download zip</a>
 			<h4 class="version">Latest version <strong></strong></h4>
 		</div>
-		<div class="article">
+		<div id="basic" class="article">
 			<h3><span>Calendar</span></h3>
             <h4>PIGNOSE Calendar is beautiful and eidetic jQuery date picker plguin.</h4>
             <div class="calendar"></div>
 			<div class="box"></div>
 		</div>
-		<div class="article">
+		<div id="input" class="article">
 			<h3><span>Input type</span></h3>
             <h4>You can use calendar by input power ups.</h4>
             <input type="text" class="input-calendar" />
 			<div class="box"></div>
 		</div>
-		<div class="article">
+		<div id="modal" class="article">
 			<h3><span>Modal</span></h3>
             <h4>You can display calendar by modal popup.</h4>
             <a href="#" class="btn-calendar">Open Modal</a>
 			<div class="box"></div>
 		</div>
-		<div class="article">
+		<div id="theme" class="article">
 			<h3><span>Dark theme support</span></h3>
             <h4>Dark theme type supports, And we have a plan to add other themes.</h4>
             <div class="calendar-dark"></div>
 			<div class="box"></div>
 		</div>
-		<div class="article">
+		<div id="multiple" class="article">
 			<h3><span>Multiple range Calendar</span></h3>
             <h4>PIGNOSE Calendar supports multiple range picker.</h4>
             <div class="multi-select-calendar"></div>
 			<div class="box"></div>
 		</div>
-		<div class="article">
+		<div id="toggle" class="article">
 			<h3><span>Toggle Calendar</span></h3>
             <h4>You can toggle date and get those dates as array.</h4>
             <div class="toggle-calendar"></div>
 			<div class="box"></div>
 		</div>
-		<div class="article">
+		<div id="disabled" class="article">
 			<h3><span>Disabled Dates Calendar</span></h3>
             <h4>You can turn off the specific dates.</h4>
 			<div class="guide">
@@ -257,19 +271,25 @@
             <div class="disabled-dates-calendar"></div>
 			<div class="box"></div>
 		</div>
-		<div class="article">
+		<div id="disabled-weekdays" class="article">
 			<h3><span>Disabled Weekdays Calendar</span></h3>
             <h4>You can disable dates by specific weekday numbers (0 ~ 6, 0 is sunday).</h4>
             <div class="disabled-weekdays-calendar"></div>
 			<div class="box"></div>
 		</div>
-		<div class="article">
+		<div id="disabled-range" class="article">
 			<h3><span>Disabled Range Calendar</span></h3>
             <h4>You can give disabled range(minimum, maximum) by date string(YYYY-MM-DD).</h4>
             <div class="disabled-range-calendar"></div>
 			<div class="box"></div>
 		</div>
-		<div class="article">
+		<div id="disabled-multiple-range" class="article">
+			<h3><span>Disabled Multiple Ranges Calendar</span></h3>
+            <h4><strong>Advanced</strong> - You can give multiple disabled date ranges by string(YYYY-MM-DD).</h4>
+            <div class="disabled-ranges-calendar"></div>
+			<div class="box"></div>
+		</div>
+		<div id="i18n" class="article">
 			<h3><span>I18N Support</span></h3>
             <h4>PIGNOSE Calendar supports various languages.</h4>
 
@@ -373,15 +393,27 @@
 						<td>false</td>
 					</tr>
 					<tr>
+						<td colspan="2">enabledDates</td>
+						<td class="center"><span class="ui label primary">array</span></td>
+						<td>You can set enabled dates by using date string array by formatted to 'YYYY-MM-DD'.</td>
+						<td>[]</td>
+					</tr>
+					<tr>
 						<td colspan="2">disabledDates</td>
 						<td class="center"><span class="ui label primary">array</span></td>
-						<td>You can disable dates by using a date array formatted like 'YYYY-MM-DD' strings.</td>
+						<td>You can set disabled dates by using date string array by formatted to 'YYYY-MM-DD'.</td>
 						<td>[]</td>
 					</tr>
 					<tr>
 						<td colspan="2">disabledWeekdays</td>
 						<td class="center"><span class="ui label primary">array</span></td>
-						<td>You can disable by using a weekday number array (This is a sequential number start from 0 [sunday]).</td>
+						<td>You can set disabled date by using a weekday number array (This is a sequential number start from 0 [sunday]).</td>
+						<td>[]</td>
+					</tr>
+					<tr>
+						<td colspan="2">disabledRanges</td>
+						<td class="center"><span class="ui label primary">array</span></td>
+						<td>This option is advanced way to using disable settings, You can give multiple disabled range by double array date string by formatted to 'YYYY-MM-DD'.</td>
 						<td>[]</td>
 					</tr>
 					<tr>

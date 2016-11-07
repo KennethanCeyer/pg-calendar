@@ -8,7 +8,7 @@
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.3.1';
+var ComponentVersion = '1.3.2';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
@@ -220,6 +220,7 @@ var ComponentPreference = {
 					enabledDates: [],
 					disabledDates: [],
 					disabledWeekdays: [],
+					disabledRanges: [],
 					weeks: languagePack.weeks.en,
 					monthsLong: languagePack.monthsLong.en,
 					months: languagePack.months.en,
@@ -429,14 +430,23 @@ var ComponentPreference = {
 								var $this = $(this);
 								if($this.hasClass(_calendarButtonClass + '-apply')) {
 									$super.trigger('apply.' + ComponentName, local);
-									var value = null
+									var value = ''
 									if(_this.settings.toggle === true) {
 										value = local.storage.activeDates.join(', ');
 									} else if(_this.settings.multiple === true) {
-										value = (local.current[0] === null? null:local.current[0].format(_this.settings.format)) + ', ' +
-												(local.current[1] === null? null:local.current[1].format(_this.settings.format));
+										var dateValues = [];
+
+										if(local.current[0] !== null) {
+											dateValues.push(local.current[0].format(_this.settings.format));
+										}
+
+										if(local.current[1] !== null) {
+											dateValues.push(local.current[1].format(_this.settings.format));
+										}
+
+										value = dateValues.join(' ~ ');
 									} else {
-										value = local.current[0] === null? null:moment(local.current[0]).format(_this.settings.format);
+										value = local.current[0] === null? '':moment(local.current[0]).format(_this.settings.format);
 									}
 									if(local.input === true) {
 										$super.val(value).triggerHandler('change');
@@ -471,19 +481,28 @@ var ComponentPreference = {
 							var iDateFormat = iDate.format('YYYY-MM-DD');
 							var $unit = $(Helper.Format('<div class="{0} {0}-date {0}-{3}" data-date="{1}"><a href="#">{2}</a></div>', Helper.GetSubClass('Unit'), iDate.format('YYYY-MM-DD'), i, languagePack.weeks.en[iDate.weekday()].toLowerCase()));
 
-							if(_this.settings.enabledDates.length > 0 && $.inArray(iDateFormat, _this.settings.enabledDates) === -1) {
-								$unit.addClass(Helper.GetSubClass('UnitDisabled'));
-							} else if(_this.settings.enabledDates.length < 1 && $.inArray(iDateFormat, _this.settings.disabledDates) !== -1) {
-								$unit.addClass(Helper.GetSubClass('UnitDisabled'));
-							} else if(_this.settings.enabledDates.length < 1 ||
-									  $.inArray(iDateFormat, _this.settings.enabledDates) === -1) {
-								if(_this.settings.disabledWeekdays.length > 0 && $.inArray(iDate.weekday(), _this.settings.disabledWeekdays) !== -1) {
+							if(_this.settings.enabledDates.length > 0) {
+								if($.inArray(iDateFormat, _this.settings.enabledDates) === -1) {
 									$unit.addClass(Helper.GetSubClass('UnitDisabled'));
-								} else if(
-									(minDate !== null && minDate.diff(iDate) > 0) ||
-									(maxDate !== null && maxDate.diff(iDate) < 0)
-								) {
-									$unit.addClass(Helper.GetSubClass('UnitDisabled'));
+								}
+							} else if($.inArray(iDateFormat, _this.settings.disabledDates) !== -1) {
+								$unit.addClass(Helper.GetSubClass('UnitDisabled'));
+							} else if(_this.settings.disabledWeekdays.length > 0 && $.inArray(iDate.weekday(), _this.settings.disabledWeekdays) !== -1) {
+								$unit.addClass(Helper.GetSubClass('UnitDisabled')).addClass(Helper.GetSubClass('UnitDisabledWeekdays'));
+							} else if(
+								(minDate !== null && minDate.diff(iDate) > 0) ||
+								(maxDate !== null && maxDate.diff(iDate) < 0)
+							) {
+								$unit.addClass(Helper.GetSubClass('UnitDisabled')).addClass(Helper.GetSubClass('UnitDisabledRange'));
+							} else if(_this.settings.disabledRanges.length > 0) {
+								var disabledRangesLength = _this.settings.disabledRanges.length;
+								for(var j=0; j<disabledRangesLength; j++) {
+									var disabledRange = _this.settings.disabledRanges[j];
+									var disabledRangeLength = disabledRange.length;
+									if(iDate.diff(moment(disabledRange[0])) >= 0 && iDate.diff(moment(disabledRange[1])) <= 0) {
+										$unit.addClass(Helper.GetSubClass('UnitDisabled')).addClass(Helper.GetSubClass('UnitDisabledRange')).addClass(Helper.GetSubClass('UnitDisabledMultipleRange'));
+										break;
+									}
 								}
 							}
 
@@ -603,10 +622,17 @@ var ComponentPreference = {
 												}
 
 												if(local.input === true && _this.settings.buttons === false) {
-													$super.val(
-														(local.current[0] === null? null:local.current[0].format(_this.settings.format)) + ', ' +
-														(local.current[1] === null? null:local.current[1].format(_this.settings.format))
-													);
+													var dateValues = []
+
+													if(local.current[0] !== null) {
+														dateValues.push(local.current[0].format(_this.settings.format));
+													}
+
+													if(local.current[1] !== null) {
+														dateValues.push(local.current[1].format(_this.settings.format));
+													}
+
+													$super.val(dateValues.join(', '));
 													$parent.trigger('apply.' + ComponentClass); 
 												}
 
@@ -672,9 +698,9 @@ var ComponentPreference = {
 			},
 			set: function(date) {
 				if(typeof date !== 'undefined' && date !== null && date !== '') {
-					var dateSplit = date.split(',').map(function(e) {
+					var dateSplit = date.split('~').map(function(e) {
 						var f = $.trim(e);
-						return f === 'null'? null:f;
+						return (f === 'null' || f === '')? null:f;
 					});
 
 					this.each(function() {
@@ -683,8 +709,8 @@ var ComponentPreference = {
 						var context = local.context;
 
 						var dateArray = [
-							dateSplit[0] === null? null:moment(dateSplit[0], context.settings.format),
-							dateSplit[1] === null? null:moment(dateSplit[1], context.settings.format)
+							(typeof dateSplit[0] === 'undefined' || dateSplit[0] === null)? null:moment(dateSplit[0], context.settings.format),
+							(typeof dateSplit[1] === 'undefined' || dateSplit[1] === null)? null:moment(dateSplit[1], context.settings.format)
 						];
 
 						local.dateManager = new DateManager(dateArray[0]);
