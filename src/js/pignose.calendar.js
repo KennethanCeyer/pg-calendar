@@ -8,7 +8,7 @@
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.3.3';
+var ComponentVersion = '1.3.4';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
@@ -224,6 +224,7 @@ var ComponentPreference = {
 					weeks: languagePack.weeks.en,
 					monthsLong: languagePack.monthsLong.en,
 					months: languagePack.months.en,
+					initialize: true,
 					multiple: false,
 					toggle: false,
 					reverse: false,
@@ -289,7 +290,7 @@ var ComponentPreference = {
 					var $super = $this;
 					var $parent = $this;
 					var local = {
-						initial: null,
+						initialize: null,
 						calendar: $(_this.global.calendarHtml),
 						input: $this.is('input'),
 						renderer: null,
@@ -303,7 +304,11 @@ var ComponentPreference = {
 						context: _this
 					};
 					var len;
-					local.initial = local.current[0] = local.dateManager.date.clone();
+
+					if(_this.settings.initialize === true) {
+						local.initialize = local.current[0] = local.dateManager.date.clone();
+					}
+
 					this.local = local;
 
 					if(_this.settings.reverse === true) {
@@ -549,7 +554,7 @@ var ComponentPreference = {
 									return false;
 								}
 
-								if(local.initial !== null && local.initial.format('YYYY-MM-DD') === date) {
+								if(local.initialize !== null && local.initialize.format('YYYY-MM-DD') === date) {
 								} else {
 									if(_this.settings.toggle === true) {
 										var match = local.storage.activeDates.filter(function(e, i) {
@@ -641,7 +646,7 @@ var ComponentPreference = {
 										}
 									}
 								}
-								local.initial = null;
+								local.initialize = null;
 
 								if(typeof _this.settings.select === 'function') {
 									_this.settings.select.call($this, local.current, local);
