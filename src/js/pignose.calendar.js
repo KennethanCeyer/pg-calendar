@@ -1,14 +1,14 @@
 /************************************************************************************************************
  *
  * @ PIGNOSE Calendar
- * @ Date Nov 09. 2016
+ * @ Date Nov 15. 2016
  * @ Author PIGNOSE
  * @ Licensed under MIT.
  *
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.3.4';
+var ComponentVersion = '1.3.5';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion

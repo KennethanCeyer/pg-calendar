@@ -180,8 +180,8 @@
 		});
 
 		// Disabled Range Calendar.
-		var minDate = moment().day(Math.min(moment().day(), 2 + 1)).format('YYYY-MM-DD');
-		var maxDate = moment().day(Math.max(moment().day(), 24 + 1)).format('YYYY-MM-DD');
+		var minDate = moment().set('dates', Math.min(moment().day(), 2 + 1)).format('YYYY-MM-DD');
+		var maxDate = moment().set('dates', Math.max(moment().day(), 24 + 1)).format('YYYY-MM-DD');
 		$('.disabled-range-calendar').pignoseCalendar({
 			select: onClickHandler,
 			minDate: minDate,
