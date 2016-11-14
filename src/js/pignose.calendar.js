@@ -8,7 +8,7 @@
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.3.5';
+var ComponentVersion = '1.3.6';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
@@ -490,8 +490,6 @@ var ComponentPreference = {
 								if($.inArray(iDateFormat, _this.settings.enabledDates) === -1) {
 									$unit.addClass(Helper.GetSubClass('UnitDisabled'));
 								}
-							} else if($.inArray(iDateFormat, _this.settings.disabledDates) !== -1) {
-								$unit.addClass(Helper.GetSubClass('UnitDisabled'));
 							} else if(_this.settings.disabledWeekdays.length > 0 && $.inArray(iDate.weekday(), _this.settings.disabledWeekdays) !== -1) {
 								$unit.addClass(Helper.GetSubClass('UnitDisabled')).addClass(Helper.GetSubClass('UnitDisabledWeekdays'));
 							} else if(
@@ -499,6 +497,8 @@ var ComponentPreference = {
 								(maxDate !== null && maxDate.diff(iDate) < 0)
 							) {
 								$unit.addClass(Helper.GetSubClass('UnitDisabled')).addClass(Helper.GetSubClass('UnitDisabledRange'));
+							} else if($.inArray(iDateFormat, _this.settings.disabledDates) !== -1) {
+								$unit.addClass(Helper.GetSubClass('UnitDisabled'));
 							} else if(_this.settings.disabledRanges.length > 0) {
 								var disabledRangesLength = _this.settings.disabledRanges.length;
 								for(var j=0; j<disabledRangesLength; j++) {
