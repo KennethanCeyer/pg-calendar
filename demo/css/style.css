@@ -184,3 +184,15 @@ pre, code, code span {
 	white-space: normal;
 	word-break: break-word;
 }
+
+.box-languages .box-languages-set {
+	font-size: 0;
+}
+
+.box-languages .label:nth-child(4n) {
+	margin-right: 0;
+}
+
+.box-languages .label:nth-child(4n + 1) {
+	margin-left: 0;
+}

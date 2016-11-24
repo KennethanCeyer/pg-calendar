@@ -1,14 +1,14 @@
 /************************************************************************************************************
  *
  * @ PIGNOSE Calendar
- * @ Date Nov 15. 2016
+ * @ Date Nov 24. 2016
  * @ Author PIGNOSE
  * @ Licensed under MIT.
  *
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.3.7';
+var ComponentVersion = '1.3.8';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
@@ -177,7 +177,7 @@ var ComponentPreference = {
 	var _calendarButtonClass = Helper.GetSubClass('Button');
 
 	var languagePack = {
-		supports: ['en', 'ko', 'fr', 'ch', 'de', 'jp', 'pt'],
+		supports: ['en', 'ko', 'fr', 'ch', 'de', 'jp', 'pt', 'da'],
 		weeks: {
 			en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 			ko: ['일', '월', '화', '수', '목', '금', '토'],
@@ -186,6 +186,7 @@ var ComponentPreference = {
 			de: ['SO', 'MO', 'DI', 'MI', 'DO', 'FR', 'SA'],
 			jp: ['日', '月', '火', '水', '木', '金', '土'],
 			pt: ['Dom','Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+			da: ['Søn', 'Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør'],
 		},
 		monthsLong: {
 			en: ['January', 'February', 'March', 'April', 'May', 'Jun', 'July', 'August', 'September', 'October', 'November', 'December'],
@@ -195,6 +196,7 @@ var ComponentPreference = {
 			de: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
 			jp: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
 			pt: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+			da: ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'],
 		},
 		months: {
 			en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -204,6 +206,7 @@ var ComponentPreference = {
 			de: ['Jän', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
 			jp: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
  			pt: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+			da: ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
 		}
 	};
 
