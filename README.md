@@ -27,7 +27,7 @@ See our features which we are supported.
 - Input type controller support.
 - The toggle controll each of date buttons are supported.
 - You can disable specific dates.
-- Multiple languages are supported, (en, ko, fr, ch, de, jp, pt).
+- Multiple languages are supported, (en, ko, fr, ch, de, jp, pt, da).
 - Theme system supports (light, dark).
 
 ----
@@ -40,6 +40,7 @@ We welcome your support, You can support to notice by send me github issue or us
 
 - [@matheusdelima](https://www.github.com/matheusdelima)
 - [@feldmarv](https://www.github.com/feldmarv)
+- [@TNDecoder](https://www.github.com/TNDecoder)
 
 ----
 
