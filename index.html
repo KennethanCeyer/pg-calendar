@@ -188,6 +188,13 @@
 			maxDate: maxDate
 		});
 
+		// Multiple Week Select
+		$('.pick-weeks-calendar').pignoseCalendar({
+			pickWeeks: true,
+			multiple: true,
+			select: onClickHandler
+		});
+
 		// Disabled Ranges Calendar.
 		$('.disabled-ranges-calendar').pignoseCalendar({
 			select: onClickHandler,
@@ -287,6 +294,12 @@
 			<h3><span>Disabled Multiple Ranges Calendar</span></h3>
             <h4><strong>Advanced</strong> - You can give multiple disabled date ranges by string(YYYY-MM-DD).</h4>
             <div class="disabled-ranges-calendar"></div>
+			<div class="box"></div>
+		</div>
+		<div id="pick-weeks" class="article">
+			<h3><span>Multiple Weeks Calendar</span></h3>
+            <h4><strong>Advanced</strong> - You can turn on/off weeks date range by clicking.</h4>
+            <div class="pick-weeks-calendar"></div>
 			<div class="box"></div>
 		</div>
 		<div id="i18n" class="article">
@@ -410,6 +423,12 @@
 						<td colspan="2">multiple</td>
 						<td class="center"><span class="ui label primary">boolean</span></td>
 						<td>If you set true this option, You can use multiple picker on your Calendar.</td>
+						<td>false</td>
+					</tr>
+					<tr>
+						<td colspan="2">pickWeeks</td>
+						<td class="center"><span class="ui label primary">boolean</span></td>
+						<td>If you set true this option, You can use multiple range picker by one click on your Calendar.</td>
 						<td>false</td>
 					</tr>
 					<tr>

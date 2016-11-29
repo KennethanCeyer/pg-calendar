@@ -1,14 +1,14 @@
 /************************************************************************************************************
  *
  * @ PIGNOSE Calendar
- * @ Date Nov 24. 2016
+ * @ Date Nov 30. 2016
  * @ Author PIGNOSE
  * @ Licensed under MIT.
  *
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.3.8';
+var ComponentVersion = '1.3.9';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
@@ -181,7 +181,7 @@ var ComponentPreference = {
 		weeks: {
 			en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 			ko: ['일', '월', '화', '수', '목', '금', '토'],
-			fr: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+			fr: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
 			ch: ['日', '月', '火', '水', '木', '金', '土'],
 			de: ['SO', 'MO', 'DI', 'MI', 'DO', 'FR', 'SA'],
 			jp: ['日', '月', '火', '水', '木', '金', '土'],
@@ -227,6 +227,7 @@ var ComponentPreference = {
 					weeks: languagePack.weeks.en,
 					monthsLong: languagePack.monthsLong.en,
 					months: languagePack.months.en,
+					pickWeeks: false,
 					initialize: true,
 					multiple: false,
 					toggle: false,
@@ -253,6 +254,14 @@ var ComponentPreference = {
 				if(this.settings.theme !== 'light' &&
 				   $.inArray(this.settings.theme, ComponentPreference.supports.themes) === -1) {
 				   this.settings.theme = 'light';
+				}
+
+				if(this.settings.pickWeeks === true) {
+					if(this.settings.multiple === false) {
+						console.error('You must give true at settings.multiple options on PIGNOSE-Calendar for using in pickWeeks option.');
+					} else if(this.settings.toggle === true) {
+						console.error('You must give false at settings.toggle options on PIGNOSE-Calendar for using in pickWeeks option.');
+					}
 				}
 
 				this.global = {
@@ -580,11 +589,10 @@ var ComponentPreference = {
 											$this.removeClass(toggleActiveClass).addClass(toggleInactiveClass);
 										}
 									} else {
-										if(_this.settings.multiple === true) {
-											local.calendar.find('.' + rangeClass).removeClass(rangeClass).removeClass(rangeFirstClass).removeClass(rangeLastClass);
-										}
-
-										if($this.hasClass(activeClass)) {
+										if(
+											$this.hasClass(activeClass) === true &&
+											_this.settings.pickWeeks === false
+										) {
 											if(_this.settings.multiple === true) {
 												if($this.hasClass(activePositionClasses[0])) {
 													position = 0;
@@ -595,21 +603,47 @@ var ComponentPreference = {
 											$this.removeClass(activeClass).removeClass(activePositionClasses[position]);
 											local.current[position] = null;
 										} else {
-											if(_this.settings.multiple === true) {
-												if(local.current[0] === null) {
-													position = 0;
-												} else if(local.current[1] === null) {
-													position = 1;
-												} else {
-													position = 0;
+											if(_this.settings.pickWeeks === true) {
+												if(
+													$this.hasClass(activeClass) === true ||
+													$this.hasClass(rangeClass) === true
+												) {
+													for(var j=0; j<2; j++) {
+														local.calendar.find('.' + activeClass + '.' + activePositionClasses[j]).removeClass(activeClass).removeClass(activePositionClasses[j]);
+													}
+
+													local.current[0] = null;
 													local.current[1] = null;
-													local.calendar.find('.' + activeClass + '.' + activePositionClasses[1]).removeClass(activeClass).removeClass(activePositionClasses[1]);
+												} else {
+													local.current[0] = moment(date).startOf('week');
+													local.current[1] = moment(date).endOf('week');
+
+													for(var j=0; j<2; j++) {
+														local.calendar.find('.' + activeClass + '.' + activePositionClasses[j]).removeClass(activeClass).removeClass(activePositionClasses[j]);
+														local.calendar.find(Helper.Format('.{0}[data-date="{1}"]', Helper.GetSubClass('Unit'), local.current[j].format('YYYY-MM-DD'))).addClass(activeClass).addClass(activePositionClasses[j]);
+													}
 												}
+											} else {
+												if(_this.settings.multiple === true) {
+													if(local.current[0] === null) {
+														position = 0;
+													} else if(local.current[1] === null) {
+														position = 1;
+													} else {
+														position = 0;
+														local.current[1] = null;
+														local.calendar.find('.' + activeClass + '.' + activePositionClasses[1]).removeClass(activeClass).removeClass(activePositionClasses[1]);
+													}
+												}
+
+												local.calendar.find('.' + activeClass + '.' + activePositionClasses[position]).removeClass(activeClass).removeClass(activePositionClasses[position]);
+												$this.addClass(activeClass).addClass(activePositionClasses[position]);
+												local.current[position] = moment(date);
 											}
 
-											local.calendar.find('.' + activeClass + '.' + activePositionClasses[position]).removeClass(activeClass).removeClass(activePositionClasses[position]);
-											$this.addClass(activeClass).addClass(activePositionClasses[position]);
-											local.current[position] = moment(date);
+											if(_this.settings.multiple === true) {
+												local.calendar.find('.' + rangeClass).removeClass(rangeClass).removeClass(rangeFirstClass).removeClass(rangeLastClass);
+											}
 
 											if(_this.settings.multiple === true &&
 											   local.current[0] !== null &&
@@ -720,8 +754,17 @@ var ComponentPreference = {
 							(typeof dateSplit[0] === 'undefined' || dateSplit[0] === null)? null:moment(dateSplit[0], context.settings.format),
 							(typeof dateSplit[1] === 'undefined' || dateSplit[1] === null)? null:moment(dateSplit[1], context.settings.format)
 						];
-
 						local.dateManager = new DateManager(dateArray[0]);
+
+						if(context.settings.pickWeeks === true) {
+							if(dateArray[0] !== null) {
+								var date = dateArray[0];
+								dateArray[0] = date.clone().startOf('week');
+								dateArray[1] = date.clone().endOf('week');
+								console.log(dateArray);
+							}
+						}
+
 						if(context.settings.toggle === true) {
 							local.storage.activeDates = dateSplit;
 						} else {
