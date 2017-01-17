@@ -1,14 +1,14 @@
 /************************************************************************************************************
  *
  * @ PIGNOSE Calendar
- * @ Date Nov 30. 2016
+ * @ Date Jan 01. 2017
  * @ Author PIGNOSE
  * @ Licensed under MIT.
  *
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.3.9';
+var ComponentVersion = '1.4.0';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
@@ -566,7 +566,11 @@ var ComponentPreference = {
 									return false;
 								}
 
-								if(local.initialize !== null && local.initialize.format('YYYY-MM-DD') === date) {
+								if(
+									local.initialize !== null &&
+									local.initialize.format('YYYY-MM-DD') === date &&
+									_this.settings.toggle === false
+								) {
 								} else {
 									if(_this.settings.toggle === true) {
 										var match = local.storage.activeDates.filter(function(e, i) {
