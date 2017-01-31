@@ -8,7 +8,7 @@
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.4.0';
+var ComponentVersion = '1.4.1';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
@@ -16,7 +16,7 @@ window[ComponentName] = {
 
 /************************************************************************************************************
  *
- * @ Version 1.0.2
+ * @ Version 1.0.3
  * @ PIGNOSE PLUGIN HELPER
  * @ Date Nev 05. 2016
  * @ Author PIGNOSE
@@ -177,7 +177,7 @@ var ComponentPreference = {
 	var _calendarButtonClass = Helper.GetSubClass('Button');
 
 	var languagePack = {
-		supports: ['en', 'ko', 'fr', 'ch', 'de', 'jp', 'pt', 'da'],
+		supports: ['en', 'ko', 'fr', 'ch', 'de', 'jp', 'pt', 'da', 'es'],
 		weeks: {
 			en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 			ko: ['일', '월', '화', '수', '목', '금', '토'],
@@ -187,6 +187,7 @@ var ComponentPreference = {
 			jp: ['日', '月', '火', '水', '木', '金', '土'],
 			pt: ['Dom','Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
 			da: ['Søn', 'Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør'],
+            es: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
 		},
 		monthsLong: {
 			en: ['January', 'February', 'March', 'April', 'May', 'Jun', 'July', 'August', 'September', 'October', 'November', 'December'],
@@ -197,6 +198,7 @@ var ComponentPreference = {
 			jp: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
 			pt: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
 			da: ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'],
+            es: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
 		},
 		months: {
 			en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -207,6 +209,7 @@ var ComponentPreference = {
 			jp: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
  			pt: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
 			da: ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
+            es: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dec'],
 		}
 	};
 
