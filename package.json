@@ -1,6 +1,6 @@
 {
   "name": "pg-calendar",
-  "version": "1.3.9",
+  "version": "1.4.1",
   "description": "Beautiful and eidetic jQuery date picker plguin.",
   "main": "index.html",
   "scripts": {
