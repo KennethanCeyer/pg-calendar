@@ -38,8 +38,11 @@ We welcome your support, You can support to notice by send me github issue or us
 
 #### Languages
 
-- [@matheusdelima](https://www.github.com/matheusdelima)
+- [@adrian2monk](https://www.github.com/adrian2monk)
 - [@feldmarv](https://www.github.com/feldmarv)
+- [@matheusdelima](https://www.github.com/matheusdelima)
+- [@maxma51](https://www.github.com/maxma51)
+- [@pkly](https://www.github.com/pkly)
 - [@TNDecoder](https://www.github.com/TNDecoder)
 
 ----
