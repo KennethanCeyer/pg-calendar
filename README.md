@@ -18,6 +18,32 @@ The datepicker supports responsive and mobile environment.
 
 ----
 
+### Usage
+
+Check `dist/` folder on this repository.
+
+1. Install from git
+
+```shell
+  git clone git@github.com:KennethanCeyer/PIGNOSE-Calendar.git
+```
+
+2. Check distributed folder
+
+```shell
+  cd ./PIGNOSE-Calendar/dist
+  ls -al
+```
+
+3. Insert snippets at `<head>` tag of your html file.
+
+```html
+<script src="./dist/pignose.calendar.min.js"></script>
+<link type="text/css" href="./dist/pignose.calendar.min.css" />
+```
+
+----
+
 ### Overview
 
 See our features which we are supported.
