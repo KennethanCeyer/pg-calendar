@@ -22,13 +22,13 @@ The datepicker supports responsive and mobile environment.
 
 Check `dist/` folder on this repository.
 
-1. Install from git
+1. Install from git.
 
  ```shell
   git clone git@github.com:KennethanCeyer/PIGNOSE-Calendar.git
 ```
 
-2. Check distributed folder
+2. Check distributed folder.
 
  ```shell
   cd ./PIGNOSE-Calendar/dist
