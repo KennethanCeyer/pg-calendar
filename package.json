@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/KennethanCeyer/PIGNOSE-Calendar.git"
+    "url": "git+https://github.com/adrian2monk/PIGNOSE-Calendar.git"
   },
   "keywords": [
     "datepicker",
@@ -20,12 +20,12 @@
     "jquery",
     "plugin"
   ],
-  "author": "Kenneth Ceyer <kennethan@nhpcw.com> (http://www.pigno.se)",
+  "author": "Adrian Hernandez <adrian2monk@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/KennethanCeyer/PIGNOSE-Calendar/issues"
+    "url": "https://github.com/adrian2monk/PIGNOSE-Calendar/issues"
   },
-  "homepage": "https://github.com/KennethanCeyer/PIGNOSE-Calendar#readme",
+  "homepage": "https://github.com/adrian2monk/PIGNOSE-Calendar#readme",
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",

@@ -3,12 +3,13 @@
  * @ PIGNOSE Calendar
  * @ Date Jan 01. 2017
  * @ Author PIGNOSE
+ * @ Updated adrian2monk
  * @ Licensed under MIT.
  *
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.4.1';
+var ComponentVersion = '1.4.2';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
@@ -20,6 +21,7 @@ window[ComponentName] = {
  * @ PIGNOSE PLUGIN HELPER
  * @ Date Nev 05. 2016
  * @ Author PIGNOSE
+ * @ Updated adrian2monk
  * @ Licensed under MIT.
  *
  ***********************************************************************************************************/
