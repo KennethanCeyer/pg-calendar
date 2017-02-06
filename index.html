@@ -113,7 +113,14 @@
 
 		// Color theme type Calendar
 		$('.calendar-dark').pignoseCalendar({
-			theme: 'dark', // light, dark
+			theme: 'dark', // light, dark, light-blue
+            toggle: true,
+			select: onClickHandler
+		});
+
+		// Light Blue theme type Calendar
+		$('.calendar-light-blue').pignoseCalendar({
+			theme: 'light-blue', // light, dark, light-blue
 			select: onClickHandler
 		});
 
@@ -250,7 +257,12 @@
             <a href="#" class="btn-calendar">Open Modal</a>
 			<div class="box"></div>
 		</div>
-		<div id="theme" class="article">
+		<div id="theme-blue" class="article">
+			<h3><span>Light Blue theme support</span></h3>
+            <div class="calendar-light-blue"></div>
+			<div class="box"></div>
+		</div>
+		<div id="theme-dark" class="article">
 			<h3><span>Dark theme support</span></h3>
             <h4>Dark theme type supports, And we have a plan to add other themes.</h4>
             <div class="calendar-dark"></div>
@@ -380,7 +392,7 @@
 					<tr>
 						<td colspan="2">theme</td>
 						<td class="center"><span class="ui label primary">string</span></td>
-						<td>A theme to set to the Calendar. (light, dark).</td>
+						<td>A theme to set to the Calendar. (light, dark, light-blue).</td>
 						<td>light</td>
 					</tr>
 					<tr>

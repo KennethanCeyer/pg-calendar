@@ -165,7 +165,7 @@ if(typeof Array.prototype.filter === 'undefined') {
 var ComponentClass = Helper.GetClass(ComponentName);
 var ComponentPreference = {
 	supports: {
-		themes: ['light', 'dark']
+		themes: ['light', 'dark', 'light-blue']
 	}
 };
 (function($) {
