@@ -1,7 +1,7 @@
 /************************************************************************************************************
  *
  * @ PIGNOSE Calendar
- * @ Date Jan 01. 2017
+ * @ Date Feb 07. 2017
  * @ Author PIGNOSE
  * @ Updated adrian2monk
  * @ Licensed under MIT.
@@ -9,7 +9,7 @@
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.4.2';
+var ComponentVersion = '1.4.3';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
@@ -21,7 +21,6 @@ window[ComponentName] = {
  * @ PIGNOSE PLUGIN HELPER
  * @ Date Nev 05. 2016
  * @ Author PIGNOSE
- * @ Updated adrian2monk
  * @ Licensed under MIT.
  *
  ***********************************************************************************************************/
@@ -224,11 +223,13 @@ var ComponentPreference = {
 					theme: 'light',
 					date: moment(),
 					format: 'YYYY-MM-DD',
+                    classOnEvents: {},
 					classOnDays: [],
 					enabledDates: [],
 					disabledDates: [],
 					disabledWeekdays: [],
 					disabledRanges: [],
+                    events: [],
 					weeks: languagePack.weeks.en,
 					monthsLong: languagePack.monthsLong.en,
 					months: languagePack.months.en,
@@ -274,14 +275,12 @@ var ComponentPreference = {
 													<div class="{1}">\
 														<a href="#" class="{1}-nav {1}-prev">\
 															<span class="{1}-icon"></span>\
-															<span class="{1}-value"></span>\
 														</a>\
 														<div class="{1}-date">\
-															<p class="{1}-month"></p>\
-															<h3 class="{1}-year"></h3>\
+															<span class="{1}-month"></span>\
+															<span class="{1}-year"></span>\
 														</div>\
 														<a href="#" class="{1}-nav {1}-next">\
-															<span class="{1}-value"></span>\
 															<span class="{1}-icon"></span>\
 														</a>\
 													</div>\
@@ -313,7 +312,8 @@ var ComponentPreference = {
 						renderer: null,
 						current: [null, null],
 						storage: {
-							activeDates: []
+							activeDates: [],
+							events: []
 						},
 						dateManager: new DateManager(_this.settings.date),
 						calendarWrapperHtml: Helper.Format('<div class="{0}"></div>', Helper.GetSubClass('Wrapper')),
@@ -526,6 +526,24 @@ var ComponentPreference = {
 										break;
 									}
 								}
+							} else if(_this.settings.events.length > 0) {
+							    var currentEvents = Array.filter(_this.settings.events, function(ev) {
+							    	return ev.date === iDateFormat;
+								});
+							    var classEvents = $.unique(Array.sort($.map(currentEvents, function(ev) {
+							    	return ev.group;
+								})));
+							    if (classEvents.length > 0) {
+							        $unit.data('events', currentEvents);
+							    	$unit.append('<div class="group-container"></div>');
+                                    var $container = $unit.find('.group-container');
+							    	$.each(classEvents, function(index, group) {
+							    		if ($.inArray(group, Object.keys(_this.settings.classOnEvents)) !== -1) {
+                                            var color = _this.settings.classOnEvents[group];
+                                            $container.append($(Helper.Format('<span class="event-group-{0}" style="background-color: {1}"></span>', group.toLowerCase(), color)));
+										}
+									});
+								}
 							}
 
 							if(_this.settings.toggle === true) {
@@ -560,6 +578,7 @@ var ComponentPreference = {
 								var $this = $(this);
 								var position = 0;
 								var date = $this.data('date');
+                                var eventsOnDate = $this.data('events');
 
 								if($this.hasClass(Helper.GetSubClass('UnitDisabled'))) {
 									return false;
@@ -645,6 +664,7 @@ var ComponentPreference = {
 													}
 												}
 
+												local.storage.events = eventsOnDate;
 												local.calendar.find('.' + activeClass + '.' + activePositionClasses[position]).removeClass(activeClass).removeClass(activePositionClasses[position]);
 												$this.addClass(activeClass).addClass(activePositionClasses[position]);
 												local.current[position] = moment(date);
