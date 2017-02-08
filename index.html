@@ -69,6 +69,7 @@
 			 * @obj is an object which stored calendar interal data.
 			 * @obj.calendar is an element reference.
 			 * @obj.storage.activeDates is all toggled data, If you use toggle type calendar.
+             * @obj.storage.events is all events associated to this date
 			 */
 
 			var $calendar = obj.calendar;
@@ -122,6 +123,40 @@
 		$('.calendar-light-blue').pignoseCalendar({
 			theme: 'light-blue', // light, dark, light-blue
 			select: onClickHandler
+		});
+
+		// Event Class Pin type Calendar
+		$('.calendar-events').pignoseCalendar({
+			classOnEvents: {
+			    offer: '#2fabb7',
+				ad: '#5c6270'
+			},
+			events: [{
+			    date: '2017-02-08',
+				group: 'offer'
+			}, {
+			    date: '2017-02-08',
+				group: 'ad'
+			}, {
+			    date: '2017-02-05',
+				group: 'offer'
+			}],
+			select: function(date, obj) {
+				var $target = obj.calendar.parent().next().show().html('You selected ' +
+				(date[0] === null? 'null':date[0].format('YYYY-MM-DD')) +
+				'.' +
+				'<br /><br />' +
+				'<strong>Events for this date</strong><br /><br />' +
+				'<div class="events-date"></div>');
+
+				for(var idx in obj.storage.events) {
+					var ev = obj.storage.events[idx];
+					if(typeof ev !== 'object') {
+						continue;
+					}
+					$target.find('.events-date').append('<span class="ui label default">' + JSON.stringify(ev) + '</span>');
+				}
+			}
 		});
 
 		// Multiple picker type Calendar
@@ -302,15 +337,20 @@
 });</code></pre>
 			</div>
 		</div>
+		<div id="theme-dark" class="article">
+			<h3><span>Dark theme support</span></h3>
+            <h4>Dark theme type supports, And we have a plan to add other themes.</h4>
+            <div class="calendar-dark"></div>
+			<div class="box"></div>
+		</div>
 		<div id="theme-blue" class="article">
 			<h3><span>Light Blue theme support</span></h3>
             <div class="calendar-light-blue"></div>
 			<div class="box"></div>
 		</div>
-		<div id="theme-dark" class="article">
-			<h3><span>Dark theme support</span></h3>
-            <h4>Dark theme type supports, And we have a plan to add other themes.</h4>
-            <div class="calendar-dark"></div>
+        <div id="events" class="article">
+			<h3><span>Events Class pin support</span></h3>
+            <div class="calendar-events"></div>
 			<div class="box"></div>
 			<ul class="ui top pointing secondary menu">
 				<a href="#" role="presentation" class="item active" data-tab="html-theme">HTML</a>
@@ -732,6 +772,18 @@
 						<td class="center"><span class="ui label primary">array</span></td>
 						<td>This option is advanced way to using disable settings, You can give multiple disabled range by double array date string by formatted to 'YYYY-MM-DD'.</td>
 						<td>[]</td>
+					</tr>
+					<tr>
+						<td colspan="2">events</td>
+						<td class="center"><span class="ui label primary">array</span></td>
+						<td>Set and array of events to pin on calendar. Each event is an object that must contain a date string formatted to 'YYYY-MM-DD' and class key that belong to classOnEvents dictionary indicating its color on calendar. Events with not color class suitable are all pin with <span style="display: inline-block; width: .8em; height: .8em; background-color: #5c6270;"></span>&nbsp;#5c6270. Issues may arise when the number of color class increase, this could break the calendar cell.</td>
+						<td>[]</td>
+					</tr>
+					<tr>
+						<td colspan="2">classOnEvents</td>
+						<td class="center"><span class="ui label primary">object</span></td>
+						<td>Set a dictionary with class 'key' and color code 'value' used for pin events class by date.</td>
+						<td>{}</td>
 					</tr>
 					<tr>
 						<td colspan="2">minDate</td>

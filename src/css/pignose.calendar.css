@@ -45,7 +45,7 @@
 }
 
 .pignose-calendar .pignose-calendar-top {
-	padding: 2.6em 0;
+	padding: 2em 0;
 	background-color: #fafafa;
 	border-bottom: 1px solid #e2e2e2;
 	box-shadow: 0 3px 8px rgba(0, 0, 0, .125);
@@ -62,8 +62,9 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
-	padding: 1.6em 0;
+	padding: inherit;
 	text-align: center;
+    text-transform: uppercase;
 	box-sizing: border-box;
 	-o-box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -72,14 +73,14 @@
 
 .pignose-calendar .pignose-calendar-top .pignose-calendar-top-year {
 	font-weight: 400;
-	font-size: 13px;
+	font-size: 20px;
 	color: #999999;
 	margin: 0;
 	padding: 0;
 }
 
 .pignose-calendar .pignose-calendar-top .pignose-calendar-top-month {
-	font-weight: 600;
+	font-weight: 400;
 	font-size: 20px;
 	margin-bottom: .4em;
 }
@@ -175,7 +176,7 @@
 .pignose-calendar-unit {
 	float: left;
 	display: block;
-	height: 2.8em;
+	height: 3.8em;
 	width: 14.28%;
 	text-align: center;
 	line-height: 2.8em;
@@ -183,6 +184,24 @@
 	-o-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
+}
+
+.pignose-calendar-unit .group-container {
+	line-height: .5em;
+}
+
+.pignose-calendar-unit [class^='event-group-'] {
+	background-color: #5c6270;
+	width: .5em;
+	height: .5em;
+	border-radius: 50%;
+	margin-left: auto;
+	margin-right: auto;
+	display: inline-block;
+}
+
+.pignose-calendar-unit [class^='event-group-'] + [class^='event-group-'] {
+	margin-left: .2em;
 }
 
 .pignose-calendar-unit a {
