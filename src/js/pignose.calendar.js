@@ -452,7 +452,7 @@ var ComponentPreference = {
 								var $this = $(this);
 								if($this.hasClass(_calendarButtonClass + '-apply')) {
 									$super.trigger('apply.' + ComponentName, local);
-									var value = ''
+									var value = '';
 									if(_this.settings.toggle === true) {
 										value = local.storage.activeDates.join(', ');
 									} else if(_this.settings.multiple === true) {
@@ -703,7 +703,7 @@ var ComponentPreference = {
 						var lastDate = DateManager.Convert(local.dateManager.year, local.dateManager.month, local.dateManager.lastDay);
 						var lastWeekday = lastDate.weekday();
 
-						for(var i=lastWeekday+1;$unitList.length <= 7 * 5;i++) {
+						for(var i=lastWeekday+1;$unitList.length < 7 * 5;i++) {
 							var $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('Unit'), languagePack.weeks.en[i % 7].toLowerCase()));
 							$unitList.push($unit);
 						}
