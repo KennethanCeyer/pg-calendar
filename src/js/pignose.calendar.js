@@ -333,7 +333,7 @@ var ComponentPreference = {
 					} else {
 						local.calendar.addClass(Helper.GetSubClass('Default'));
 					}
-					
+
 					len = _this.settings.weeks.length;
 					for(var idx=0; idx<len; idx++) {
 						var week = _this.settings.weeks[idx];
@@ -431,7 +431,7 @@ var ComponentPreference = {
 							if(date === firstDateFixed) {
 								$target.addClass(rangeFirstClass);
 							}
-							
+
 							if(date === lastDateFixed) {
 								$target.addClass(rangeLastClass);
 							}
@@ -527,12 +527,12 @@ var ComponentPreference = {
 									}
 								}
 							} else if(_this.settings.events.length > 0) {
-							    var currentEvents = Array.filter(_this.settings.events, function(ev) {
+							    var currentEvents = _this.settings.events.filter(function(ev) {
 							    	return ev.date === iDateFormat;
 								});
-							    var classEvents = $.unique(Array.sort($.map(currentEvents, function(ev) {
+							    var classEvents = $.unique($.map(currentEvents, function(ev) {
 							    	return ev.group;
-								})));
+								}).sort());
 							    if (classEvents.length > 0) {
 							        $unit.data('events', currentEvents);
 							    	$unit.append('<div class="group-container"></div>');
@@ -557,7 +557,7 @@ var ComponentPreference = {
 									if((currentFormat[0] !== null && iDateFormat === currentFormat[0])) {
 										$unit.addClass(activeClass).addClass(activePositionClasses[0]);
 									}
-									
+
 									if((currentFormat[1] !== null && iDateFormat === currentFormat[1])) {
 										$unit.addClass(activeClass).addClass(activePositionClasses[1]);
 									}
@@ -704,7 +704,7 @@ var ComponentPreference = {
 													}
 
 													$super.val(dateValues.join(', '));
-													$parent.trigger('apply.' + ComponentClass); 
+													$parent.trigger('apply.' + ComponentClass);
 												}
 
 												generateDateRange.call();
