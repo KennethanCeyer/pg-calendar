@@ -532,12 +532,12 @@ var ComponentPreference = {
 									}
 								}
 							} else if(_this.settings.events.length > 0) {
-							    var currentEvents = Array.filter(_this.settings.events, function(ev) {
+							    var currentEvents = _this.settings.events.filter(function(ev) {
 							    	return ev.date === iDateFormat;
 								});
-							    var classEvents = $.unique(Array.sort($.map(currentEvents, function(ev) {
+							    var classEvents = $.unique($.map(currentEvents, function(ev) {
 							    	return ev.group;
-								})));
+								}).sort());
 							    if (classEvents.length > 0) {
 							        $unit.data('events', currentEvents);
 							    	$unit.append('<div class="group-container"></div>');
