@@ -278,14 +278,12 @@ var ComponentPreference = {
 													<div class="{1}">\
 														<a href="#" class="{1}-nav {1}-prev">\
 															<span class="icon-keyboard_arrow_left {1}-icon"></span>\
-															<span class="{1}-value"></span>\
 														</a>\
 														<div class="{1}-date">\
 															<span class="{1}-month"></span>\
 															<span class="{1}-year"></span>\
 														</div>\
 														<a href="#" class="{1}-nav {1}-next">\
-															<span class="{1}-value"></span>\
 															<span class="icon-keyboard_arrow_right {1}-icon"></span>\
 														</a>\
 													</div>\

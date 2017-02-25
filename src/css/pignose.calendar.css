@@ -36,7 +36,7 @@
 	max-width: 360px;
 	background-color: #ffffff;
 	border: 1px solid #d8d8d8;
-	font-size: 14px;
+	font-size: 10px;
 	margin: 0 auto;
 	box-shadow: 0 3px 8px rgba(0, 0, 0, .25);
 	-o-box-shadow: 0 3px 8px rgba(0, 0, 0, .25);
@@ -45,7 +45,7 @@
 }
 
 .pignose-calendar .pignose-calendar-top {
-	padding: 2em 0;
+	padding: 1.8em 0;
 	background-color: #fafafa;
 	border-bottom: 1px solid #e2e2e2;
 	box-shadow: 0 3px 8px rgba(0, 0, 0, .125);
@@ -72,17 +72,14 @@
 }
 
 .pignose-calendar .pignose-calendar-top .pignose-calendar-top-year {
-	font-weight: 400;
-	font-size: 20px;
+	font-weight: bold;
+	font-size: 1.5em;
 	color: #999999;
-	margin: 0;
-	padding: 0;
 }
 
 .pignose-calendar .pignose-calendar-top .pignose-calendar-top-month {
-	font-weight: 400;
-	font-size: 20px;
-	margin-bottom: .4em;
+    font-weight: bold;
+	font-size: 1.5em;
 }
 
 .pignose-calendar .pignose-calendar-top .pignose-calendar-top-nav {
