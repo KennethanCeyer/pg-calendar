@@ -9,7 +9,7 @@
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.4.2';
+var ComponentVersion = '1.4.3';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
@@ -273,7 +273,7 @@ var ComponentPreference = {
 					calendarHtml: Helper.Format('<div class="{0} {0}-{4}">\
 													<div class="{1}">\
 														<a href="#" class="{1}-nav {1}-prev">\
-															<span class="{1}-icon"></span>\
+															<span class="icon-keyboard_arrow_left {1}-icon"></span>\
 															<span class="{1}-value"></span>\
 														</a>\
 														<div class="{1}-date">\
@@ -282,7 +282,7 @@ var ComponentPreference = {
 														</div>\
 														<a href="#" class="{1}-nav {1}-next">\
 															<span class="{1}-value"></span>\
-															<span class="{1}-icon"></span>\
+															<span class="icon-keyboard_arrow_right {1}-icon"></span>\
 														</a>\
 													</div>\
 													<div class="{2}"></div>\
@@ -333,7 +333,7 @@ var ComponentPreference = {
 					} else {
 						local.calendar.addClass(Helper.GetSubClass('Default'));
 					}
-					
+
 					len = _this.settings.weeks.length;
 					for(var idx=0; idx<len; idx++) {
 						var week = _this.settings.weeks[idx];
@@ -431,7 +431,7 @@ var ComponentPreference = {
 							if(date === firstDateFixed) {
 								$target.addClass(rangeFirstClass);
 							}
-							
+
 							if(date === lastDateFixed) {
 								$target.addClass(rangeLastClass);
 							}
@@ -539,7 +539,7 @@ var ComponentPreference = {
 									if((currentFormat[0] !== null && iDateFormat === currentFormat[0])) {
 										$unit.addClass(activeClass).addClass(activePositionClasses[0]);
 									}
-									
+
 									if((currentFormat[1] !== null && iDateFormat === currentFormat[1])) {
 										$unit.addClass(activeClass).addClass(activePositionClasses[1]);
 									}
@@ -684,7 +684,7 @@ var ComponentPreference = {
 													}
 
 													$super.val(dateValues.join(', '));
-													$parent.trigger('apply.' + ComponentClass); 
+													$parent.trigger('apply.' + ComponentClass);
 												}
 
 												generateDateRange.call();
