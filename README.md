@@ -18,6 +18,32 @@ The datepicker supports responsive and mobile environment.
 
 ----
 
+### Usage
+
+Check `dist/` folder on this repository.
+
+1. Install from git.
+
+ ```shell
+  git clone git@github.com:KennethanCeyer/PIGNOSE-Calendar.git
+```
+
+2. Check distributed folder.
+
+ ```shell
+  cd ./PIGNOSE-Calendar/dist
+  ls -al
+```
+
+3. Insert snippets at `<head>` tag of your html file.
+
+ ```html
+<script src="./dist/pignose.calendar.min.js"></script>
+<link type="text/css" href="./dist/pignose.calendar.min.css" />
+```
+
+----
+
 ### Overview
 
 See our features which we are supported.
@@ -27,7 +53,7 @@ See our features which we are supported.
 - Input type controller support.
 - The toggle controll each of date buttons are supported.
 - You can disable specific dates.
-- Multiple languages are supported, (en, ko, fr, ch, de, jp, pt, da).
+- Multiple languages are supported, (en, ko, fr, ch, de, jp, pt, da, pl, es).
 - Theme system supports (light, dark).
 
 ----
@@ -38,8 +64,11 @@ We welcome your support, You can support to notice by send me github issue or us
 
 #### Languages
 
-- [@matheusdelima](https://www.github.com/matheusdelima)
+- [@adrian2monk](https://www.github.com/adrian2monk)
 - [@feldmarv](https://www.github.com/feldmarv)
+- [@matheusdelima](https://www.github.com/matheusdelima)
+- [@maxma51](https://www.github.com/maxma51)
+- [@pkly](https://www.github.com/pkly)
 - [@TNDecoder](https://www.github.com/TNDecoder)
 
 ----
