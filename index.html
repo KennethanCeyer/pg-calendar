@@ -248,6 +248,11 @@
 				['2016-12-17', '2016-12-18'],
 				['2016-12-29', '2016-12-30'],
 				['2017-01-10', '2017-01-20'],
+				['2017-02-10', '2017-04-11'],
+				['2017-07-04', '2017-07-09'],
+				['2017-12-01', '2017-12-25'],
+				['2018-02-10', '2018-02-26'],
+				['2018-05-10', '2018-09-17'],
 			]
 		});
 
@@ -279,17 +284,63 @@
             <h4>PIGNOSE Calendar is beautiful and eidetic jQuery date picker plguin.</h4>
             <div class="calendar"></div>
 			<div class="box"></div>
+			<ul class="ui top pointing secondary menu">
+				<a href="#" role="presentation" class="item active" data-tab="html-basic">HTML</a>
+				<a href="#" role="presentation" class="item" data-tab="javascript-basic">Javascript</a>
+			</ul>
+			<div role="tabpanel" class="ui tab segment active" data-tab="html-basic">
+				<pre><code class="language-markup">&lt;div class=&quot;calendar&quot;&gt;&lt;/div&gt;</code></pre>
+			</div>
+			<div role="tabpanel" class="ui tab segment" data-tab="javascript-basic">
+					<pre><code class="language-js">$(function() {
+    $('.calendar').pignoseCalendar();
+});</code></pre>
+			</div>
 		</div>
 		<div id="input" class="article">
 			<h3><span>Input type</span></h3>
             <h4>You can use calendar by input power ups.</h4>
             <input type="text" class="input-calendar" />
 			<div class="box"></div>
+			<ul class="ui top pointing secondary menu">
+				<a href="#" role="presentation" class="item active" data-tab="html-input">HTML</a>
+				<a href="#" role="presentation" class="item" data-tab="javascript-input">Javascript</a>
+			</ul>
+			<div role="tabpanel" class="ui tab segment active" data-tab="html-input">
+				<pre><code class="language-markup">&lt;input type=&quot;text&quot; id=&quot;text-calendar&quot; class=&quot;calendar&quot; /&gt;</code></pre>
+			</div>
+			<div role="tabpanel" class="ui tab segment" data-tab="javascript-input">
+				<pre><code class="language-js">$(function() {
+    $('input.calendar').pignoseCalendar({
+		format: 'YYYY-MM-DD' // date format string. (2017-02-02)
+	});
+});</code></pre>
+			</div>
 		</div>
 		<div id="modal" class="article">
 			<h3><span>Modal</span></h3>
             <h4>You can display calendar by modal popup.</h4>
             <a href="#" class="btn-calendar">Open Modal</a>
+			<div class="box"></div>
+			<ul class="ui top pointing secondary menu">
+				<a href="#" role="presentation" class="item active" data-tab="html-modal">HTML</a>
+				<a href="#" role="presentation" class="item" data-tab="javascript-modal">Javascript</a>
+			</ul>
+			<div role="tabpanel" class="ui tab segment active" data-tab="html-modal">
+				<pre><code class="language-markup">&lt;a href=&quot;#&quot; class=&quot;calendar&quot;&gt;&lt;/a&gt;</code></pre>
+			</div>
+			<div role="tabpanel" class="ui tab segment" data-tab="javascript-modal">
+				<pre><code class="language-js">$(function() {
+    $('a.calendar').pignoseCalendar({
+		format: 'YYYY-MM-DD' // date format string. (2017-02-02)
+	});
+});</code></pre>
+			</div>
+		</div>
+		<div id="theme-dark" class="article">
+			<h3><span>Dark theme support</span></h3>
+            <h4>Dark theme type supports, And we have a plan to add other themes.</h4>
+            <div class="calendar-dark"></div>
 			<div class="box"></div>
 		</div>
 		<div id="theme-dark" class="article">
@@ -307,18 +358,63 @@
 			<h3><span>Events Class pin support</span></h3>
             <div class="calendar-events"></div>
 			<div class="box"></div>
+			<ul class="ui top pointing secondary menu">
+				<a href="#" role="presentation" class="item active" data-tab="html-theme">HTML</a>
+				<a href="#" role="presentation" class="item" data-tab="javascript-theme">Javascript</a>
+			</ul>
+			<div role="tabpanel" class="ui tab segment active" data-tab="html-theme">
+				<pre><code class="language-markup">&lt;div class=&quot;calendar&quot;&gt;&lt;/div&gt;</code></pre>
+			</div>
+			<div role="tabpanel" class="ui tab segment" data-tab="javascript-theme">
+				<pre><code class="language-js">$(function() {
+    $('.calendar').pignoseCalendar({
+		theme: 'dark' // light, dark
+	});
+});</code></pre>
+			</div>
 		</div>
 		<div id="multiple" class="article">
 			<h3><span>Multiple range Calendar</span></h3>
             <h4>PIGNOSE Calendar supports multiple range picker.</h4>
             <div class="multi-select-calendar"></div>
 			<div class="box"></div>
+			<ul class="ui top pointing secondary menu">
+				<a href="#" role="presentation" class="item active" data-tab="html-multiple">HTML</a>
+				<a href="#" role="presentation" class="item" data-tab="javascript-multiple">Javascript</a>
+			</ul>
+			<div role="tabpanel" class="ui tab segment active" data-tab="html-multiple">
+				<pre><code class="language-markup">&lt;div class=&quot;calendar&quot;&gt;&lt;/div&gt;</code></pre>
+			</div>
+			<div role="tabpanel" class="ui tab segment" data-tab="javascript-multiple">
+				<pre><code class="language-js">$(function() {
+    $('.calendar').pignoseCalendar({
+		multiple: true
+	});
+});</code></pre>
+			</div>
 		</div>
 		<div id="toggle" class="article">
 			<h3><span>Toggle Calendar</span></h3>
             <h4>You can toggle date and get those dates as array.</h4>
             <div class="toggle-calendar"></div>
 			<div class="box"></div>
+			<ul class="ui top pointing secondary menu">
+				<a href="#" role="presentation" class="item active" data-tab="html-toggle">HTML</a>
+				<a href="#" role="presentation" class="item" data-tab="javascript-toggle">Javascript</a>
+			</ul>
+			<div role="tabpanel" class="ui tab segment active" data-tab="html-toggle">
+				<pre><code class="language-markup">&lt;div class=&quot;calendar&quot;&gt;&lt;/div&gt;</code></pre>
+			</div>
+			<div role="tabpanel" class="ui tab segment" data-tab="javascript-toggle">
+				<pre><code class="language-js">$(function() {
+    $('.calendar').pignoseCalendar({
+		toggle: true,
+		select: function(dates, obj) {
+			console.log('toggle active dates', obj.storage.activeDates);
+		}
+	});
+});</code></pre>
+			</div>
 		</div>
 		<div id="disabled" class="article">
 			<h3><span>Disabled Dates Calendar</span></h3>
@@ -329,49 +425,218 @@
 			</div>
             <div class="disabled-dates-calendar"></div>
 			<div class="box"></div>
+			<ul class="ui top pointing secondary menu">
+				<a href="#" role="presentation" class="item active" data-tab="html-disabled">HTML</a>
+				<a href="#" role="presentation" class="item" data-tab="javascript-disabled">Javascript</a>
+			</ul>
+			<div role="tabpanel" class="ui tab segment active" data-tab="html-disabled">
+				<pre><code class="language-markup">&lt;div class=&quot;calendar&quot;&gt;&lt;/div&gt;</code></pre>
+			</div>
+			<div role="tabpanel" class="ui tab segment" data-tab="javascript-disabled">
+				<pre><code class="language-js">$(function() {
+    $('.calendar').pignoseCalendar({
+		disabledDates: [
+			'2017-01-01',
+			'2017-06-01',
+			'2017-06-02'
+		]
+	});
+});</code></pre>
+			</div>
 		</div>
 		<div id="disabled-weekdays" class="article">
 			<h3><span>Disabled Weekdays Calendar</span></h3>
             <h4>You can disable dates by specific weekday numbers (0 ~ 6, 0 is sunday).</h4>
             <div class="disabled-weekdays-calendar"></div>
 			<div class="box"></div>
+			<ul class="ui top pointing secondary menu">
+				<a href="#" role="presentation" class="item active" data-tab="html-disabled-weekdays">HTML</a>
+				<a href="#" role="presentation" class="item" data-tab="javascript-disabled-weekdays">Javascript</a>
+			</ul>
+			<div role="tabpanel" class="ui tab segment active" data-tab="html-disabled-weekdays">
+				<pre><code class="language-markup">&lt;div class=&quot;calendar&quot;&gt;&lt;/div&gt;</code></pre>
+			</div>
+			<div role="tabpanel" class="ui tab segment" data-tab="javascript-disabled-weekdays">
+				<pre><code class="language-js">$(function() {
+    $('.calendar').pignoseCalendar({
+		disabledWeekdays: [0, 6] // SUN (0), SAT (6)
+	});
+});</code></pre>
+			</div>
 		</div>
 		<div id="disabled-range" class="article">
 			<h3><span>Disabled Range Calendar</span></h3>
             <h4>You can give disabled range(minimum, maximum) by date string(YYYY-MM-DD).</h4>
             <div class="disabled-range-calendar"></div>
 			<div class="box"></div>
+			<ul class="ui top pointing secondary menu">
+				<a href="#" role="presentation" class="item active" data-tab="html-disabled-range">HTML</a>
+				<a href="#" role="presentation" class="item" data-tab="javascript-disabled-range">Javascript</a>
+			</ul>
+			<div role="tabpanel" class="ui tab segment active" data-tab="html-disabled-range">
+				<pre><code class="language-markup">&lt;div class=&quot;calendar&quot;&gt;&lt;/div&gt;</code></pre>
+			</div>
+			<div role="tabpanel" class="ui tab segment" data-tab="javascript-disabled-range">
+				<pre><code class="language-js">$(function() {
+    $('.calendar').pignoseCalendar({
+		minDate: '2017-04-01',
+		maxDate: '2017-06-24'
+	});
+});</code></pre>
+			</div>
 		</div>
 		<div id="disabled-multiple-range" class="article">
 			<h3><span>Disabled Multiple Ranges Calendar</span></h3>
             <h4><strong>Advanced</strong> - You can give multiple disabled date ranges by string(YYYY-MM-DD).</h4>
             <div class="disabled-ranges-calendar"></div>
 			<div class="box"></div>
+			<ul class="ui top pointing secondary menu">
+				<a href="#" role="presentation" class="item active" data-tab="html-disabled-multiple-range">HTML</a>
+				<a href="#" role="presentation" class="item" data-tab="javascript-disabled-multiple-range">Javascript</a>
+			</ul>
+			<div role="tabpanel" class="ui tab segment active" data-tab="html-disabled-multiple-range">
+				<pre><code class="language-markup">&lt;div class=&quot;calendar&quot;&gt;&lt;/div&gt;</code></pre>
+			</div>
+			<div role="tabpanel" class="ui tab segment" data-tab="javascript-disabled-multiple-range">
+				<pre><code class="language-js">$(function() {
+    $('.calendar').pignoseCalendar({
+		disabledRanges: [
+			['2016-10-05', '2016-10-21'],
+			['2016-11-01', '2016-11-07'],
+			['2016-11-19', '2016-11-21'],
+			['2016-12-05', '2016-12-08'],
+			['2016-12-17', '2016-12-18'],
+			['2016-12-29', '2016-12-30'],
+			['2017-01-10', '2017-01-20'],
+			['2017-02-10', '2017-04-11'],
+			['2017-07-04', '2017-07-09'],
+			['2017-12-01', '2017-12-25'],
+			['2018-02-10', '2018-02-26'],
+			['2018-05-10', '2018-09-17'],
+		]
+	});
+});</code></pre>
+			</div>
 		</div>
 		<div id="pick-weeks" class="article">
 			<h3><span>Multiple Weeks Calendar</span></h3>
             <h4><strong>Advanced</strong> - You can turn on/off weeks date range by clicking.</h4>
             <div class="pick-weeks-calendar"></div>
 			<div class="box"></div>
+			<ul class="ui top pointing secondary menu">
+				<a href="#" role="presentation" class="item active" data-tab="html-pick-weeks">HTML</a>
+				<a href="#" role="presentation" class="item" data-tab="javascript-pick-weeks">Javascript</a>
+			</ul>
+			<div role="tabpanel" class="ui tab segment active" data-tab="html-pick-weeks">
+				<pre><code class="language-markup">&lt;div class=&quot;calendar&quot;&gt;&lt;/div&gt;</code></pre>
+			</div>
+			<div role="tabpanel" class="ui tab segment" data-tab="javascript-pick-weeks">
+				<pre><code class="language-js">$(function() {
+    $('.calendar').pignoseCalendar({
+			pickWeeks: true,
+			multiple: true,
+	});
+});</code></pre>
+			</div>
 		</div>
 		<div id="i18n" class="article">
 			<h3><span>I18N Support</span></h3>
             <h4>PIGNOSE Calendar supports various languages.</h4>
 
-			<h5>Korean</h5>
-            <div class="language-calendar language-ko-calendar" data-lang="ko"></div>
+			<div class="group">
+				<h5>Korean</h5>
+				<div class="language-calendar language-ko-calendar" data-lang="ko"></div>
+				<ul class="ui top pointing secondary menu">
+					<a href="#" role="presentation" class="item active" data-tab="html-lang-ko">HTML</a>
+					<a href="#" role="presentation" class="item" data-tab="javascript-lang-ko">Javascript</a>
+				</ul>
+				<div role="tabpanel" class="ui tab segment active" data-tab="html-lang-ko">
+					<pre><code class="language-markup">&lt;div class=&quot;calendar&quot;&gt;&lt;/div&gt;</code></pre>
+				</div>
+				<div role="tabpanel" class="ui tab segment" data-tab="javascript-lang-ko">
+					<pre><code class="language-js">$(function() {
+    $('.calendar').pignoseCalendar({
+		lang: 'ko'
+	});
+});</code></pre>
+				</div>
+			</div>
 
-			<h5>Deutsch</h5>
-            <div class="language-calendar language-de-calendar" data-lang="de"></div>
+			<div class="group">
+				<h5>Deutsch</h5>
+				<div class="language-calendar language-de-calendar" data-lang="de"></div>
+				<ul class="ui top pointing secondary menu">
+					<a href="#" role="presentation" class="item active" data-tab="html-lang-de">HTML</a>
+					<a href="#" role="presentation" class="item" data-tab="javascript-lang-de">Javascript</a>
+				</ul>
+				<div role="tabpanel" class="ui tab segment active" data-tab="html-lang-de">
+					<pre><code class="language-markup">&lt;div class=&quot;calendar&quot;&gt;&lt;/div&gt;</code></pre>
+				</div>
+				<div role="tabpanel" class="ui tab segment" data-tab="javascript-lang-de">
+					<pre><code class="language-js">$(function() {
+    $('.calendar').pignoseCalendar({
+		lang: 'de'
+	});
+});</code></pre>
+				</div>
+			</div>
 
-			<h5>Chinese</h5>
-            <div class="language-calendar language-ch-calendar" data-lang="ch"></div>
+			<div class="group">
+				<h5>Chinese</h5>
+				<div class="language-calendar language-ch-calendar" data-lang="ch"></div>
+				<ul class="ui top pointing secondary menu">
+					<a href="#" role="presentation" class="item active" data-tab="html-lang-ch">HTML</a>
+					<a href="#" role="presentation" class="item" data-tab="javascript-lang-ch">Javascript</a>
+				</ul>
+				<div role="tabpanel" class="ui tab segment active" data-tab="html-lang-ch">
+					<pre><code class="language-markup">&lt;div class=&quot;calendar&quot;&gt;&lt;/div&gt;</code></pre>
+				</div>
+				<div role="tabpanel" class="ui tab segment" data-tab="javascript-lang-ch">
+					<pre><code class="language-js">$(function() {
+    $('.calendar').pignoseCalendar({
+		lang: 'ch'
+	});
+});</code></pre>
+				</div>
+			</div>
 
-			<h5>Português</h5>
-            <div class="language-calendar language-pt-calendar" data-lang="pt"></div>
+			<div class="group">
+				<h5>Português</h5>
+				<div class="language-calendar language-pt-calendar" data-lang="pt"></div>
+				<ul class="ui top pointing secondary menu">
+					<a href="#" role="presentation" class="item active" data-tab="html-lang-pt">HTML</a>
+					<a href="#" role="presentation" class="item" data-tab="javascript-lang-pt">Javascript</a>
+				</ul>
+				<div role="tabpanel" class="ui tab segment active" data-tab="html-lang-pt">
+					<pre><code class="language-markup">&lt;div class=&quot;calendar&quot;&gt;&lt;/div&gt;</code></pre>
+				</div>
+				<div role="tabpanel" class="ui tab segment" data-tab="javascript-lang-pt">
+					<pre><code class="language-js">$(function() {
+    $('.calendar').pignoseCalendar({
+		lang: 'pt'
+	});
+});</code></pre>
+				</div>
+			</div>
 
-			<h5>Danish</h5>
-            <div class="language-calendar language-da-calendar" data-lang="da"></div>
+			<div class="group">
+				<h5>Danish</h5>
+				<div class="language-calendar language-da-calendar" data-lang="da"></div>
+				<ul class="ui top pointing secondary menu">
+					<a href="#" role="presentation" class="item active" data-tab="html-lang-da">HTML</a>
+					<a href="#" role="presentation" class="item" data-tab="javascript-lang-da">Javascript</a>
+				</ul>
+				<div role="tabpanel" class="ui tab segment active" data-tab="html-lang-da">
+					<pre><code class="language-markup">&lt;div class=&quot;calendar&quot;&gt;&lt;/div&gt;</code></pre>
+				</div>
+				<div role="tabpanel" class="ui tab segment" data-tab="javascript-lang-da">
+					<pre><code class="language-js">$(function() {
+    $('.calendar').pignoseCalendar({
+		lang: 'da'
+	});
+});</code></pre>
+				</div>
+			</div>
 
 			<h5>Spanish</h5>
 			<div class="language-calendar language-es-calendar" data-lang="es"></div>
@@ -391,6 +656,7 @@
 					<span class="ui label blue tiny">da</span>
 				</div>
 				<div class="box-languages-set">
+					<span class="ui label blue tiny">pl</span>
 					<span class="ui label blue tiny">es</span>
 				</div>
 			</div>
@@ -586,24 +852,6 @@
 			<h3><span>npm</span></h3>
 			<blockquote><p>If you use npm.</p></blockquote>
 			<pre><code class="language-bash">npm install pg-calendar</code></pre>
-		</div>
-		<div id="sample" class="article">
-			<h3><span>sample</span></h3>
-			<br />
-			<ul class="ui top pointing secondary menu">
-				<a href="#" role="presentation" class="item active" data-tab="html">HTML</a>
-				<a href="#" role="presentation" class="item" data-tab="javascript">Javascript</a>
-			</ul>
-			<div role="tabpanel" class="ui tab segment active" data-tab="html">
-				<pre><code class="language-markup">&lt;div class=&quot;calendar&quot;&gt;&lt;/div&gt;</code></pre>
-			</div>
-			<div role="tabpanel" class="ui tab segment" data-tab="javascript">
-					<pre><code class="language-js">$(function() {
-    $('.calendar').pignoseCalendar({
-		lang: 'en'
-	});
-});</code></pre>
-			</div>
 		</div>
 	</div>
 </body>
