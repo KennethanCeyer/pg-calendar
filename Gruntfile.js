@@ -24,6 +24,19 @@ module.exports = function (grunt) {
                 }
             },
         },
+	cssUrlRewrite: {
+	    dist: {
+          	src: 'src/css/**.css',
+	        dest: '.dist/css/pignose.calendar.css',
+		options: {
+	            skipExternal: true,
+	            rewriteUrl: function(url, options, dataURI) {
+	                var path = url.replace('src/', '');
+		        return path;
+	            }
+	        }
+	   }
+        },
         cssmin: {
           options: {
             banner: '//================================================================================\n' +
@@ -34,7 +47,7 @@ module.exports = function (grunt) {
           },
           dist: {
             files: {
-              'dist/pignose.calendar.min.css': ['src/css/**.css']
+              'dist/pignose.calendar.min.css': ['.dist/css/**.css']
             }
           }
         },
@@ -49,6 +62,11 @@ module.exports = function (grunt) {
               document: true
             }
           }
+        },
+	copy: {
+	  main: {
+	     files: [{expand: true, cwd: 'src', src: 'fonts/*', dest: 'dist/'}]
+	    }
         },
         csslint: {
           dist: ['src/**.css']
@@ -73,8 +91,10 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-csslint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-css-url-rewrite');
 
     // Default task
-    grunt.registerTask('default', ['jshint', 'csslint', 'cssmin', 'uglify']);
+    grunt.registerTask('default', ['jshint', 'csslint', 'copy', 'cssUrlRewrite', 'cssmin', 'uglify']);
     grunt.registerTask('test', ['jshint', 'csslint']);
 };
