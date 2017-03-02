@@ -50,6 +50,7 @@ See our features which we are supported.
 
 - Responsive and mobile friendly display.
 - Multiple range datepicker support.
+- Scheduling calendar support.
 - Input type controller support.
 - The toggle controll each of date buttons are supported.
 - You can disable specific dates.
