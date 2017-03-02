@@ -9,7 +9,7 @@
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.4.5';
+var ComponentVersion = '1.4.6';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
@@ -323,7 +323,7 @@ var ComponentPreference = {
 						current: [null, null],
 						storage: {
 							activeDates: [],
-							events: []
+							schedules: []
 						},
 						dateManager: new DateManager(_this.settings.date),
 						calendarWrapperHtml: Helper.Format('<div class="{0}"></div>', Helper.GetSubClass('Wrapper')),
