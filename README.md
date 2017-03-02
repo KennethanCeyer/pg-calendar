@@ -24,15 +24,15 @@ Check `dist/` folder on this repository.
 
 1. Install from git.
 
- ```shell
-  git clone git@github.com:KennethanCeyer/PIGNOSE-Calendar.git
+ ```bash
+  $ git clone git@github.com:KennethanCeyer/PIGNOSE-Calendar.git
 ```
 
 2. Check distributed folder.
 
- ```shell
-  cd ./PIGNOSE-Calendar/dist
-  ls -al
+ ```bash
+  $ cd ./PIGNOSE-Calendar/dist
+  $ ls -al
 ```
 
 3. Insert snippets at `<head>` tag of your html file.
