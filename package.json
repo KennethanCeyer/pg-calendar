@@ -1,6 +1,6 @@
 {
   "name": "pg-calendar",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "Beautiful and eidetic jQuery date picker plguin.",
   "main": "src/js/pignose.calendar.js",
   "scripts": {
