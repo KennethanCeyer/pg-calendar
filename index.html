@@ -114,47 +114,51 @@
 
 		// Color theme type Calendar
 		$('.calendar-dark').pignoseCalendar({
-			theme: 'dark', // light, dark, light-blue
+			theme: 'dark', // light, dark, blue
             toggle: true,
 			select: onClickHandler
 		});
 
-		// Light Blue theme type Calendar
-		$('.calendar-light-blue').pignoseCalendar({
-			theme: 'light-blue', // light, dark, light-blue
+		// Blue theme type Calendar
+		$('.calendar-blue').pignoseCalendar({
+			theme: 'blue', // light, dark, blue
 			select: onClickHandler
 		});
 
-		// Event Class Pin type Calendar
-		$('.calendar-events').pignoseCalendar({
-			classOnEvents: {
-			    offer: '#2fabb7',
-				ad: '#5c6270'
+		// Schedule Calendar
+		$('.calendar-schedules').pignoseCalendar({
+			scheduleOptions: {
+				colors: {
+				    offer: '#2fabb7',
+					ad: '#5c6270'
+				}
 			},
-			events: [{
-			    date: '2017-02-08',
-				group: 'offer'
+			schedules: [{
+				name: 'offer',
+			    date: '2017-02-08'
 			}, {
-			    date: '2017-02-08',
-				group: 'ad'
+				name: 'ad',
+			    date: '2017-02-08'
 			}, {
+				name: 'offer',
 			    date: '2017-02-05',
-				group: 'offer'
 			}],
 			select: function(date, obj) {
-				var $target = obj.calendar.parent().next().show().html('You selected ' +
-				(date[0] === null? 'null':date[0].format('YYYY-MM-DD')) +
-				'.' +
-				'<br /><br />' +
-				'<strong>Events for this date</strong><br /><br />' +
-				'<div class="events-date"></div>');
+				var message = `You selected ${(date[0] === null? 'null':date[0].format('YYYY-MM-DD'))}.
+							   <br />
+							   <br />
+							   <strong>Events for this date</strong>
+							   <br />
+							   <br />
+							   <div class="schedules-date"></div>`;
+				var $target = obj.calendar.parent().next().show().html(message);
 
-				for(var idx in obj.storage.events) {
-					var ev = obj.storage.events[idx];
-					if(typeof ev !== 'object') {
+				for(var idx in obj.storage.schedules) {
+					var schedule = obj.storage.schedules[idx];
+					if(typeof schedule !== 'object') {
 						continue;
 					}
-					$target.find('.events-date').append('<span class="ui label default">' + JSON.stringify(ev) + '</span>');
+					$target.find('.schedules-date').append('<span class="ui label default">' + schedule.name + '</span>');
 				}
 			}
 		});
@@ -169,12 +173,14 @@
 		$('.toggle-calendar').pignoseCalendar({
 			toggle: true,
 			select: function(date, obj) {
-				var $target = obj.calendar.parent().next().show().html('You selected ' + 
-				(date[0] === null? 'null':date[0].format('YYYY-MM-DD')) + 
-				'.' +
-				'<br /><br />' +
-				'<strong>Active dates</strong><br /><br />' +
-				'<div class="active-dates"></div>');
+				var message = `You selected ${(date[0] === null? 'null':date[0].format('YYYY-MM-DD'))}.
+							   <br />
+							   <br />
+							   <strong>Events for this date</strong>
+							   <br />
+							   <br />
+							   <div class="active-dates"></div>`;
+				var $target = obj.calendar.parent().next().show().html(message);
 
 				for(var idx in obj.storage.activeDates) {
 					var date = obj.storage.activeDates[idx];
@@ -342,28 +348,72 @@
             <h4>Dark theme type supports, And we have a plan to add other themes.</h4>
             <div class="calendar-dark"></div>
 			<div class="box"></div>
-		</div>
-		<div id="theme-blue" class="article">
-			<h3><span>Light Blue theme support</span></h3>
-            <div class="calendar-light-blue"></div>
-			<div class="box"></div>
-		</div>
-        <div id="events" class="article">
-			<h3><span>Events Class pin support</span></h3>
-            <div class="calendar-events"></div>
-			<div class="box"></div>
 			<ul class="ui top pointing secondary menu">
-				<a href="#" role="presentation" class="item active" data-tab="html-theme">HTML</a>
-				<a href="#" role="presentation" class="item" data-tab="javascript-theme">Javascript</a>
+				<a href="#" role="presentation" class="item active" data-tab="html-dark-theme">HTML</a>
+				<a href="#" role="presentation" class="item" data-tab="javascript-dark-theme">Javascript</a>
 			</ul>
-			<div role="tabpanel" class="ui tab segment active" data-tab="html-theme">
+			<div role="tabpanel" class="ui tab segment active" data-tab="html-dark-theme">
 				<pre><code class="language-markup">&lt;div class=&quot;calendar&quot;&gt;&lt;/div&gt;</code></pre>
 			</div>
-			<div role="tabpanel" class="ui tab segment" data-tab="javascript-theme">
+			<div role="tabpanel" class="ui tab segment" data-tab="javascript-dark-theme">
 				<pre><code class="language-js">$(function() {
     $('.calendar').pignoseCalendar({
-		theme: 'dark' // light, dark
+		theme: 'dark' // light, dark, blue
 	});
+});</code></pre>
+			</div>
+		</div>
+		<div id="theme-blue" class="article">
+			<h3><span>Blue theme support</span></h3>
+            <div class="calendar-blue"></div>
+			<div class="box"></div>
+			<ul class="ui top pointing secondary menu">
+				<a href="#" role="presentation" class="item active" data-tab="html-blue-theme">HTML</a>
+				<a href="#" role="presentation" class="item" data-tab="javascript-blue-theme">Javascript</a>
+			</ul>
+			<div role="tabpanel" class="ui tab segment active" data-tab="html-blue-theme">
+				<pre><code class="language-markup">&lt;div class=&quot;calendar&quot;&gt;&lt;/div&gt;</code></pre>
+			</div>
+			<div role="tabpanel" class="ui tab segment" data-tab="javascript-blue-theme">
+				<pre><code class="language-js">$(function() {
+    $('.calendar').pignoseCalendar({
+		theme: 'blue' // light, dark, blue
+	});
+});</code></pre>
+			</div>
+		</div>
+        <div id="schedules" class="article">
+			<h3><span>Schedule Calendar</span></h3>
+            <div class="calendar-schedules"></div>
+			<div class="box"></div>
+			<ul class="ui top pointing secondary menu">
+				<a href="#" role="presentation" class="item active" data-tab="html-schedules">HTML</a>
+				<a href="#" role="presentation" class="item" data-tab="javascript-schedules">Javascript</a>
+			</ul>
+			<div role="tabpanel" class="ui tab segment active" data-tab="html-schedules">
+				<pre><code class="language-markup">&lt;div class=&quot;calendar&quot;&gt;&lt;/div&gt;</code></pre>
+			</div>
+			<div role="tabpanel" class="ui tab segment" data-tab="javascript-schedules">
+				<pre><code class="language-js">$('.calendar').pignoseCalendar({
+	scheduleOptions: {
+		colors: {
+		    offer: '#2fabb7',
+			ad: '#5c6270'
+		}
+	},
+	schedules: [{
+		name: 'offer',
+	    date: '2017-02-08'
+	}, {
+		name: 'ad',
+	    date: '2017-02-08'
+	}, {
+		name: 'offer',
+	    date: '2017-02-05',
+	}],
+	select: function(date, obj) {
+		console.log('events for this date', obj.storage.events);
+	}
 });</code></pre>
 			</div>
 		</div>
@@ -692,7 +742,7 @@
 					<tr>
 						<td colspan="2">theme</td>
 						<td class="center"><span class="ui label primary">string</span></td>
-						<td>A theme to set to the Calendar. (light, dark, light-blue).</td>
+						<td>A theme to set to the Calendar. (light, dark, blue).</td>
 						<td>light</td>
 					</tr>
 					<tr>
@@ -706,6 +756,12 @@
 						<td class="center"><span class="ui label primary">moment date object</span></td>
 						<td>You can change auto initialized date at first.</td>
 						<td>moment()</td>
+					</tr>
+					<tr>
+						<td colspan="2">week</td>
+						<td class="center"><span class="ui label primary">number</span></td>
+						<td>Your first day of week (0: Sunday ~ 6: Saturday).</td>
+						<td>0</td>
 					</tr>
 					<tr>
 						<td colspan="2">initialized</td>
@@ -774,13 +830,14 @@
 						<td>[]</td>
 					</tr>
 					<tr>
-						<td colspan="2">events</td>
+						<td colspan="2">schedules</td>
 						<td class="center"><span class="ui label primary">array</span></td>
 						<td>Set and array of events to pin on calendar. Each event is an object that must contain a date string formatted to 'YYYY-MM-DD' and class key that belong to classOnEvents dictionary indicating its color on calendar. Events with not color class suitable are all pin with <span style="display: inline-block; width: .8em; height: .8em; background-color: #5c6270;"></span>&nbsp;#5c6270. Issues may arise when the number of color class increase, this could break the calendar cell.</td>
 						<td>[]</td>
 					</tr>
 					<tr>
-						<td colspan="2">classOnEvents</td>
+						<td>scheduleOptions</td>
+						<td>colors</td>
 						<td class="center"><span class="ui label primary">object</span></td>
 						<td>Set a dictionary with class 'key' and color code 'value' used for pin events class by date.</td>
 						<td>{}</td>

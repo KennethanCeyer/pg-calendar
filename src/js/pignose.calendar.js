@@ -1,15 +1,15 @@
 /************************************************************************************************************
  *
  * @ PIGNOSE Calendar
- * @ Date Feb 02. 2017
+ * @ Date Mar 02. 2017
  * @ Author PIGNOSE
- * @ Updated adrian2monk
+ * @ Updated PIGNOSE
  * @ Licensed under MIT.
  *
  ***********************************************************************************************************/
 
 var ComponentName = 'pignoseCalendar';
-var ComponentVersion = '1.4.3';
+var ComponentVersion = '1.4.4';
 
 window[ComponentName] = {
 	VERSION: ComponentVersion
@@ -17,9 +17,9 @@ window[ComponentName] = {
 
 /************************************************************************************************************
  *
- * @ Version 1.0.3
+ * @ Version 1.0.4
  * @ PIGNOSE PLUGIN HELPER
- * @ Date Nev 05. 2016
+ * @ Date Mar 02. 2017
  * @ Author PIGNOSE
  * @ Licensed under MIT.
  *
@@ -77,6 +77,7 @@ var Helper = (function() {
 					var value = args[idx];
 					format = format.replace(new RegExp(('((?!\\\\)?\\{' + idx + '(?!\\\\)?\\})'), 'g'), value);
 				}
+				format = format.replace(new RegExp(('\\\\{([0-9]+)\\\\}'), 'g'), '{$1}');
 			}
 		}
 		m_formatCache[key] = format;
@@ -164,7 +165,7 @@ if(typeof Array.prototype.filter === 'undefined') {
 var ComponentClass = Helper.GetClass(ComponentName);
 var ComponentPreference = {
 	supports: {
-		themes: ['light', 'dark', 'light-blue']
+		themes: ['light', 'dark', 'blue']
 	}
 };
 (function($) {
@@ -226,13 +227,15 @@ var ComponentPreference = {
 					theme: 'light',
 					date: moment(),
 					format: 'YYYY-MM-DD',
-                    classOnEvents: {},
-					classOnDays: [],
 					enabledDates: [],
 					disabledDates: [],
 					disabledWeekdays: [],
 					disabledRanges: [],
-                    events: [],
+                    schedules: [],
+                    scheduleOptions: {
+                    	colors: {}
+                    },
+                    week: 0,
 					weeks: languagePack.weeks.en,
 					monthsLong: languagePack.monthsLong.en,
 					months: languagePack.months.en,
@@ -273,18 +276,20 @@ var ComponentPreference = {
 					}
 				}
 
+				this.settings.week %= this.settings.weeks.length;
+
 				this.global = {
 					calendarHtml: Helper.Format('<div class="{0} {0}-{4}">\
 													<div class="{1}">\
 														<a href="#" class="{1}-nav {1}-prev">\
-															<span class="icon-keyboard_arrow_left {1}-icon"></span>\
+															<span class="icon-arrow-left {1}-icon"></span>\
 														</a>\
 														<div class="{1}-date">\
 															<span class="{1}-month"></span>\
 															<span class="{1}-year"></span>\
 														</div>\
 														<a href="#" class="{1}-nav {1}-next">\
-															<span class="icon-keyboard_arrow_right {1}-icon"></span>\
+															<span class="icon-arrow-right {1}-icon"></span>\
 														</a>\
 													</div>\
 													<div class="{2}"></div>\
@@ -293,7 +298,9 @@ var ComponentPreference = {
 					calendarButtonsHtml: Helper.Format('<div class="{0}-group">\
 															<a href="#" class="{0} {0}-cancel">Cancel</a>\
 															<a href="#" class="{0} {0}-apply">OK</a>\
-														</div>', _calendarButtonClass)
+														</div>', _calendarButtonClass),
+					calendarScheduleContainerHtml: Helper.Format('<div class="{0}-schedule-container"></div>', _calendarButtonClass),
+					calendarSchedulePinHtml: Helper.Format('<span class="{0}-schedule-pin {0}-schedule-pin-\\{0\\}" style="background-color: \\{1\\};"></span>', _calendarButtonClass),
 				};
 
 				var rangeClass = Helper.GetSubClass('UnitRange');
@@ -337,14 +344,13 @@ var ComponentPreference = {
 						local.calendar.addClass(Helper.GetSubClass('Default'));
 					}
 
-					len = _this.settings.weeks.length;
-					for(var idx=0; idx<len; idx++) {
-						var week = _this.settings.weeks[idx];
+					for(var idx=_this.settings.week; idx<_this.settings.weeks.length + _this.settings.week; idx++) {
+						var week = _this.settings.weeks[idx % _this.settings.weeks.length];
 						if(typeof week !== 'string') {
 							continue;
 						}
 						week = week.toUpperCase();
-						var $unit = $(Helper.Format('<div class="{0} {0}-{2}">{1}</div>', Helper.GetSubClass('Week'), week, languagePack.weeks.en[idx].toLowerCase()));
+						var $unit = $(Helper.Format('<div class="{0} {0}-{2}">{1}</div>', Helper.GetSubClass('Week'), week, languagePack.weeks.en[idx % languagePack.weeks.en.length].toLowerCase()));
 						$unit.appendTo(local.calendar.find('.' + _calendarHeaderClass));
 					}
 
@@ -489,7 +495,14 @@ var ComponentPreference = {
 						var $calendarBody = local.calendar.find('.' + _calendarBodyClass).empty();
 
 						var firstDate = DateManager.Convert(local.dateManager.year, local.dateManager.month, local.dateManager.firstDay);
-						var firstWeekday = firstDate.weekday();
+						var lastDate = DateManager.Convert(local.dateManager.year, local.dateManager.month, local.dateManager.lastDay);
+						var firstWeekday = firstDate.weekday() - _this.settings.week;
+						var lastWeekday = lastDate.weekday() - _this.settings.week;
+
+						if(firstWeekday < 0) {
+							firstWeekday += _this.settings.weeks.length;
+						}
+
 						var $unitList = [], currentFormat = [
 								local.current[0] === null? null:local.current[0].format('YYYY-MM-DD'),
 								local.current[1] === null? null:local.current[1].format('YYYY-MM-DD')
@@ -529,21 +542,30 @@ var ComponentPreference = {
 										break;
 									}
 								}
-							} else if(_this.settings.events.length > 0) {
-							    var currentEvents = _this.settings.events.filter(function(ev) {
-							    	return ev.date === iDateFormat;
+							}
+
+							if(
+								_this.settings.schedules.length > 0 &&
+								typeof _this.settings.scheduleOptions === 'object' &&
+								typeof _this.settings.scheduleOptions.colors === 'object'
+							) {
+							    var currentSchedules = _this.settings.schedules.filter(function(schedule) {
+							    	return schedule.date === iDateFormat;
 								});
-							    var classEvents = $.unique($.map(currentEvents, function(ev) {
-							    	return ev.group;
+
+							    var nameOfSchedules = $.unique(currentSchedules.map(function(schedule, index) {
+							    	return schedule.name;
 								}).sort());
-							    if (classEvents.length > 0) {
-							        $unit.data('events', currentEvents);
-							    	$unit.append('<div class="group-container"></div>');
-                                    var $container = $unit.find('.group-container');
-							    	$.each(classEvents, function(index, group) {
-							    		if ($.inArray(group, Object.keys(_this.settings.classOnEvents)) !== -1) {
-                                            var color = _this.settings.classOnEvents[group];
-                                            $container.append($(Helper.Format('<span class="event-group-{0}" style="background-color: {1}"></span>', group.toLowerCase(), color)));
+
+							    if (nameOfSchedules.length > 0) {
+							        //$unit.data('schedules', currentSchedules);
+                                    var $schedulePinContainer = $(_this.global.calendarScheduleContainerHtml);
+                                    $schedulePinContainer.appendTo($unit);
+							    	nameOfSchedules.map(function(name, index) {
+							    		if (typeof _this.settings.scheduleOptions.colors[name] !== 'undefined') {
+                                            var color = _this.settings.scheduleOptions.colors[name];
+                                            var $schedulePin = $(Helper.Format(_this.global.calendarSchedulePinHtml, name, color));
+                                            $schedulePin.appendTo($schedulePinContainer);
 										}
 									});
 								}
@@ -581,7 +603,6 @@ var ComponentPreference = {
 								var $this = $(this);
 								var position = 0;
 								var date = $this.data('date');
-                                var eventsOnDate = $this.data('events');
 
 								if($this.hasClass(Helper.GetSubClass('UnitDisabled'))) {
 									return false;
@@ -619,102 +640,107 @@ var ComponentPreference = {
 											local.storage.activeDates.splice(index, 1);
 											$this.removeClass(toggleActiveClass).addClass(toggleInactiveClass);
 										}
-									} else {
-										if(
-											$this.hasClass(activeClass) === true &&
-											_this.settings.pickWeeks === false
-										) {
-											if(_this.settings.multiple === true) {
-												if($this.hasClass(activePositionClasses[0])) {
-													position = 0;
-												} else if(activePositionClasses[1]) {
-													position = 1;
-												}
-											}
-											$this.removeClass(activeClass).removeClass(activePositionClasses[position]);
-											local.current[position] = null;
-										} else {
-											if(_this.settings.pickWeeks === true) {
-												if(
-													$this.hasClass(activeClass) === true ||
-													$this.hasClass(rangeClass) === true
-												) {
-													for(var j=0; j<2; j++) {
-														local.calendar.find('.' + activeClass + '.' + activePositionClasses[j]).removeClass(activeClass).removeClass(activePositionClasses[j]);
-													}
-
-													local.current[0] = null;
-													local.current[1] = null;
-												} else {
-													local.current[0] = moment(date).startOf('week');
-													local.current[1] = moment(date).endOf('week');
-
-													for(var j=0; j<2; j++) {
-														local.calendar.find('.' + activeClass + '.' + activePositionClasses[j]).removeClass(activeClass).removeClass(activePositionClasses[j]);
-														local.calendar.find(Helper.Format('.{0}[data-date="{1}"]', Helper.GetSubClass('Unit'), local.current[j].format('YYYY-MM-DD'))).addClass(activeClass).addClass(activePositionClasses[j]);
-													}
-												}
-											} else {
-												if(_this.settings.multiple === true) {
-													if(local.current[0] === null) {
-														position = 0;
-													} else if(local.current[1] === null) {
-														position = 1;
-													} else {
-														position = 0;
-														local.current[1] = null;
-														local.calendar.find('.' + activeClass + '.' + activePositionClasses[1]).removeClass(activeClass).removeClass(activePositionClasses[1]);
-													}
-												}
-
-												local.storage.events = eventsOnDate;
-												local.calendar.find('.' + activeClass + '.' + activePositionClasses[position]).removeClass(activeClass).removeClass(activePositionClasses[position]);
-												$this.addClass(activeClass).addClass(activePositionClasses[position]);
-												local.current[position] = moment(date);
-											}
-
-											if(_this.settings.multiple === true) {
-												local.calendar.find('.' + rangeClass).removeClass(rangeClass).removeClass(rangeFirstClass).removeClass(rangeLastClass);
-											}
-
-											if(_this.settings.multiple === true &&
-											   local.current[0] !== null &&
-											   local.current[1] !== null) {
-												if(local.current[0].diff(local.current[1]) > 0) {
-													var tmp = local.current[0];
-													local.current[0] = local.current[1];
-													local.current[1] = tmp;
-													tmp = null;
-
-													local.calendar.find('.' + activeClass).each(function() {
-														var $this = $(this);
-														for(var idx in activePositionClasses) {
-															var className = activePositionClasses[idx];
-															$this.toggleClass(className);
-														}
-													});
-												}
-
-												if(local.input === true && _this.settings.buttons === false) {
-													var dateValues = []
-
-													if(local.current[0] !== null) {
-														dateValues.push(local.current[0].format(_this.settings.format));
-													}
-
-													if(local.current[1] !== null) {
-														dateValues.push(local.current[1].format(_this.settings.format));
-													}
-
-													$super.val(dateValues.join(', '));
-													$parent.trigger('apply.' + ComponentClass);
-												}
-
-												generateDateRange.call();
+									} else if(
+										$this.hasClass(activeClass) === true &&
+										_this.settings.pickWeeks === false
+									) {
+										if(_this.settings.multiple === true) {
+											if($this.hasClass(activePositionClasses[0])) {
+												position = 0;
+											} else if(activePositionClasses[1]) {
+												position = 1;
 											}
 										}
+										$this.removeClass(activeClass).removeClass(activePositionClasses[position]);
+										local.current[position] = null;
+									} else {
+										if(_this.settings.pickWeeks === true) {
+											if(
+												$this.hasClass(activeClass) === true ||
+												$this.hasClass(rangeClass) === true
+											) {
+												for(var j=0; j<2; j++) {
+													local.calendar.find('.' + activeClass + '.' + activePositionClasses[j]).removeClass(activeClass).removeClass(activePositionClasses[j]);
+												}
+
+												local.current[0] = null;
+												local.current[1] = null;
+											} else {
+												local.current[0] = moment(date).startOf('week');
+												local.current[1] = moment(date).endOf('week');
+
+												for(var j=0; j<2; j++) {
+													local.calendar.find('.' + activeClass + '.' + activePositionClasses[j]).removeClass(activeClass).removeClass(activePositionClasses[j]);
+													local.calendar.find(Helper.Format('.{0}[data-date="{1}"]', Helper.GetSubClass('Unit'), local.current[j].format('YYYY-MM-DD'))).addClass(activeClass).addClass(activePositionClasses[j]);
+												}
+											}
+										} else {
+											if(_this.settings.multiple === true) {
+												if(local.current[0] === null) {
+													position = 0;
+												} else if(local.current[1] === null) {
+													position = 1;
+												} else {
+													position = 0;
+													local.current[1] = null;
+													local.calendar.find('.' + activeClass + '.' + activePositionClasses[1]).removeClass(activeClass).removeClass(activePositionClasses[1]);
+												}
+											}
+
+											local.calendar.find('.' + activeClass + '.' + activePositionClasses[position]).removeClass(activeClass).removeClass(activePositionClasses[position]);
+											$this.addClass(activeClass).addClass(activePositionClasses[position]);
+											local.current[position] = moment(date);
+										}
+
+										if(_this.settings.multiple === true) {
+											local.calendar.find('.' + rangeClass).removeClass(rangeClass).removeClass(rangeFirstClass).removeClass(rangeLastClass);
+										}
+
+										if(
+										   local.current[0] !== null &&
+										   local.current[1] !== null
+										) {
+											if(local.current[0].diff(local.current[1]) > 0) {
+												var tmp = local.current[0];
+												local.current[0] = local.current[1];
+												local.current[1] = tmp;
+												tmp = null;
+
+												local.calendar.find('.' + activeClass).each(function() {
+													var $this = $(this);
+													for(var idx in activePositionClasses) {
+														var className = activePositionClasses[idx];
+														$this.toggleClass(className);
+													}
+												});
+											}
+
+											if(local.input === true && _this.settings.buttons === false) {
+												var dateValues = []
+
+												if(local.current[0] !== null) {
+													dateValues.push(local.current[0].format(_this.settings.format));
+												}
+
+												if(local.current[1] !== null) {
+													dateValues.push(local.current[1].format(_this.settings.format));
+												}
+
+												$super.val(dateValues.join(', '));
+												$parent.trigger('apply.' + ComponentClass);
+											}
+
+											generateDateRange.call();
+										}
+									}
+
+									if(_this.settings.schedules.length > 0) {
+										local.storage.schedules = _this.settings.schedules.filter(function(event) {
+											return event.date === date;
+										});
 									}
 								}
+
 								local.initialize = null;
 
 								if(typeof _this.settings.select === 'function') {
@@ -723,11 +749,8 @@ var ComponentPreference = {
 							});
 						}
 
-						var lastDate = DateManager.Convert(local.dateManager.year, local.dateManager.month, local.dateManager.lastDay);
-						var lastWeekday = lastDate.weekday();
-
-						for(var i=lastWeekday+1;$unitList.length < 7 * 5;i++) {
-							var $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('Unit'), languagePack.weeks.en[i % 7].toLowerCase()));
+						for(var i=lastWeekday+1; $unitList.length < _this.settings.weeks.length * 5; i++) {
+							var $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('Unit'), languagePack.weeks.en[i % languagePack.weeks.en.length].toLowerCase()));
 							$unitList.push($unit);
 						}
 
@@ -735,7 +758,7 @@ var ComponentPreference = {
 						var unitListLen = $unitList.length;
 						for(var i=0; i<unitListLen; i++) {
 							var e = $unitList[i];
-							if(i % 7 == 0 || i + 1 >= unitListLen) {
+							if(i % _this.settings.weeks.length == 0 || i + 1 >= unitListLen) {
 								if($row !== null) {
 									$row.appendTo($calendarBody);
 								}
@@ -793,7 +816,6 @@ var ComponentPreference = {
 								var date = dateArray[0];
 								dateArray[0] = date.clone().startOf('week');
 								dateArray[1] = date.clone().endOf('week');
-								console.log(dateArray);
 							}
 						}
 
