@@ -5,10 +5,10 @@ module.exports = function (grunt) {
         // Metadata
         pkg: grunt.file.readJSON('package.json'),
         banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
-            '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-            '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
-            '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-            ' Licensed <%= props.license %> */\n',
+                '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
+                '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
+                '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
+                ' Licensed <%= props.license %> */\n',
         // Task configuration
         uglify: {
             options: {
@@ -20,59 +20,111 @@ module.exports = function (grunt) {
             },
             dist: {
                 files: {
-                    'dist/pignose.calendar.min.js': ['src/js/**.js']
+                    'dist/js/pignose.calendar.min.js': [
+                        'dist/js/pignose.calendar.js',
+                    ],
+                    'dist/js/pignose.calendar.full.min.js': [
+                        'dist/js/pignose.calendar.full.js'
+                    ]
                 }
             },
         },
-	cssUrlRewrite: {
-	    dist: {
-          	src: 'src/css/**.css',
-	        dest: '.dist/css/pignose.calendar.css',
-		options: {
-	            skipExternal: true,
-	            rewriteUrl: function(url, options, dataURI) {
-	                var path = url.replace('src/', '');
-		        return path;
-	            }
-	        }
-	   }
+        cssUrlRewrite: {
+            dist: {
+                src: 'src/css/**.css',
+                dest: 'dist/css/pignose.calendar.css',
+                options: {
+                    skipExternal: true,
+                    rewriteUrl: function(url, options, dataURI) {
+                        var path = url.replace('src/', '../');
+                        return path;
+                    }
+                }
+            }
         },
         cssmin: {
-          options: {
-            banner: '//================================================================================\n' +
-                    '// [<%= pkg.name %>]\n' +
-                    '// version: <%= pkg.version %>\n' +
-                    '// update: <%= grunt.template.today("yyyy.mm.dd") %>\n' +
-                    '//================================================================================\n\n'
-          },
-          dist: {
-            files: {
-              'dist/pignose.calendar.min.css': ['.dist/css/**.css']
+            options: {
+                banner: '//================================================================================\n' +
+                '// [<%= pkg.name %>]\n' +
+                '// version: <%= pkg.version %>\n' +
+                '// update: <%= grunt.template.today("yyyy.mm.dd") %>\n' +
+                '//================================================================================\n\n'
+            },
+            dist: {
+                files: {
+                    'dist/css/pignose.calendar.min.css': [
+                        'dist/css/pignose.calendar.css'
+                    ]
+                }
             }
-          }
         },
         jshint: {
-          files: ['Gruntfile.js', 'src/**.js'],
-          options: {
-            // options here to override JSHint defaults
-            globals: {
-              jQuery: true,
-              console: true,
-              module: true,
-              document: true
+            files: ['Gruntfile.js', 'src/**.js'],
+            options: {
+                jshintrc: true
             }
-          }
         },
-	copy: {
-	  main: {
-	     files: [{expand: true, cwd: 'src', src: 'fonts/*', dest: 'dist/'}]
-	    }
+    	copy: {
+            main: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'src',
+                        src: 'fonts/*',
+                        dest: 'dist/'
+                    }
+                ]
+            }
         },
         csslint: {
-          dist: ['src/**.css']
+            dist: ['src/**.css']
         },
         qunit: {
-            files: ['test/**/*.html']
+            files: ['tests/**/*.html']
+        },
+        requirejs: {
+            dist: {
+                options: {
+                    name: 'plugin',
+                    baseUrl: 'src/js/',
+                    optimize: 'none',
+                    include: [
+                        'almond'
+                    ],
+                    paths: {
+                        plugin: 'plugins/jquery.plugin',
+                        almond: '../../node_modules/almond/almond',
+                        jquery: 'shim/jquery.shim',
+                        moment: 'shim/moment.shim'
+                    },
+                    out: 'dist/js/pignose.calendar.js',
+                    wrap: {
+                        startFile: 'src/js/wrapper/start.wrapper.js',
+                        endFile: 'src/js/wrapper/end.wrapper.js'
+                    }
+                }
+            },
+            full: {
+                options: {
+                    name: 'plugin',
+                    baseUrl: 'src/js/',
+                    optimize: 'none',
+                    include: [
+                        'almond',
+                    ],
+                    paths: {
+                        plugin: 'plugins/jquery.plugin',
+                        almond: '../../node_modules/almond/almond',
+                        jquery: '../../node_modules/jquery/dist/jquery.min',
+                        moment: '../../node_modules/moment/min/moment.min'
+                    },
+                    out: 'dist/js/pignose.calendar.full.js',
+                    wrap: {
+                        startFile: 'src/js/wrapper/start.wrapper.js',
+                        endFile: 'src/js/wrapper/end.wrapper.js'
+                    }
+                }
+            }
         },
         watch: {
             gruntfile: {
@@ -93,8 +145,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-css-url-rewrite');
+    grunt.loadNpmTasks('grunt-contrib-requirejs');
 
     // Default task
-    grunt.registerTask('default', ['jshint', 'csslint', 'copy', 'cssUrlRewrite', 'cssmin', 'uglify']);
+    grunt.registerTask('default', ['jshint', 'csslint', 'copy', 'cssUrlRewrite', 'cssmin', 'requirejs:dist', 'requirejs:full', 'uglify']);
     grunt.registerTask('test', ['jshint', 'csslint']);
 };

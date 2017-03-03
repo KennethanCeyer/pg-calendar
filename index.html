@@ -15,7 +15,7 @@
 	<link rel="stylesheet" type="text/css" href="demo/css/prism.css" />
 	<link rel="stylesheet" type="text/css" href="demo/css/calendar-style.css" />
 	<link rel="stylesheet" type="text/css" href="demo/css/style.css" />
-	<link rel="stylesheet" type="text/css" href="src/css/pignose.calendar.css" />
+	<link rel="stylesheet" type="text/css" href="dist/css/pignose.calendar.css" />
 	<style type="text/css">
 		.input-calendar {
 			display: block;
@@ -55,14 +55,14 @@
 		}
 	</style>
 	<script type="text/javascript" src="demo/js/jquery.latest.min.js"></script>
+	<script type="text/javascript" src="demo/js/moment.latest.min.js"></script>
 	<script type="text/javascript" src="demo/js/semantic.ui.min.js"></script>
 	<script type="text/javascript" src="demo/js/prism.min.js"></script>
-	<script type="text/javascript" src="vender/moment.min.js"></script>
-	<script type="text/javascript" src="src/js/pignose.calendar.js"></script>
+	<script type="text/javascript" src="dist/js/pignose.calendar.js"></script>
 	<script type="text/javascript">
 	//<![CDATA[
 	$(function() {
-		$('#wrapper .version strong').text('v' + pignoseCalendar.VERSION);
+		$('#wrapper .version strong').text('v' + $.fn.pignoseCalendar.ComponentVersion);
 		function onClickHandler(date, obj) {
 			/**
 			 * @date is an array which be included dates(clicked date at first index)

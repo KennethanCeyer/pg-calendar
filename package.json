@@ -1,9 +1,10 @@
 {
   "name": "pg-calendar",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "Beautiful and eidetic jQuery date picker plguin.",
-  "main": "src/js/pignose.calendar.js",
+  "main": "dist/pignose.calendar.js",
   "scripts": {
+    "build": "grunt",
     "test": "grunt test"
   },
   "repository": {
@@ -20,20 +21,37 @@
     "jquery",
     "plugin"
   ],
-  "author": "Adrian Hernandez <adrian2monk@gmail.com>",
+  "author": "PIGNOSE <kennethan@nhpcw.com>",
+  "contributors": [
+    {
+      "name": "Adrian Hernandez",
+      "url": "https://github.com/adrian2monk"
+    }
+  ],
   "license": "MIT",
+  "files": [
+    "src",
+    "dist"
+  ],
   "bugs": {
     "url": "https://github.com/adrian2monk/PIGNOSE-Calendar/issues"
   },
-  "homepage": "https://github.com/adrian2monk/PIGNOSE-Calendar#readme",
+  "homepage": "https://www.pigno.se/barn/PIGNOSE-Calendar/",
   "devDependencies": {
+    "almond": "^0.3.3",
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-copy": "1.0.0",
     "grunt-contrib-csslint": "^2.0.0",
     "grunt-contrib-cssmin": "^1.0.2",
     "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-requirejs": "^1.0.0",
     "grunt-contrib-uglify": "^2.0.0",
-    "grunt-css-url-rewrite": "0.3.5"
+    "grunt-css-url-rewrite": "0.3.5",
+    "jsdom": "^9.11.0"
+  },
+  "dependencies": {
+    "jquery": "^3.1.1",
+    "moment": "^2.17.1"
   }
 }

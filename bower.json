@@ -2,11 +2,10 @@
   "name": "pg-calendar",
   "description": "Beautiful and eidetic jQuery date picker plguin.",
   "main": [
-    "dist/pignose.calendar.min.js",
-    "dist/pignose.calendar.min.css"
+    "dist/pignose.calendar.min.js"
   ],
   "authors": [
-    "Kenneth Ceyer <kennethan@nhpcw.com> (http://www.pigno.se)"
+    "PIGNOSE <kennethan@nhpcw.com> (http://www.pigno.se)"
   ],
   "license": "MIT",
   "keywords": [
