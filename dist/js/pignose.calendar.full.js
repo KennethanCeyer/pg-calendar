@@ -455,7 +455,7 @@ define("almond", function(){});
 define('component/models',[], function() {
 	var model = {
 		ComponentName: 'pignoseCalendar',
-		ComponentVersion: '1.4.9',
+		ComponentVersion: '1.4.10',
 		ComponentPreference: {
 			supports: {
 				themes: ['light', 'dark', 'blue']
@@ -1348,14 +1348,9 @@ define('core',[
 				if(local.input === true || _this.settings.modal === true) {
 					var wrapperActiveClass = Helper.GetSubClass('WrapperActive');
 					var overlayActiveClass = Helper.GetSubClass('WrapperOverlayActive');
-					var $overlay = $('.' + Helper.GetSubClass('WrapperOverlay'));
-					if($overlay.length < 1) {
-						$overlay = $(local.calendarWrapperOverlayHtml);
-						$overlay.appendTo('body').hide();
-					}
+					var $overlay;
 
 					$parent = $(local.calendarWrapperHtml);
-					$parent.appendTo('body');
 					$parent.bind('click', function(event) {
 						event.stopPropagation();
 					});
@@ -1365,30 +1360,40 @@ define('core',[
 							event.preventDefault();
 							event.stopPropagation();
 							event.stopImmediatePropagation();
+							$overlay = $('.' + Helper.GetSubClass('WrapperOverlay'));
+							if($overlay.length < 1) {
+								$overlay = $(local.calendarWrapperOverlayHtml);
+								$overlay.bind('click.' + Helper.GetClass(models.ComponentName), function() {
+									$parent.trigger('cancel.' + Helper.GetClass(models.ComponentName));
+								});
+								$overlay.appendTo('body');
+							}
+							
+							if($parent.parent().is('body') === false) {
+								$parent.appendTo('body');
+							}
+
+							$parent.show();
+							$overlay.show();
+
+							$window.unbind('resize.' + Helper.GetClass(models.ComponentName)).bind('resize.' + Helper.GetClass(models.ComponentName), function() {
+								$parent.css({
+									marginLeft: - $parent.outerWidth() / 2,
+									marginTop: - $parent.outerHeight() / 2
+								});
+							}).triggerHandler('resize.' + Helper.GetClass(models.ComponentName));
+
+							$super[models.ComponentName]('set', $this.val());
+
 							setTimeout(function() {
-								$overlay.show();
-								$parent.show();
-								$window.unbind('resize.' + Helper.GetClass(models.ComponentName)).bind('resize.' + Helper.GetClass(models.ComponentName), function() {
-									$parent.css({
-										marginLeft: - $parent.outerWidth() / 2,
-										marginTop: - $parent.outerHeight() / 2
-									});
-								}).triggerHandler('resize.' + Helper.GetClass(models.ComponentName));
-								$super[models.ComponentName]('set', $this.val());
-								setTimeout(function() {
-									$overlay.addClass(overlayActiveClass);
-									$parent.addClass(wrapperActiveClass);
-								}, 25);
+								$overlay.addClass(overlayActiveClass);
+								$parent.addClass(wrapperActiveClass);
 							}, 25);
 						})
 						.bind('focus', function(event) {
 							var $this = $(this);
 							$this.blur();
 						});
-
-					$overlay.bind('click.' + Helper.GetClass(models.ComponentName), function() {
-						$parent.trigger('cancel.' + Helper.GetClass(models.ComponentName));
-					});
 
 					$parent.unbind('cancel.' + Helper.GetClass(models.ComponentName) + ' ' + 'apply.' + Helper.GetClass(models.ComponentName)).bind('cancel.' + Helper.GetClass(models.ComponentName) + ' ' + 'apply.' + Helper.GetClass(models.ComponentName), function() {
 						$overlay.removeClass(overlayActiveClass).hide();
@@ -1934,7 +1939,7 @@ define('plugin',[
 ], function(Constructor, models, $) {
 	'use strict';
 	$.fn[models.ComponentName] = function(options) {
-		return Constructor(this, options);
+		return Constructor.apply(Constructor, [this, options].concat(Array.prototype.splice.call(arguments, 1)));
 	};
 
 	for (var idx in models) {

@@ -5,7 +5,7 @@ define([
 ], function(Constructor, models, $) {
 	'use strict';
 	$.fn[models.ComponentName] = function(options) {
-		return Constructor(this, options);
+		return Constructor.apply(Constructor, [this, options].concat(Array.prototype.splice.call(arguments, 1)));
 	};
 
 	for (var idx in models) {
