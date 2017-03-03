@@ -38,8 +38,8 @@ Check `dist/` folder on this repository.
 3. Insert snippets at `<head>` tag of your html file.
 
  ```html
-<script src="./dist/pignose.calendar.min.js"></script>
-<link type="text/css" href="./dist/pignose.calendar.min.css" />
+<script src="./dist/js/pignose.calendar.min.js"></script>
+<link type="text/css" href="./dist/css/pignose.calendar.min.css" />
 ```
 
 ----
