@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no" />
+	<meta property="og:url" content="http://www.pigno.se/barn/PIGNOSE-Calendar">
+	<meta property="og:type" content="product" />
+	<meta property="og:title" content="PIGNOSE Calendar" />
+	<meta property="og:description" content="PIGNOSE Calendar is beautiful and eidetic jQuery date picker plguin." />
+	<meta property="og:image" content="http://www.pigno.se/barn/PIGNOSE-Calendar/demo/img/cover@250.png" />
+	<meta property="og:site_name" content="PIGNOSE" />
+	<title>PIGNOSE Calendar</title>
+	<link rel="shortcut icon" type="image/x-icon" href="../demo/img/pignose-ico.ico" />
+	<link rel="stylesheet" type="text/css" href="../demo/css/semantic.ui.min.css">
+	<link rel="stylesheet" type="text/css" href="../demo/css/prism.css" />
+	<link rel="stylesheet" type="text/css" href="../demo/css/calendar-style.css" />
+	<link rel="stylesheet" type="text/css" href="../demo/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="../dist/css/pignose.calendar.css" />
+	<style type="text/css">
+		.input-calendar {
+			display: block;
+			width: 100%;
+			max-width: 360px;
+			margin: 0 auto;
+			height: 3.2em;
+			line-height: 3.2em;
+			font: inherit;
+			padding: 0 1.2em;
+			border: 1px solid #d8d8d8;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+			-o-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+			-moz-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+			-webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+		}
+
+		.btn-calendar {
+			display: block;
+			width: 100%;
+			max-width: 360px;
+			height: 3.2em;
+			line-height: 3.2em;
+			background-color: #52555a;
+			margin: 0 auto;
+			font-weight: 600;
+			color: #ffffff !important;
+			text-decoration: none !important;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+			-o-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+			-moz-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+			-webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+		}
+
+		.btn-calendar:hover {
+			background-color: #5a6268;
+		}
+	</style>
+	<script type="text/javascript" src="../demo/js/jquery.latest.min.js"></script>
+	<script type="text/javascript" src="../demo/js/moment.latest.min.js"></script>
+	<script type="text/javascript" src="../demo/js/semantic.ui.min.js"></script>
+	<script type="text/javascript" src="../demo/js/prism.min.js"></script>
+	<script type="text/javascript" src="../dist/js/pignose.calendar.js"></script>
+	<script type="text/javascript">
+	//<![CDATA[
+	$(function() {
+		$('#wrapper .version strong').text('v' + $.fn.pignoseCalendar.ComponentVersion);
+
+		function onClickHandler(date, obj) {
+			/**
+			 * @date is an array which be included dates(clicked date at first index)
+			 * @obj is an object which stored calendar interal data.
+			 * @obj.calendar is an element reference.
+			 * @obj.storage.activeDates is all toggled data, If you use toggle type calendar.
+             * @obj.storage.events is all events associated to this date
+			 */
+
+			var $calendar = obj.calendar;
+			var $box = $calendar.parent().siblings('.box').show();
+			var text = 'You choose date ';
+
+			if(date[0] !== null) {
+				text += date[0].format('YYYY-MM-DD');
+			}
+
+			if(date[0] !== null && date[1] !== null) {
+				text += ' ~ ';
+			} else if(date[0] === null && date[1] == null) {
+				text += 'nothing';
+			}
+
+			if(date[1] !== null) {
+				text += date[1].format('YYYY-MM-DD');
+			}
+
+			$box.text(text);
+		}
+
+		// Default Calendar
+		$('.calendar').pignoseCalendar({
+			select: onClickHandler
+		});
+
+		// This use for DEMO page tab component.
+		$('.menu .item').tab();
+	});
+	//]]>
+	</script>
+</head>
+<body>
+	<div id="wrapper">
+		<div class="header">
+			<img src="../demo/img/pignose-logo.png" alt="" />
+			<h1>PIGNOSE Calendar Examples</h1>
+			<a href="../https://github.com/KennethanCeyer/PIGNOSE-Calendar" target="_blank" class="ui button primary">View project on Github</a> <a href="../https://github.com/KennethanCeyer/PIGNOSE-Calendar/archive/master.zip" target="_blank" class="ui button teal">Download zip</a>
+			<h4 class="version">Latest version <strong></strong></h4>
+		</div>
+		<div id="basic" class="article">
+			<h3><span>Basic</span></h3>
+            <div class="calendar"></div>
+			<div class="box"></div>
+			<ul class="ui top pointing secondary menu">
+				<a href="../#" role="presentation" class="item active" data-tab="html-basic">HTML</a>
+				<a href="../#" role="presentation" class="item" data-tab="javascript-basic">Javascript</a>
+			</ul>
+			<div role="tabpanel" class="ui tab segment active" data-tab="html-basic">
+				<pre><code class="language-markup">&lt;div class=&quot;calendar&quot;&gt;&lt;/div&gt;</code></pre>
+			</div>
+			<div role="tabpanel" class="ui tab segment" data-tab="javascript-basic">
+					<pre><code class="language-js">$(function() {
+    $('.calendar').pignoseCalendar();
+});</code></pre>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

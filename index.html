@@ -108,6 +108,7 @@
 			modal: true, // It means modal will be showed when you click the target button.
 			buttons: true,
 			apply: function(date) {
+				console.log($btn);
 				$btn.next().show().text('You applied date ' + date + '.');
 			}
 		});
@@ -128,19 +129,50 @@
 		$('.calendar-schedules').pignoseCalendar({
 			scheduleOptions: {
 				colors: {
-				    offer: '#2fabb7',
-					ad: '#5c6270'
+				    holiday: '#2fabb7',
+					seminar: '#5c6270',
+					meetup:  '#ef8080'
 				}
 			},
 			schedules: [{
-				name: 'offer',
+				name: 'holiday',
 			    date: '2017-02-08'
 			}, {
-				name: 'ad',
-			    date: '2017-02-08'
+				name: 'holiday',
+			    date: '2017-02-16'
 			}, {
-				name: 'offer',
-			    date: '2017-02-05',
+				name: 'holiday',
+			    date: '2017-03-01',
+			}, {
+				name: 'holiday',
+			    date: '2017-03-05'
+			}, {
+				name: 'holiday',
+			    date: '2017-03-18',
+			}, {
+				name: 'seminar',
+			    date: '2017-02-14'
+			}, {
+				name: 'seminar',
+			    date: '2017-03-01',
+			}, {
+				name: 'meetup',
+			    date: '2017-02-16'
+			}, {
+				name: 'meetup',
+			    date: '2017-03-01',
+			}, {
+				name: 'meetup',
+			    date: '2017-03-18'
+			}, {
+				name: 'meetup',
+			    date: '2017-04-04',
+			}, {
+				name: 'meetup',
+			    date: '2017-05-01'
+			}, {
+				name: 'meetup',
+			    date: '2017-06-19',
 			}],
 			select: function(date, obj) {
 				var message = `You selected ${(date[0] === null? 'null':date[0].format('YYYY-MM-DD'))}.
@@ -802,6 +834,12 @@
 						<td colspan="2">pickWeeks</td>
 						<td class="center"><span class="ui label primary">boolean</span></td>
 						<td>If you set true this option, You can use multiple range picker by one click on your Calendar.</td>
+						<td>false</td>
+					</tr>
+					<tr>
+						<td colspan="2">selectOver</td>
+						<td class="center"><span class="ui label primary">boolean</span></td>
+						<td>If you set true this option, You can pass the check of disabled dates when multiple mode enabled.</td>
 						<td>false</td>
 					</tr>
 					<tr>

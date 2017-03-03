@@ -1,6 +1,5 @@
 define([], function() {
 	var lib = moment;
-	console.log('test', moment);
 	var message = 'PIGNOSE Calendar plugin must be needed moment library.\n' +
 				  'If you want to use built-in plugin, Import `dist/pignose.calendar.full.js`.'
 

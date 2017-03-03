@@ -5,7 +5,7 @@ define([
 ], function(Constructor, models, $) {
 	'use strict';
 	$.fn[models.ComponentName] = function(options) {
-		Constructor(this, options);
+		return Constructor(this, options);
 	};
 
 	for (var idx in models) {

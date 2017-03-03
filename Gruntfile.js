@@ -127,13 +127,13 @@ module.exports = function (grunt) {
             }
         },
         watch: {
-            gruntfile: {
-                files: '<%= jshint.gruntfile.src %>',
-                tasks: ['jshint:gruntfile']
-            },
-            lib_test: {
-                files: '<%= jshint.lib_test.src %>',
-                tasks: ['jshint:lib_test', 'qunit']
+            dist: {
+                files: [
+                    'src/js/**/**.js',
+                    'src/css/**/**.css',
+                    'Gruntfile.js'
+                ],
+                tasks: ['default']
             }
         }
     });
@@ -146,6 +146,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-css-url-rewrite');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Default task
     grunt.registerTask('default', ['jshint', 'csslint', 'copy', 'cssUrlRewrite', 'cssmin', 'requirejs:dist', 'requirejs:full', 'uglify']);

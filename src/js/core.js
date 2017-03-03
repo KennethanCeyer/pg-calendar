@@ -86,6 +86,7 @@ define([
 				reverse: false,
 				buttons: false,
 				modal: false,
+				selectOver: false,
 				minDate: null,
 				maxDate: null,
 
@@ -285,6 +286,76 @@ define([
 							$target.addClass(rangeLastClass);
 						}
 					}
+				};
+
+				var existsBetweenRange = function(startDate, endDate, targetDate) {
+					if(typeof targetDate !== 'undefined' && targetDate !== null) {
+						if(
+							startDate.diff(targetDate) < 0 &&
+							endDate.diff(targetDate) > 0
+						) {
+							return true;
+						} else {
+							return false;
+						}
+					} else {
+						return false;
+					}
+				};
+
+				var validDisabledArea = function(startDate, endDate) {
+					var idx, date, index;
+
+					for(idx in _this.settings.disabledDates) {
+						date = moment(_this.settings.disabledDates[idx]);
+						if(existsBetweenRange(startDate, endDate, date)) {
+							return false;
+						}
+					}
+
+					if(existsBetweenRange(startDate, endDate, _this.settings.maxDate)) {
+						return false;
+					}
+
+					if(existsBetweenRange(startDate, endDate, _this.settings.minDate)) {
+						return false;
+					}
+
+					for (idx in _this.settings.disabledRanges) {
+						date = _this.settings.disabledRanges[idx];
+						var startRangeDate = moment(date[0]);
+						var endRangeDate = moment(date[1]);
+
+						if(
+							existsBetweenRange(startDate, endDate, startRangeDate) ||
+							existsBetweenRange(startDate, endDate, endRangeDate)
+						) {
+							return false;
+						}
+					}
+
+					for (idx = 0, index = 0; idx < _this.settings.disabledWeekdays.length && index < 7; idx++) {
+						index++;
+						var week = _this.settings.disabledWeekdays[idx];
+						var startWeekday = startDate.weekday();
+						var endWeekday = endDate.weekday();
+						var tmp;
+
+						if(startWeekday > endWeekday) {
+							tmp = startWeekday;
+							startWeekday = endWeekday;
+							endWeekday = tmp;
+						}
+
+						if(
+							week >= startWeekday &&
+							week <= endWeekday
+						) {
+							return false;
+						}
+					}
+
+					return true;
 				};
 
 				local.renderer = function() {
@@ -532,10 +603,6 @@ define([
 										local.current[position] = moment(date);
 									}
 
-									if(_this.settings.multiple === true) {
-										local.calendar.find('.' + rangeClass).removeClass(rangeClass).removeClass(rangeFirstClass).removeClass(rangeLastClass);
-									}
-
 									if(
 									   local.current[0] !== null &&
 									   local.current[1] !== null
@@ -555,6 +622,16 @@ define([
 											});
 										}
 
+										if(
+											validDisabledArea(local.current[0], local.current[1]) === false &&
+											_this.settings.selectOver === false
+										) {
+											local.current[0] = null;
+											local.current[1] = null;
+
+											local.calendar.find('.' + activeClass).removeClass(activeClass).removeClass(activePositionClasses[0]).removeClass(activePositionClasses[1]);
+										}
+
 										if(local.input === true && _this.settings.buttons === false) {
 											var dateValues = []
 
@@ -569,9 +646,12 @@ define([
 											$super.val(dateValues.join(', '));
 											$parent.trigger('apply.' + Helper.GetClass(models.ComponentName));
 										}
-
-										generateDateRange.call();
 									}
+								}
+
+								if(_this.settings.multiple === true) {
+									local.calendar.find('.' + rangeClass).removeClass(rangeClass).removeClass(rangeFirstClass).removeClass(rangeLastClass);
+									generateDateRange.call();
 								}
 
 								if(_this.settings.schedules.length > 0) {
