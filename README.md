@@ -2,7 +2,7 @@
 
 Beautiful and eidetic jQuery date picker plugin.
 
-[![npm version](https://badge.fury.io/js/pg-calendar.svg)](https://badge.fury.io/js/pg-calendar) [![Bower version](https://badge.fury.io/bo/pg-calendar.svg)](https://badge.fury.io/bo/pg-calendar) [![Join the chat at https://gitter.im/KennethanCeyer/PIGNOSE](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/KennethanCeyer/PIGNOSE?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![npm version](https://badge.fury.io/js/pg-calendar.svg)](https://badge.fury.io/js/pg-calendar) [![Bower version](https://badge.fury.io/bo/pg-calendar.svg)](https://badge.fury.io/bo/pg-calendar) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Join the chat at https://gitter.im/KennethanCeyer/PIGNOSE](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/KennethanCeyer/PIGNOSE?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ----
 
