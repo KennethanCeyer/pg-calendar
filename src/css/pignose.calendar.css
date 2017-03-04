@@ -31,6 +31,7 @@
 }
 
 .pignose-calendar {
+	width: 80%;
 	max-width: 360px;
 	background-color: #ffffff;
 	border: 1px solid #d8d8d8;
@@ -277,7 +278,7 @@
 .pignose-calendar-wrapper {
 	display: none;
 	position: fixed;
-	width: 100%;
+	width: 80%;
 	max-width: 360px;
 	top: 50%;
 	left: 50%;
@@ -287,10 +288,9 @@
 	-webkit-box-shadow: 0 4px 16px rgba(0, 0, 0, 1);
 	-moz-box-shadow: 0 4px 16px rgba(0, 0, 0, 1);
 	box-shadow: 0 4px 16px rgba(0, 0, 0, 1);
-	transform: translate3d(0, 160px, 0);
-	-o-transform: translate3d(0, 160px, 0);
-	-moz-transform: translate3d(0, 160px, 0);
 	-webkit-transform: translate3d(0, 160px, 0);
+	-moz-transform: translate3d(0, 160px, 0);
+	transform: translate3d(0, 160px, 0);
 	opacity: 0;
 	-webkit-transition: opacity .3s ease, transform .5s ease-out, -webkit-transform .5s ease-out;
 	-moz-transition: opacity .3s ease, transform .5s ease-out, -webkit-transform .5s ease-out;
@@ -298,6 +298,8 @@
 }
 
 .pignose-calendar-wrapper .pignose-calendar {
+	max-width: auto;
+	width: 100%;
 	border: none;
 }
 

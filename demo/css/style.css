@@ -196,3 +196,39 @@ pre, code, code span {
 .box-languages .label:nth-child(4n + 1) {
 	margin-left: 0;
 }
+
+@media screen and (max-width: 640px) {
+	html, body {
+		font-size: 15px;
+	}
+
+	.article {
+		width: 90%;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	html, body {
+		font-size: 14px;
+	}
+
+	.header h1 {
+		margin-bottom: 1.2em;
+	}
+
+	.header .button {
+		display: block;
+		margin: 0;
+		margin-bottom: 1em;
+	}
+
+	.header .button:last-child {
+		margin-bottom: 0;
+	}
+
+	.article {
+		width: 100%;
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+}
