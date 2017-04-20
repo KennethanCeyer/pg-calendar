@@ -210,7 +210,6 @@ define([
 					$parent
                         .unbind('cancel.' + Helper.GetClass(models.ComponentName) + ' ' + 'apply.' + Helper.GetClass(models.ComponentName))
                         .bind('cancel.' + Helper.GetClass(models.ComponentName) + ' ' + 'apply.' + Helper.GetClass(models.ComponentName), function() {
-                            console.log($overlay, $parent);
     						$overlay.removeClass(overlayActiveClass).hide();
     						$parent.removeClass(wrapperActiveClass).hide();
     					});
