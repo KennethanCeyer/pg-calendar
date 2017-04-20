@@ -19,48 +19,53 @@ define([
 	var _calendarBodyClass = Helper.GetSubClass('Body');
 	var _calendarButtonClass = Helper.GetSubClass('Button');
 
-	var languages = {
-		supports: ['en', 'ko', 'fr', 'ch', 'de', 'jp', 'pt', 'da', 'pl', 'es'],
-		weeks: {
-			en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-			ko: ['일', '월', '화', '수', '목', '금', '토'],
-			fr: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
-			ch: ['日', '一', '二', '三', '四', '五', '六'],
-			de: ['SO', 'MO', 'DI', 'MI', 'DO', 'FR', 'SA'],
-			jp: ['日', '月', '火', '水', '木', '金', '土'],
-			pt: ['Dom','Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-			da: ['Søn', 'Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør'],
-			pl: ['Nie', 'Pon', 'Wto', 'Śro', 'Czw', 'Pią', 'Sob'],
-			es: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
-		},
-		monthsLong: {
-			en: ['January', 'February', 'March', 'April', 'May', 'Jun', 'July', 'August', 'September', 'October', 'November', 'December'],
-			ko: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-			fr: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-			ch: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-			de: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
-			jp: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-			pt: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-			da: ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'],
-			pl: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
-			es: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-		},
-		months: {
-			en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-			ko: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-			fr: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'],
-			ch: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-			de: ['Jän', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
-			jp: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
- 			pt: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-			da: ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
-			pl: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
-			es: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dec'],
-		}
-	};
+    var global = {
+        language: 'en',
+        languages: {
+            supports: ['en', 'ko', 'fr', 'ch', 'de', 'jp', 'pt', 'da', 'pl', 'es'],
+            weeks: {
+                en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                ko: ['일', '월', '화', '수', '목', '금', '토'],
+                fr: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+                ch: ['日', '一', '二', '三', '四', '五', '六'],
+                de: ['SO', 'MO', 'DI', 'MI', 'DO', 'FR', 'SA'],
+                jp: ['日', '月', '火', '水', '木', '金', '土'],
+                pt: ['Dom','Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+                da: ['Søn', 'Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør'],
+                pl: ['Nie', 'Pon', 'Wto', 'Śro', 'Czw', 'Pią', 'Sob'],
+                es: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+            },
+            monthsLong: {
+                en: ['January', 'February', 'March', 'April', 'May', 'Jun', 'July', 'August', 'September', 'October', 'November', 'December'],
+                ko: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+                fr: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                ch: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                de: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+                jp: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                pt: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                da: ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'],
+                pl: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
+                es: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            },
+            months: {
+                en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                ko: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+                fr: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'],
+                ch: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                de: ['Jän', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+                jp: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                pt: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                da: ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
+                pl: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
+                es: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dec'],
+            }
+        },
+        week: 0,
+        format: 'YYYY-MM-DD'
+    };
 
 	var Component = {
-		init : function(options) {
+		init: function(options) {
 			var _this = this;
 			
             this.settings = {};
@@ -139,14 +144,14 @@ define([
 
 				for(var i=_this.settings.week; i<_this.settings.weeks.length + _this.settings.week; i++) {
                     if (i < 0) {
-                        i = languages.weeks.en.length - i;                            
+                        i = global.languages.weeks.en.length - i;                            
                     }
 					var week = _this.settings.weeks[i % _this.settings.weeks.length];
 					if(typeof week !== 'string') {
 						continue;
 					}
 					week = week.toUpperCase();
-					var $unit = $(Helper.Format('<div class="{0} {0}-{2}">{1}</div>', Helper.GetSubClass('Week'), week, languages.weeks.en[i % languages.weeks.en.length].toLowerCase()));
+					var $unit = $(Helper.Format('<div class="{0} {0}-{2}">{1}</div>', Helper.GetSubClass('Week'), week, global.languages.weeks.en[i % global.languages.weeks.en.length].toLowerCase()));
 					$unit.appendTo(local.calendar.find('.' + _calendarHeaderClass));
 				}
 
@@ -364,6 +369,7 @@ define([
 					local.calendar.find(Helper.Format('.{0}-next .{0}-value', _calendarTopClass)).text(_this.settings.months[local.dateManager.nextMonth - 1].toUpperCase());
 
 					if(_this.settings.buttons === true) {
+                        var $super = $this;
 						$calendarButton.find('.' + _calendarButtonClass).bind('click', function(event) {
 							event.preventDefault();
 							event.stopPropagation();
@@ -388,9 +394,11 @@ define([
 								} else {
 									value = local.current[0] === null? '':moment(local.current[0]).format(_this.settings.format);
 								}
+
 								if(local.input === true) {
-									$this.val(value).triggerHandler('change');
+									$super.val(value).triggerHandler('change');
 								}
+
 								if(typeof _this.settings.apply === 'function') {
 									_this.settings.apply.call($this, local.current, local);
 								}
@@ -419,14 +427,14 @@ define([
 						   maxDate = _this.settings.maxDate === null? null:moment(_this.settings.maxDate);
 
 					for(var i=0; i<firstWeekday; i++) {
-						var $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('Unit'), languages.weeks.en[i].toLowerCase()));
+						var $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('Unit'), global.languages.weeks.en[i].toLowerCase()));
 						$unitList.push($unit);
 					}
 
 					for(var i=local.dateManager.firstDay; i<=local.dateManager.lastDay; i++) {
 						var iDate = DateManager.Convert(local.dateManager.year, local.dateManager.month, i);
 						var iDateFormat = iDate.format('YYYY-MM-DD');
-						var $unit = $(Helper.Format('<div class="{0} {0}-date {0}-{3}" data-date="{1}"><a href="#">{2}</a></div>', Helper.GetSubClass('Unit'), iDate.format('YYYY-MM-DD'), i, languages.weeks.en[iDate.weekday()].toLowerCase()));
+						var $unit = $(Helper.Format('<div class="{0} {0}-date {0}-{3}" data-date="{1}"><a href="#">{2}</a></div>', Helper.GetSubClass('Unit'), iDate.format('YYYY-MM-DD'), i, global.languages.weeks.en[iDate.weekday()].toLowerCase()));
 
 						if(_this.settings.enabledDates.length > 0) {
 							if($.inArray(iDateFormat, _this.settings.enabledDates) === -1) {
@@ -697,9 +705,9 @@ define([
 
 					for(var i=lastWeekday+1; $unitList.length < _this.settings.weeks.length * 5; i++) {
                         if (i < 0) {
-                            i = languages.weeks.en.length - i;                            
+                            i = global.languages.weeks.en.length - i;                            
                         }
-						var $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('Unit'), languages.weeks.en[i % languages.weeks.en.length].toLowerCase()));
+						var $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('Unit'), global.languages.weeks.en[i % global.languages.weeks.en.length].toLowerCase()));
 						$unitList.push($unit);
 					}
 
@@ -742,15 +750,101 @@ define([
 				$this[0][models.ComponentName] = local;
 			});
 		},
+        setting: function(options) {
+            var settings = $.extend({
+                language: global.language,
+                languages: {},
+                week: null,
+                format: null
+            }, options);
+
+            var monthsCount = 12;
+            var weeksCount = 7;
+
+            global.language = settings.language;
+
+            if (Object.keys(settings.languages).length > 0) {
+                for (var idx in settings.languages) {
+                    var language = settings.languages[idx];
+
+                    if (typeof idx !== 'string') {
+                        console.error('Global configuration is failed.\nMessage: language key is not a string type.', idx);
+                    }
+
+                    if (typeof language.weeks === 'undefined') {
+                        console.error('Global configuration is failed.\nMessage: You must give `weeks` option of `' + idx + '` language.');
+                        break;
+                    }
+
+                    if (typeof language.monthsLong === 'undefined') {
+                        console.error('Global configuration is failed.\nMessage: You must give `monthsLong` option of `' + idx + '` language.');
+                        break;
+                    }
+
+                    if (typeof language.months === 'undefined') {
+                        console.error('Global configuration is failed.\nMessage: You must give `months` option of `' + idx + '` language.');
+                        break;
+                    }
+
+                    if (language.weeks.length < weeksCount) {
+                        console.error('`weeks` must have least ' + weeksCount + ' items.');
+                        break;
+                    } else if (language.weeks.length !== weeksCount) {
+                        console.warn('`weeks` option over ' + weeksCount + ' items. We recommend to give ' + weeksCount + ' items.');
+                    }
+
+                    if (language.monthsLong.length < monthsCount) {
+                        console.error('`monthsLong` must have least ' + monthsCount + ' items.');
+                        break;
+                    } else if (language.monthsLong.length !== monthsCount) {
+                        console.warn('`monthsLong` option over ' + monthsCount + ' items. We recommend to give ' + monthsCount + ' items.');
+                    }
+
+                    if (language.months.length < monthsCount) {
+                        console.error('`months` must have least ' + monthsCount + ' items.');
+                        break;
+                    } else if (language.months.length !== monthsCount) {
+                        console.warn('`months` option over ' + monthsCount + ' items. We recommend to give ' + monthsCount + ' items.');
+                    }
+                    
+                    if (global.languages.supports.indexOf(settings.language) === -1) {
+                        global.languages.supports.push(settings.language);
+                    }
+
+                    ['weeks', 'monthsLong', 'months'].map(function(key) {
+                        if (typeof global.languages[key][idx] !== 'undefined') {
+                            console.warn('`' + idx + '` language is already given however it will be overwriten.');
+                        }
+                        global.languages[key][idx] = language[key];
+                    });
+                }
+            }
+
+            if (settings.week !== null) {
+                if (typeof settings.week  === 'number') {
+                    global.week = settings.week;
+                } else {
+                    console.error('Global configuration is failed.\nMessage: You must give `week` option as number type.');
+                }
+            }
+
+            if (settings.format !== null) {
+                if (typeof settings.format  === 'string') {
+                    global.format = settings.format;
+                } else {
+                    console.error('Global configuration is failed.\nMessage: You must give `format` option as string type.');
+                }
+            }
+        },
         configure: function(options) {
             var _this = this;
             
             this.settings = $.extend({
-                lang: 'en',
-                languages: languages,
+                lang: global.language,
+                languages: global.languages,
                 theme: 'light',
                 date: moment(),
-                format: 'YYYY-MM-DD',
+                format: global.format,
                 enabledDates: [],
                 disabledDates: [],
                 disabledWeekdays: [],
@@ -759,10 +853,10 @@ define([
                 scheduleOptions: {
                     colors: {}
                 },
-                week: 0,
-                weeks: languages.weeks.en,
-                monthsLong: languages.monthsLong.en,
-                months: languages.months.en,
+                week: global.week,
+                weeks: global.languages.weeks.en,
+                monthsLong: global.languages.monthsLong.en,
+                months: global.languages.months.en,
                 pickWeeks: false,
                 initialize: true,
                 multiple: false,
@@ -783,10 +877,10 @@ define([
             }, options);
 
             if(this.settings.lang !== 'en' &&
-               $.inArray(this.settings.lang, _this.settings.languages.supports) !== -1) {
-                this.settings.weeks = _this.settings.languages.weeks[this.settings.lang];
-                this.settings.monthsLong = _this.settings.languages.monthsLong[this.settings.lang];
-                this.settings.months = _this.settings.languages.months[this.settings.lang];
+               $.inArray(this.settings.lang, global.languages.supports) !== -1) {
+                this.settings.weeks = global.languages.weeks[this.settings.lang];
+                this.settings.monthsLong = global.languages.monthsLong[this.settings.lang];
+                this.settings.months = global.languages.months[this.settings.lang];
             }
 
             if(this.settings.theme !== 'light' &&
