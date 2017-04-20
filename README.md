@@ -72,6 +72,10 @@ We welcome your support, You can support to notice by send me github issue or us
 - [@pkly](https://www.github.com/pkly)
 - [@TNDecoder](https://www.github.com/TNDecoder)
 
+#### Join in contribution
+
+Please move to [Contribution section](https://github.com/KennethanCeyer/PIGNOSE-Calendar/wiki/Contribution).
+
 ----
 
 ### Question
