@@ -1,15 +1,23 @@
 define(['../component/index', 'moment'], function(Helper, moment) {
 	var m_dateCache = {};
-	var DateManager = function Constructor(d) {
-		this.year = parseInt(d.format('YYYY'), 10);
-		this.month = parseInt(d.format('MM'), 10);
-		this.prevMonth = parseInt(d.clone().add(-1, 'months').format('MM'), 10);
-		this.nextMonth = parseInt(d.clone().add(1, 'months').format('MM'), 10);
-		this.day = parseInt(d.format('DD'), 10);
+	var DateManager = function Constructor(date) {
+        if (date instanceof moment === false) {
+           if (typeof date === 'string' || typeof date === 'number') {
+            date = moment(date);
+           } else {
+            console.error('`date` option is invalid type. (date: ' + date + ').');
+           }
+        }
+
+		this.year = parseInt(date.format('YYYY'), 10);
+		this.month = parseInt(date.format('MM'), 10);
+		this.prevMonth = parseInt(date.clone().add(-1, 'months').format('MM'), 10);
+		this.nextMonth = parseInt(date.clone().add(1, 'months').format('MM'), 10);
+		this.day = parseInt(date.format('DD'), 10);
 		this.firstDay = 1;
-		this.lastDay = parseInt(d.clone().endOf('month').format('DD'), 10);
-		this.weekDay = d.weekday();
-		this.date = d;
+		this.lastDay = parseInt(date.clone().endOf('month').format('DD'), 10);
+		this.weekDay = date.weekday();
+		this.date = date;
 	};
 
 	DateManager.prototype.toString = function() {

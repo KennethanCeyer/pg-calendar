@@ -63,17 +63,19 @@
 	//<![CDATA[
 	$(function() {
 		$('#wrapper .version strong').text('v' + $.fn.pignoseCalendar.ComponentVersion);
-		function onClickHandler(date, obj) {
+		function onSelectHandler(date, context) {
 			/**
 			 * @date is an array which be included dates(clicked date at first index)
-			 * @obj is an object which stored calendar interal data.
-			 * @obj.calendar is an element reference.
-			 * @obj.storage.activeDates is all toggled data, If you use toggle type calendar.
-             * @obj.storage.events is all events associated to this date
+			 * @context is an object which stored calendar interal data.
+             * @context.calendar is a root element reference.
+			 * @context.calendar is a calendar element reference.
+			 * @context.storage.activeDates is all toggled data, If you use toggle type calendar.
+             * @context.storage.events is all events associated to this date
 			 */
 
-			var $calendar = obj.calendar;
-			var $box = $calendar.parent().siblings('.box').show();
+            var $element = context.element;
+			var $calendar = context.calendar;
+			var $box = $element.siblings('.box').show();
 			var text = 'You choose date ';
 
 			if(date[0] !== null) {
@@ -93,36 +95,68 @@
 			$box.text(text);
 		}
 
+        function onApplyHandler(date, context) {
+            /**
+             * @date is an array which be included dates(clicked date at first index)
+             * @context is an object which stored calendar interal data.
+             * @context.calendar is a root element reference.
+             * @context.calendar is a calendar element reference.
+             * @context.storage.activeDates is all toggled data, If you use toggle type calendar.
+             * @context.storage.events is all events associated to this date
+             */
+
+            var $element = context.element;
+            var $calendar = context.calendar;
+            var $box = $element.siblings('.box').show();
+            var text = 'You applied date ';
+
+            if(date[0] !== null) {
+                text += date[0].format('YYYY-MM-DD');
+            }
+
+            if(date[0] !== null && date[1] !== null) {
+                text += ' ~ ';
+            } else if(date[0] === null && date[1] == null) {
+                text += 'nothing';
+            }
+
+            if(date[1] !== null) {
+                text += date[1].format('YYYY-MM-DD');
+            }
+
+            $box.text(text);
+        }
+
 		// Default Calendar
 		$('.calendar').pignoseCalendar({
-			select: onClickHandler
+            select: onSelectHandler
 		});
 
 		// Input Calendar
 		$('.input-calendar').pignoseCalendar({
+            select: onSelectHandler,
+            apply: onApplyHandler,
 			buttons: true, // It means you can give bottom button controller to the modal which be opened when you click.
 		});
 
 		// Calendar modal
 		var $btn = $('.btn-calendar').pignoseCalendar({
+            select: onSelectHandler,
+            apply: onApplyHandler,
 			modal: true, // It means modal will be showed when you click the target button.
-			buttons: true,
-			apply: function(date) {
-				console.log($btn);
-				$btn.next().show().text('You applied date ' + date + '.');
-			}
+			buttons: true
 		});
 
 		// Color theme type Calendar
 		$('.calendar-dark').pignoseCalendar({
 			theme: 'dark', // light, dark, blue
-			select: onClickHandler
+			select: onSelectHandler
 		});
 
 		// Blue theme type Calendar
 		$('.calendar-blue').pignoseCalendar({
 			theme: 'blue', // light, dark, blue
-			select: onClickHandler
+			select: onSelectHandler
 		});
 
 		// Schedule Calendar
@@ -174,7 +208,7 @@
 				name: 'meetup',
 			    date: '2017-06-19',
 			}],
-			select: function(date, obj) {
+			select: function(date, context) {
 				var message = `You selected ${(date[0] === null? 'null':date[0].format('YYYY-MM-DD'))}.
 							   <br />
 							   <br />
@@ -182,10 +216,10 @@
 							   <br />
 							   <br />
 							   <div class="schedules-date"></div>`;
-				var $target = obj.calendar.parent().next().show().html(message);
+				var $target = context.calendar.parent().next().show().html(message);
 
-				for(var idx in obj.storage.schedules) {
-					var schedule = obj.storage.schedules[idx];
+				for(var idx in context.storage.schedules) {
+					var schedule = context.storage.schedules[idx];
 					if(typeof schedule !== 'object') {
 						continue;
 					}
@@ -197,13 +231,13 @@
 		// Multiple picker type Calendar
 		$('.multi-select-calendar').pignoseCalendar({
 			multiple: true,
-			select: onClickHandler
+			select: onSelectHandler
 		});
 
 		// Toggle type Calendar
 		$('.toggle-calendar').pignoseCalendar({
 			toggle: true,
-			select: function(date, obj) {
+			select: function(date, context) {
 				var message = `You selected ${(date[0] === null? 'null':date[0].format('YYYY-MM-DD'))}.
 							   <br />
 							   <br />
@@ -211,10 +245,10 @@
 							   <br />
 							   <br />
 							   <div class="active-dates"></div>`;
-				var $target = obj.calendar.parent().next().show().html(message);
+				var $target = context.calendar.parent().next().show().html(message);
 
-				for(var idx in obj.storage.activeDates) {
-					var date = obj.storage.activeDates[idx];
+				for(var idx in context.storage.activeDates) {
+					var date = context.storage.activeDates[idx];
 					if(typeof date !== 'string') {
 						continue;
 					}
@@ -247,14 +281,14 @@
 			}
 
 			$('.disabled-dates-calendar').pignoseCalendar({
-				select: onClickHandler,
+				select: onSelectHandler,
 				disabledDates: disabledDates
 			});
 		} ());
 
 		// Disabled Weekdays Calendar.
 		$('.disabled-weekdays-calendar').pignoseCalendar({
-			select: onClickHandler,
+			select: onSelectHandler,
 			disabledWeekdays: [0, 6]
 		});
 
@@ -262,7 +296,7 @@
 		var minDate = moment().set('dates', Math.min(moment().day(), 2 + 1)).format('YYYY-MM-DD');
 		var maxDate = moment().set('dates', Math.max(moment().day(), 24 + 1)).format('YYYY-MM-DD');
 		$('.disabled-range-calendar').pignoseCalendar({
-			select: onClickHandler,
+			select: onSelectHandler,
 			minDate: minDate,
 			maxDate: maxDate
 		});
@@ -271,12 +305,12 @@
 		$('.pick-weeks-calendar').pignoseCalendar({
 			pickWeeks: true,
 			multiple: true,
-			select: onClickHandler
+			select: onSelectHandler
 		});
 
 		// Disabled Ranges Calendar.
 		$('.disabled-ranges-calendar').pignoseCalendar({
-			select: onClickHandler,
+			select: onSelectHandler,
 			disabledRanges: [
 				['2016-10-05', '2016-10-21'],
 				['2016-11-01', '2016-11-07'],
@@ -442,8 +476,8 @@
 		name: 'offer',
 	    date: '2017-02-05',
 	}],
-	select: function(date, obj) {
-		console.log('events for this date', obj.storage.schedules);
+	select: function(date, context) {
+		console.log('events for this date', context.storage.schedules);
 	}
 });</code></pre>
 			</div>
@@ -484,8 +518,8 @@
 				<pre><code class="language-js">$(function() {
     $('.calendar').pignoseCalendar({
 		toggle: true,
-		select: function(dates, obj) {
-			console.log('toggle active dates', obj.storage.activeDates);
+		select: function(dates, context) {
+			console.log('toggle active dates', context.storage.activeDates);
 		}
 	});
 });</code></pre>
@@ -766,140 +800,172 @@
 				<tbody>
 					<tr>
 						<td colspan="2">lang</td>
-						<td class="center"><span class="ui label primary">string</span></td>
+						<td class="center"><span class="ui label">string</span></td>
 						<td>A language to set to the Calendar.</td>
 						<td>en</td>
 					</tr>
 					<tr>
 						<td colspan="2">theme</td>
-						<td class="center"><span class="ui label primary">string</span></td>
+						<td class="center"><span class="ui label">string</span></td>
 						<td>A theme to set to the Calendar. (light, dark, blue).</td>
 						<td>light</td>
 					</tr>
 					<tr>
 						<td colspan="2">format</td>
-						<td class="center"><span class="ui label primary">string</span></td>
+						<td class="center"><span class="ui label">string</span></td>
 						<td>The date format that you want to print to input element by value.</td>
 						<td>YYYY-MM-DD</td>
 					</tr>
 					<tr>
 						<td colspan="2">date</td>
-						<td class="center"><span class="ui label primary">moment date object</span></td>
+						<td class="center"><span class="ui label">moment date object</span></td>
 						<td>You can change auto initialized date at first.</td>
 						<td>moment()</td>
 					</tr>
 					<tr>
 						<td colspan="2">week</td>
-						<td class="center"><span class="ui label primary">number</span></td>
+						<td class="center"><span class="ui label">number</span></td>
 						<td>Your first day of week (0: Sunday ~ 6: Saturday).</td>
 						<td>0</td>
 					</tr>
 					<tr>
 						<td colspan="2">initialized</td>
-						<td class="center"><span class="ui label primary">boolean</span></td>
+						<td class="center"><span class="ui label">boolean</span></td>
 						<td>You can turn on/off initialized date by this option.</td>
 						<td>true</td>
 					</tr>
 					<tr>
 						<td colspan="2">modal</td>
-						<td class="center"><span class="ui label primary">boolean</span></td>
+						<td class="center"><span class="ui label">boolean</span></td>
 						<td>If you want display calendar as modal, You can use by setting modal option to true.</td>
 						<td>false</td>
 					</tr>
 					<tr>
 						<td colspan="2">buttons</td>
-						<td class="center"><span class="ui label primary">boolean</span></td>
+						<td class="center"><span class="ui label">boolean</span></td>
 						<td>If you are using input type calendar, You can add button controller for confirm by user.</td>
 						<td>false</td>
 					</tr>
 					<tr>
 						<td colspan="2">toggle</td>
-						<td class="center"><span class="ui label primary">boolean</span></td>
+						<td class="center"><span class="ui label">boolean</span></td>
 						<td>If you set true this option, You can use toggle on your Calendar.</td>
 						<td>false</td>
 					</tr>
 					<tr>
 						<td colspan="2">reverse</td>
-						<td class="center"><span class="ui label primary">boolean</span></td>
+						<td class="center"><span class="ui label">boolean</span></td>
 						<td>If you toggle option turned on and this option also set true, Inital calendar dates start as inactive.</td>
 						<td>false</td>
 					</tr>
 					<tr>
 						<td colspan="2">multiple</td>
-						<td class="center"><span class="ui label primary">boolean</span></td>
+						<td class="center"><span class="ui label">boolean</span></td>
 						<td>If you set true this option, You can use multiple picker on your Calendar.</td>
 						<td>false</td>
 					</tr>
 					<tr>
 						<td colspan="2">pickWeeks</td>
-						<td class="center"><span class="ui label primary">boolean</span></td>
+						<td class="center"><span class="ui label">boolean</span></td>
 						<td>If you set true this option, You can use multiple range picker by one click on your Calendar.</td>
 						<td>false</td>
 					</tr>
 					<tr>
 						<td colspan="2">selectOver</td>
-						<td class="center"><span class="ui label primary">boolean</span></td>
+						<td class="center"><span class="ui label">boolean</span></td>
 						<td>If you set true this option, You can pass the check of disabled dates when multiple mode enabled.</td>
 						<td>false</td>
 					</tr>
 					<tr>
 						<td colspan="2">enabledDates</td>
-						<td class="center"><span class="ui label primary">array</span></td>
+						<td class="center"><span class="ui label">array</span></td>
 						<td>You can set enabled dates by using date string array by formatted to 'YYYY-MM-DD'.</td>
 						<td>[]</td>
 					</tr>
 					<tr>
 						<td colspan="2">disabledDates</td>
-						<td class="center"><span class="ui label primary">array</span></td>
+						<td class="center"><span class="ui label">array</span></td>
 						<td>You can set disabled dates by using date string array by formatted to 'YYYY-MM-DD'.</td>
 						<td>[]</td>
 					</tr>
 					<tr>
 						<td colspan="2">disabledWeekdays</td>
-						<td class="center"><span class="ui label primary">array</span></td>
+						<td class="center"><span class="ui label">array</span></td>
 						<td>You can set disabled date by using a weekday number array (This is a sequential number start from 0 [sunday]).</td>
 						<td>[]</td>
 					</tr>
 					<tr>
 						<td colspan="2">disabledRanges</td>
-						<td class="center"><span class="ui label primary">array</span></td>
+						<td class="center"><span class="ui label">array</span></td>
 						<td>This option is advanced way to using disable settings, You can give multiple disabled range by double array date string by formatted to 'YYYY-MM-DD'.</td>
 						<td>[]</td>
 					</tr>
 					<tr>
 						<td colspan="2">schedules</td>
-						<td class="center"><span class="ui label primary">array</span></td>
+						<td class="center"><span class="ui label">array</span></td>
 						<td>Set and array of events to pin on calendar. Each event is an object that must contain a date string formatted to 'YYYY-MM-DD' and class key that belong to classOnEvents dictionary indicating its color on calendar. Events with not color class suitable are all pin with <span style="display: inline-block; width: .8em; height: .8em; background-color: #5c6270;"></span>&nbsp;#5c6270. Issues may arise when the number of color class increase, this could break the calendar cell.</td>
 						<td>[]</td>
 					</tr>
 					<tr>
 						<td>scheduleOptions</td>
 						<td>colors</td>
-						<td class="center"><span class="ui label primary">object</span></td>
+						<td class="center"><span class="ui label">object</span></td>
 						<td>Set a dictionary with class 'key' and color code 'value' used for pin events class by date.</td>
 						<td>{}</td>
 					</tr>
 					<tr>
 						<td colspan="2">minDate</td>
-						<td class="center"><span class="ui label primary">string</span></td>
+						<td class="center"><span class="ui label">string</span></td>
 						<td>You can give a minimum disable date range by 'YYYY-MM-DD' formatted string.</td>
 						<td>null</td>
 					</tr>
 					<tr>
 						<td colspan="2">maxDate</td>
-						<td class="center"><span class="ui label primary">array</span></td>
+						<td class="center"><span class="ui label">array</span></td>
 						<td>You can give a maximum disable date range by 'YYYY-MM-DD' formatted string.</td>
 						<td>null</td>
 					</tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="content" class="article">
+            <h3><span>Callbacks</span></h3>
+            <table class="ui table celled">
+                <colgroup>
+                    <col style="width: 120px;">
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th colspan="2">name</th>
+                        <th>type</th>
+                        <th>arguments</th>
+                        <th>description</th>
+                        <th>default</th>
+                    </tr>
+                </thead>
+                <tbody>
 					<tr>
 						<td colspan="2">select</td>
-						<td class="center"><span class="ui label primary">function</span></td>
-						<td>This callback will be called when you select a date on calendar (date click).</td>
+						<td class="center"><span class="ui label">function</span></td>
+                        <td class="center"><span class="ui label">date, context</span></td>
+						<td>This callback will be called when you select a date on calendar except disabled date (date click).</td>
 						<td></td>
 					</tr>
+                    <tr>
+                        <td colspan="2">click</td>
+                        <td class="center"><span class="ui label">function</span></td>
+                        <td class="center"><span class="ui label">event, context</span></td>
+                        <td>This callback will be called when you click a date on calendar (date click).</td>
+                        <td></td>
+                    </tr>
 					<tr>
 						<td colspan="2">apply</td>
-						<td class="center"><span class="ui label primary">function</span></td>
+						<td class="center"><span class="ui label">function</span></td>
+                        <td class="center"><span class="ui label">date, context</span></td>
 						<td>This callback will be called when you apply a date on calendar. (OK button click).</td>
 						<td></td>
 					</tr>
@@ -920,13 +986,13 @@
 				<tbody>
 					<tr>
                         <td>set</td>
-						<td class="center"><span class="ui label primary">function</span></td>
-						<td>You can set specific date that you want for using on calendar, The argument type must be <span class="ui label primary">Options.format</span> type that you gave (default format are YYYY-MM-DD).</td>
+						<td class="center"><span class="ui label">function</span></td>
+						<td>You can set specific date that you want for using on calendar, The argument type must be <span class="ui label">Options.format</span> type that you gave (default format are YYYY-MM-DD).</td>
 					</tr>
 					<tr>
                         <td>select</td>
-						<td class="center"><span class="ui label primary">function</span></td>
-						<td>You can click day by using this method, First argument must be <span class="ui label primary">integer</span> type.</td>
+						<td class="center"><span class="ui label">function</span></td>
+						<td>You can click day by using this method, First argument must be <span class="ui label">integer</span> type.</td>
 					</tr>
 				</tbody>
 			</table>

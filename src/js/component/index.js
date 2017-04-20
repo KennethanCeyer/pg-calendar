@@ -12,7 +12,7 @@ define(['./models'], function(models) {
 			return '';
 		} else {
 			var args = Array.prototype.slice.call(arguments, 1);
-			var key = format + args.join('');
+			var key = format + args.join('.');
 			if(typeof m_formatCache[key] !== 'undefined') {
 				return m_formatCache[key]
 			} else {
@@ -29,7 +29,7 @@ define(['./models'], function(models) {
 	};
 
 	Helper.GetClass = function(name) {
-		var key = models.ComponentName + name;
+		var key = [models.ComponentName, name].join('.');
 		if(typeof m_classCache[key] !== 'undefined') {
 			return m_classCache[key];
 		} else {

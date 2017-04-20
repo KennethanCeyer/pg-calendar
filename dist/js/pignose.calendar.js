@@ -455,7 +455,7 @@ define("almond", function(){});
 define('component/models',[], function() {
 	var model = {
 		ComponentName: 'pignoseCalendar',
-		ComponentVersion: '1.4.11',
+		ComponentVersion: '1.4.13',
 		ComponentPreference: {
 			supports: {
 				themes: ['light', 'dark', 'blue']
@@ -478,7 +478,7 @@ define('component/index',['./models'], function(models) {
 			return '';
 		} else {
 			var args = Array.prototype.slice.call(arguments, 1);
-			var key = format + args.join('');
+			var key = format + args.join('.');
 			if(typeof m_formatCache[key] !== 'undefined') {
 				return m_formatCache[key]
 			} else {
@@ -495,7 +495,7 @@ define('component/index',['./models'], function(models) {
 	};
 
 	Helper.GetClass = function(name) {
-		var key = models.ComponentName + name;
+		var key = [models.ComponentName, name].join('.');
 		if(typeof m_classCache[key] !== 'undefined') {
 			return m_classCache[key];
 		} else {
@@ -545,16 +545,24 @@ define('moment',[], function() {
 });
 define('manager/index',['../component/index', 'moment'], function(Helper, moment) {
 	var m_dateCache = {};
-	var DateManager = function Constructor(d) {
-		this.year = parseInt(d.format('YYYY'), 10);
-		this.month = parseInt(d.format('MM'), 10);
-		this.prevMonth = parseInt(d.clone().add(-1, 'months').format('MM'), 10);
-		this.nextMonth = parseInt(d.clone().add(1, 'months').format('MM'), 10);
-		this.day = parseInt(d.format('DD'), 10);
+	var DateManager = function Constructor(date) {
+        if (date instanceof moment === false) {
+           if (typeof date === 'string' || typeof date === 'number') {
+            date = moment(date);
+           } else {
+            console.error('`date` option is invalid type. (date: ' + date + ').');
+           }
+        }
+
+		this.year = parseInt(date.format('YYYY'), 10);
+		this.month = parseInt(date.format('MM'), 10);
+		this.prevMonth = parseInt(date.clone().add(-1, 'months').format('MM'), 10);
+		this.nextMonth = parseInt(date.clone().add(1, 'months').format('MM'), 10);
+		this.day = parseInt(date.format('DD'), 10);
 		this.firstDay = 1;
-		this.lastDay = parseInt(d.clone().endOf('month').format('DD'), 10);
-		this.weekDay = d.weekday();
-		this.date = d;
+		this.lastDay = parseInt(date.clone().endOf('month').format('DD'), 10);
+		this.weekDay = date.weekday();
+		this.date = date;
 	};
 
 	DateManager.prototype.toString = function() {
@@ -634,7 +642,7 @@ define('core',[
 	var _calendarBodyClass = Helper.GetSubClass('Body');
 	var _calendarButtonClass = Helper.GetSubClass('Button');
 
-	var languagePack = {
+	var languages = {
 		supports: ['en', 'ko', 'fr', 'ch', 'de', 'jp', 'pt', 'da', 'pl', 'es'],
 		weeks: {
 			en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -677,62 +685,9 @@ define('core',[
 	var Component = {
 		init : function(options) {
 			var _this = this;
-			this.settings = $.extend({
-				lang: 'en',
-				theme: 'light',
-				date: moment(),
-				format: 'YYYY-MM-DD',
-				enabledDates: [],
-				disabledDates: [],
-				disabledWeekdays: [],
-				disabledRanges: [],
-	            schedules: [],
-	            scheduleOptions: {
-	            	colors: {}
-	            },
-	            week: 0,
-				weeks: languagePack.weeks.en,
-				monthsLong: languagePack.monthsLong.en,
-				months: languagePack.months.en,
-				pickWeeks: false,
-				initialize: true,
-				multiple: false,
-				toggle: false,
-				reverse: false,
-				buttons: false,
-				modal: false,
-				selectOver: false,
-				minDate: null,
-				maxDate: null,
-
-				/********************************************
-				 * CALLBACK
-				 *******************************************/
-				select: null,
-				apply: null
-			}, options);
-
-			if(this.settings.lang !== 'en' &&
-			   $.inArray(this.settings.lang, languagePack.supports) !== -1) {
-				this.settings.weeks = languagePack.weeks[this.settings.lang];
-				this.settings.monthsLong = languagePack.monthsLong[this.settings.lang];
-				this.settings.months = languagePack.months[this.settings.lang];
-			}
-
-			if(this.settings.theme !== 'light' &&
-			   $.inArray(this.settings.theme, models.ComponentPreference.supports.themes) === -1) {
-			   this.settings.theme = 'light';
-			}
-
-			if(this.settings.pickWeeks === true) {
-				if(this.settings.multiple === false) {
-					console.error('You must give true at settings.multiple options on PIGNOSE-Calendar for using in pickWeeks option.');
-				} else if(this.settings.toggle === true) {
-					console.error('You must give false at settings.toggle options on PIGNOSE-Calendar for using in pickWeeks option.');
-				}
-			}
-
-			this.settings.week %= this.settings.weeks.length;
+			
+            this.settings = {};
+            Component.configure.call(this, options);
 
 			this.global = {
 				calendarHtml: Helper.Format('<div class="{0} {0}-{4}">\
@@ -769,14 +724,19 @@ define('core',[
 
 			return this.each(function() {
 				var $this = $(this);
-				var $super = $this;
-				var $parent = $this;
+                var $parent = $this;
 				var local = {
 					initialize: null,
+                    element: $this,
 					calendar: $(_this.global.calendarHtml),
 					input: $this.is('input'),
 					renderer: null,
 					current: [null, null],
+                    date: {
+                        all: [],
+                        enabled: [],
+                        disabled: []
+                    },
 					storage: {
 						activeDates: [],
 						schedules: []
@@ -800,13 +760,16 @@ define('core',[
 					local.calendar.addClass(Helper.GetSubClass('Default'));
 				}
 
-				for(var idx=_this.settings.week; idx<_this.settings.weeks.length + _this.settings.week; idx++) {
-					var week = _this.settings.weeks[idx % _this.settings.weeks.length];
+				for(var i=_this.settings.week; i<_this.settings.weeks.length + _this.settings.week; i++) {
+                    if (i < 0) {
+                        i = languages.weeks.en.length - i;                            
+                    }
+					var week = _this.settings.weeks[i % _this.settings.weeks.length];
 					if(typeof week !== 'string') {
 						continue;
 					}
 					week = week.toUpperCase();
-					var $unit = $(Helper.Format('<div class="{0} {0}-{2}">{1}</div>', Helper.GetSubClass('Week'), week, languagePack.weeks.en[idx % languagePack.weeks.en.length].toLowerCase()));
+					var $unit = $(Helper.Format('<div class="{0} {0}-{2}">{1}</div>', Helper.GetSubClass('Week'), week, languages.weeks.en[i % languages.weeks.en.length].toLowerCase()));
 					$unit.appendTo(local.calendar.find('.' + _calendarHeaderClass));
 				}
 
@@ -833,11 +796,13 @@ define('core',[
 							$overlay = $('.' + Helper.GetSubClass('WrapperOverlay'));
 							if($overlay.length < 1) {
 								$overlay = $(local.calendarWrapperOverlayHtml);
-								$overlay.bind('click.' + Helper.GetClass(models.ComponentName), function() {
-									$parent.trigger('cancel.' + Helper.GetClass(models.ComponentName));
-								});
 								$overlay.appendTo('body');
 							}
+
+                            $overlay.unbind('click.' + Helper.GetClass(models.ComponentName)).bind('click.' + Helper.GetClass(models.ComponentName), function(event) {
+                                event.stopPropagation();
+                                $parent.trigger('cancel.' + Helper.GetClass(models.ComponentName));
+                            });
 							
 							if($parent.parent().is('body') === false) {
 								$parent.appendTo('body');
@@ -853,7 +818,7 @@ define('core',[
 								});
 							}).triggerHandler('resize.' + Helper.GetClass(models.ComponentName));
 
-							$super[models.ComponentName]('set', $this.val());
+							$this[models.ComponentName]('set', $this.val());
 
 							setTimeout(function() {
 								$overlay.addClass(overlayActiveClass);
@@ -865,10 +830,13 @@ define('core',[
 							$this.blur();
 						});
 
-					$parent.unbind('cancel.' + Helper.GetClass(models.ComponentName) + ' ' + 'apply.' + Helper.GetClass(models.ComponentName)).bind('cancel.' + Helper.GetClass(models.ComponentName) + ' ' + 'apply.' + Helper.GetClass(models.ComponentName), function() {
-						$overlay.removeClass(overlayActiveClass).hide();
-						$parent.removeClass(wrapperActiveClass).hide();
-					});
+					$parent
+                        .unbind('cancel.' + Helper.GetClass(models.ComponentName) + ' ' + 'apply.' + Helper.GetClass(models.ComponentName))
+                        .bind('cancel.' + Helper.GetClass(models.ComponentName) + ' ' + 'apply.' + Helper.GetClass(models.ComponentName), function() {
+                            console.log($overlay, $parent);
+    						$overlay.removeClass(overlayActiveClass).hide();
+    						$parent.removeClass(wrapperActiveClass).hide();
+    					});
 				}
 
 				var generateDateRange = function() {
@@ -923,7 +891,39 @@ define('core',[
 					}
 				};
 
-				var validDisabledArea = function(startDate, endDate) {
+                var validDate = function(date) {
+                    if(_this.settings.disabledDates.indexOf(date) !== -1) {
+                        return false;
+                    }
+
+                    if (date.diff(_this.settings.maxDate) >= 0) {
+                        return false;
+                    }
+
+                    if (date.diff(_this.settings.minDate) <= 0) {
+                        return false;
+                    }
+
+                    for (idx in _this.settings.disabledRanges) {
+                        rangeDate = _this.settings.disabledRanges[idx];
+                        var startRangeDate = moment(rangeDate[0]);
+                        var endRangeDate = moment(rangeDate[1]);
+
+                        if(existsBetweenRange(startRangeDate, endRangeDate, date)) {
+                            return false;
+                        }
+                    }
+
+
+                    var weekday = date.weekday();
+                    if(_this.settings.disabledWeekdays.indexOf(weekday) !== -1) {
+                        return false;
+                    }
+
+                    return true;
+                }
+
+				var validDateArea = function(startDate, endDate) {
 					var idx, date, index;
 
 					for(idx in _this.settings.disabledDates) {
@@ -942,9 +942,9 @@ define('core',[
 					}
 
 					for (idx in _this.settings.disabledRanges) {
-						date = _this.settings.disabledRanges[idx];
-						var startRangeDate = moment(date[0]);
-						var endRangeDate = moment(date[1]);
+						rangeDate = _this.settings.disabledRanges[idx];
+						var startRangeDate = moment(rangeDate[0]);
+						var endRangeDate = moment(rangeDate[1]);
 
 						if(
 							existsBetweenRange(startDate, endDate, startRangeDate) ||
@@ -954,18 +954,20 @@ define('core',[
 						}
 					}
 
+
+                    var startWeekday = startDate.weekday();
+                    var endWeekday = endDate.weekday();
+                    var tmp;
+
+                    if(startWeekday > endWeekday) {
+                        tmp = startWeekday;
+                        startWeekday = endWeekday;
+                        endWeekday = tmp;
+                    }
+
 					for (idx = 0, index = 0; idx < _this.settings.disabledWeekdays.length && index < 7; idx++) {
 						index++;
 						var week = _this.settings.disabledWeekdays[idx];
-						var startWeekday = startDate.weekday();
-						var endWeekday = endDate.weekday();
-						var tmp;
-
-						if(startWeekday > endWeekday) {
-							tmp = startWeekday;
-							startWeekday = endWeekday;
-							endWeekday = tmp;
-						}
 
 						if(
 							week >= startWeekday &&
@@ -991,7 +993,7 @@ define('core',[
 							event.stopPropagation();
 							var $this = $(this);
 							if($this.hasClass(_calendarButtonClass + '-apply')) {
-								$super.trigger('apply.' + models.ComponentName, local);
+								$this.trigger('apply.' + models.ComponentName, local);
 								var value = '';
 								if(_this.settings.toggle === true) {
 									value = local.storage.activeDates.join(', ');
@@ -1011,10 +1013,10 @@ define('core',[
 									value = local.current[0] === null? '':moment(local.current[0]).format(_this.settings.format);
 								}
 								if(local.input === true) {
-									$super.val(value).triggerHandler('change');
+									$this.val(value).triggerHandler('change');
 								}
 								if(typeof _this.settings.apply === 'function') {
-									_this.settings.apply.call($super, value);
+									_this.settings.apply.call($this, local.current, local);
 								}
 								$parent.triggerHandler('apply.' + Helper.GetClass(models.ComponentName));
 							} else {
@@ -1041,14 +1043,14 @@ define('core',[
 						   maxDate = _this.settings.maxDate === null? null:moment(_this.settings.maxDate);
 
 					for(var i=0; i<firstWeekday; i++) {
-						var $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('Unit'), languagePack.weeks.en[i].toLowerCase()));
+						var $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('Unit'), languages.weeks.en[i].toLowerCase()));
 						$unitList.push($unit);
 					}
 
 					for(var i=local.dateManager.firstDay; i<=local.dateManager.lastDay; i++) {
 						var iDate = DateManager.Convert(local.dateManager.year, local.dateManager.month, i);
 						var iDateFormat = iDate.format('YYYY-MM-DD');
-						var $unit = $(Helper.Format('<div class="{0} {0}-date {0}-{3}" data-date="{1}"><a href="#">{2}</a></div>', Helper.GetSubClass('Unit'), iDate.format('YYYY-MM-DD'), i, languagePack.weeks.en[iDate.weekday()].toLowerCase()));
+						var $unit = $(Helper.Format('<div class="{0} {0}-date {0}-{3}" data-date="{1}"><a href="#">{2}</a></div>', Helper.GetSubClass('Unit'), iDate.format('YYYY-MM-DD'), i, languages.weeks.en[iDate.weekday()].toLowerCase()));
 
 						if(_this.settings.enabledDates.length > 0) {
 							if($.inArray(iDateFormat, _this.settings.enabledDates) === -1) {
@@ -1134,163 +1136,194 @@ define('core',[
 							var $this = $(this);
 							var position = 0;
 							var date = $this.data('date');
+                            var preventSelect = false;
 
 							if($this.hasClass(Helper.GetSubClass('UnitDisabled'))) {
-								return false;
-							}
-
-							if(local.input === true && _this.settings.multiple === false && _this.settings.buttons === false) {
-								$super.val(moment(date).format(_this.settings.format));
-								$parent.triggerHandler('apply.' + Helper.GetClass(models.ComponentName));
-								return false;
-							}
-
-							if(
-								local.initialize !== null &&
-								local.initialize.format('YYYY-MM-DD') === date &&
-								_this.settings.toggle === false
-							) {
+								preventSelect = true;
 							} else {
-								if(_this.settings.toggle === true) {
-									var match = local.storage.activeDates.filter(function(e, i) {
-										return e === date;
-									});
-									local.current[position] = moment(date);
-									if(match.length < 1) {
-										local.storage.activeDates.push(date);
-										$this.addClass(toggleActiveClass).removeClass(toggleInactiveClass);
-									} else {
-										var index = 0;
-										for(var idx=0; idx<local.storage.activeDates.length; idx++) {
-											var targetDate = local.storage.activeDates[idx];
-											if(date === targetDate) {
-												index = idx;
-												break;
-											}
-										}
-										local.storage.activeDates.splice(index, 1);
-										$this.removeClass(toggleActiveClass).addClass(toggleInactiveClass);
-									}
-								} else if(
-									$this.hasClass(activeClass) === true &&
-									_this.settings.pickWeeks === false
-								) {
-									if(_this.settings.multiple === true) {
-										if($this.hasClass(activePositionClasses[0])) {
-											position = 0;
-										} else if(activePositionClasses[1]) {
-											position = 1;
-										}
-									}
-									$this.removeClass(activeClass).removeClass(activePositionClasses[position]);
-									local.current[position] = null;
-								} else {
-									if(_this.settings.pickWeeks === true) {
-										if(
-											$this.hasClass(activeClass) === true ||
-											$this.hasClass(rangeClass) === true
-										) {
-											for(var j=0; j<2; j++) {
-												local.calendar.find('.' + activeClass + '.' + activePositionClasses[j]).removeClass(activeClass).removeClass(activePositionClasses[j]);
-											}
+    							if(local.input === true && _this.settings.multiple === false && _this.settings.buttons === false) {
+    								$this.val(moment(date).format(_this.settings.format));
+    								$parent.triggerHandler('apply.' + Helper.GetClass(models.ComponentName));
+    							} else {
+        							if(
+        								local.initialize !== null &&
+        								local.initialize.format('YYYY-MM-DD') === date &&
+        								_this.settings.toggle === false
+        							) {
+        							} else {
+        								if(_this.settings.toggle === true) {
+        									var match = local.storage.activeDates.filter(function(e, i) {
+        										return e === date;
+        									});
+        									local.current[position] = moment(date);
+        									if(match.length < 1) {
+        										local.storage.activeDates.push(date);
+        										$this.addClass(toggleActiveClass).removeClass(toggleInactiveClass);
+        									} else {
+        										var index = 0;
+        										for(var idx=0; idx<local.storage.activeDates.length; idx++) {
+        											var targetDate = local.storage.activeDates[idx];
+        											if(date === targetDate) {
+        												index = idx;
+        												break;
+        											}
+        										}
+        										local.storage.activeDates.splice(index, 1);
+        										$this.removeClass(toggleActiveClass).addClass(toggleInactiveClass);
+        									}
+        								} else if(
+        									$this.hasClass(activeClass) === true &&
+        									_this.settings.pickWeeks === false
+        								) {
+        									if(_this.settings.multiple === true) {
+        										if($this.hasClass(activePositionClasses[0])) {
+        											position = 0;
+        										} else if(activePositionClasses[1]) {
+        											position = 1;
+        										}
+        									}
+        									$this.removeClass(activeClass).removeClass(activePositionClasses[position]);
+        									local.current[position] = null;
+        								} else {
+        									if(_this.settings.pickWeeks === true) {
+        										if(
+        											$this.hasClass(activeClass) === true ||
+        											$this.hasClass(rangeClass) === true
+        										) {
+        											for(var j=0; j<2; j++) {
+        												local.calendar.find('.' + activeClass + '.' + activePositionClasses[j]).removeClass(activeClass).removeClass(activePositionClasses[j]);
+        											}
 
-											local.current[0] = null;
-											local.current[1] = null;
-										} else {
-											local.current[0] = moment(date).startOf('week');
-											local.current[1] = moment(date).endOf('week');
+        											local.current[0] = null;
+        											local.current[1] = null;
+        										} else {
+        											local.current[0] = moment(date).startOf('week');
+        											local.current[1] = moment(date).endOf('week');
 
-											for(var j=0; j<2; j++) {
-												local.calendar.find('.' + activeClass + '.' + activePositionClasses[j]).removeClass(activeClass).removeClass(activePositionClasses[j]);
-												local.calendar.find(Helper.Format('.{0}[data-date="{1}"]', Helper.GetSubClass('Unit'), local.current[j].format('YYYY-MM-DD'))).addClass(activeClass).addClass(activePositionClasses[j]);
-											}
-										}
-									} else {
-										if(_this.settings.multiple === true) {
-											if(local.current[0] === null) {
-												position = 0;
-											} else if(local.current[1] === null) {
-												position = 1;
-											} else {
-												position = 0;
-												local.current[1] = null;
-												local.calendar.find('.' + activeClass + '.' + activePositionClasses[1]).removeClass(activeClass).removeClass(activePositionClasses[1]);
-											}
-										}
+        											for(var j=0; j<2; j++) {
+        												local.calendar.find('.' + activeClass + '.' + activePositionClasses[j]).removeClass(activeClass).removeClass(activePositionClasses[j]);
+        												local.calendar.find(Helper.Format('.{0}[data-date="{1}"]', Helper.GetSubClass('Unit'), local.current[j].format('YYYY-MM-DD'))).addClass(activeClass).addClass(activePositionClasses[j]);
+        											}
+        										}
+        									} else {
+        										if(_this.settings.multiple === true) {
+        											if(local.current[0] === null) {
+        												position = 0;
+        											} else if(local.current[1] === null) {
+        												position = 1;
+        											} else {
+        												position = 0;
+        												local.current[1] = null;
+        												local.calendar.find('.' + activeClass + '.' + activePositionClasses[1]).removeClass(activeClass).removeClass(activePositionClasses[1]);
+        											}
+        										}
 
-										local.calendar.find('.' + activeClass + '.' + activePositionClasses[position]).removeClass(activeClass).removeClass(activePositionClasses[position]);
-										$this.addClass(activeClass).addClass(activePositionClasses[position]);
-										local.current[position] = moment(date);
-									}
+        										local.calendar.find('.' + activeClass + '.' + activePositionClasses[position]).removeClass(activeClass).removeClass(activePositionClasses[position]);
+        										$this.addClass(activeClass).addClass(activePositionClasses[position]);
+        										local.current[position] = moment(date);
+        									}
 
-									if(
-									   local.current[0] !== null &&
-									   local.current[1] !== null
-									) {
-										if(local.current[0].diff(local.current[1]) > 0) {
-											var tmp = local.current[0];
-											local.current[0] = local.current[1];
-											local.current[1] = tmp;
-											tmp = null;
+        									if(
+        									   local.current[0] !== null &&
+        									   local.current[1] !== null
+        									) {
+        										if(local.current[0].diff(local.current[1]) > 0) {
+        											var tmp = local.current[0];
+        											local.current[0] = local.current[1];
+        											local.current[1] = tmp;
+        											tmp = null;
 
-											local.calendar.find('.' + activeClass).each(function() {
-												var $this = $(this);
-												for(var idx in activePositionClasses) {
-													var className = activePositionClasses[idx];
-													$this.toggleClass(className);
-												}
-											});
-										}
+        											local.calendar.find('.' + activeClass).each(function() {
+        												var $this = $(this);
+        												for(var idx in activePositionClasses) {
+        													var className = activePositionClasses[idx];
+        													$this.toggleClass(className);
+        												}
+        											});
+        										}
 
-										if(
-											validDisabledArea(local.current[0], local.current[1]) === false &&
-											_this.settings.selectOver === false
-										) {
-											local.current[0] = null;
-											local.current[1] = null;
+        										if(
+        											validDateArea(local.current[0], local.current[1]) === false &&
+        											_this.settings.selectOver === false
+        										) {
+        											local.current[0] = null;
+        											local.current[1] = null;
 
-											local.calendar.find('.' + activeClass).removeClass(activeClass).removeClass(activePositionClasses[0]).removeClass(activePositionClasses[1]);
-										}
+        											local.calendar.find('.' + activeClass).removeClass(activeClass).removeClass(activePositionClasses[0]).removeClass(activePositionClasses[1]);
+        										}
 
-										if(local.input === true && _this.settings.buttons === false) {
-											var dateValues = []
+        										if(local.input === true && _this.settings.buttons === false) {
+        											var dateValues = []
 
-											if(local.current[0] !== null) {
-												dateValues.push(local.current[0].format(_this.settings.format));
-											}
+        											if(local.current[0] !== null) {
+        												dateValues.push(local.current[0].format(_this.settings.format));
+        											}
 
-											if(local.current[1] !== null) {
-												dateValues.push(local.current[1].format(_this.settings.format));
-											}
+        											if(local.current[1] !== null) {
+        												dateValues.push(local.current[1].format(_this.settings.format));
+        											}
 
-											$super.val(dateValues.join(', '));
-											$parent.trigger('apply.' + Helper.GetClass(models.ComponentName));
-										}
-									}
-								}
+        											$this.val(dateValues.join(', '));
+        											$parent.trigger('apply.' + Helper.GetClass(models.ComponentName));
+        										}
+        									}
+        								}
 
-								if(_this.settings.multiple === true) {
-									local.calendar.find('.' + rangeClass).removeClass(rangeClass).removeClass(rangeFirstClass).removeClass(rangeLastClass);
-									generateDateRange.call();
-								}
+        								if(_this.settings.multiple === true) {
+        									local.calendar.find('.' + rangeClass).removeClass(rangeClass).removeClass(rangeFirstClass).removeClass(rangeLastClass);
+        									generateDateRange.call();
+        								}
 
-								if(_this.settings.schedules.length > 0) {
-									local.storage.schedules = _this.settings.schedules.filter(function(event) {
-										return event.date === date;
-									});
-								}
-							}
+        								if(_this.settings.schedules.length > 0) {
+        									local.storage.schedules = _this.settings.schedules.filter(function(event) {
+        										return event.date === date;
+        									});
+        								}
+        							}
+                                }
+                            }
 
-							local.initialize = null;
+                            var classifyDate = function(date) {
+                                local.date.all.push(date);
+                                if (validDate(moment(date))) {
+                                    local.date.enabled.push(date);
+                                } else {
+                                    local.date.disabled.push(date);
+                                }
+                            };
 
-							if(typeof _this.settings.select === 'function') {
-								_this.settings.select.call($this, local.current, local);
-							}
+                            if (local.current[0] !== null) {
+                                if (local.current[1] !== null) {
+                                    var startDate = local.current[0];
+                                    var date = startDate.clone();
+                                    for (; date.format('YYYY-MM-DD') <= local.current[1].format('YYYY-MM-DD'); date.add('1', 'days')) {
+                                        classifyDate(date.clone());
+                                    }
+                                } else {
+                                    var date = local.current[0];
+                                    classifyDate(date.clone());
+                                }
+                            }
+
+                            if (preventSelect === false) {
+    							local.initialize = null;
+
+    							if(typeof _this.settings.select === 'function') {
+    								_this.settings.select.call($this, local.current, local);
+    							}
+                            }
+
+                            if(typeof _this.settings.click === 'function') {
+                                _this.settings.click.call(context, event, local);
+                            }
 						});
 					}
 
 					for(var i=lastWeekday+1; $unitList.length < _this.settings.weeks.length * 5; i++) {
-						var $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('Unit'), languagePack.weeks.en[i % languagePack.weeks.en.length].toLowerCase()));
+                        if (i < 0) {
+                            i = languages.weeks.en.length - i;                            
+                        }
+						var $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('Unit'), languages.weeks.en[i % languages.weeks.en.length].toLowerCase()));
 						$unitList.push($unit);
 					}
 
@@ -1333,6 +1366,68 @@ define('core',[
 				$this[0][models.ComponentName] = local;
 			});
 		},
+        configure: function(options) {
+            var _this = this;
+            
+            this.settings = $.extend({
+                lang: 'en',
+                languages: languages,
+                theme: 'light',
+                date: moment(),
+                format: 'YYYY-MM-DD',
+                enabledDates: [],
+                disabledDates: [],
+                disabledWeekdays: [],
+                disabledRanges: [],
+                schedules: [],
+                scheduleOptions: {
+                    colors: {}
+                },
+                week: 0,
+                weeks: languages.weeks.en,
+                monthsLong: languages.monthsLong.en,
+                months: languages.months.en,
+                pickWeeks: false,
+                initialize: true,
+                multiple: false,
+                toggle: false,
+                reverse: false,
+                buttons: false,
+                modal: false,
+                selectOver: false,
+                minDate: null,
+                maxDate: null,
+
+                /********************************************
+                 * CALLBACK
+                 *******************************************/
+                select: null,
+                apply: null,
+                click: null
+            }, options);
+
+            if(this.settings.lang !== 'en' &&
+               $.inArray(this.settings.lang, _this.settings.languages.supports) !== -1) {
+                this.settings.weeks = _this.settings.languages.weeks[this.settings.lang];
+                this.settings.monthsLong = _this.settings.languages.monthsLong[this.settings.lang];
+                this.settings.months = _this.settings.languages.months[this.settings.lang];
+            }
+
+            if(this.settings.theme !== 'light' &&
+               $.inArray(this.settings.theme, models.ComponentPreference.supports.themes) === -1) {
+               this.settings.theme = 'light';
+            }
+
+            if(this.settings.pickWeeks === true) {
+                if(this.settings.multiple === false) {
+                    console.error('You must give true at settings.multiple options on PIGNOSE-Calendar for using in pickWeeks option.');
+                } else if(this.settings.toggle === true) {
+                    console.error('You must give false at settings.toggle options on PIGNOSE-Calendar for using in pickWeeks option.');
+                }
+            }
+
+            this.settings.week %= this.settings.weeks.length;
+        },
 		set: function(date) {
 			if(typeof date !== 'undefined' && date !== null && date !== '') {
 				var dateSplit = date.split('~').map(function(e) {

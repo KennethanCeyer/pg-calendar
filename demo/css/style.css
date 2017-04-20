@@ -197,6 +197,18 @@ pre, code, code span {
 	margin-left: 0;
 }
 
+.left {
+    text-align: left !important;
+}
+
+.center {
+    text-align: center !important;
+}
+
+.right {
+    text-align: right !important;
+}
+
 @media screen and (max-width: 640px) {
 	html, body {
 		font-size: 15px;
