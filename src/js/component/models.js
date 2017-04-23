@@ -1,7 +1,7 @@
 define([], function() {
 	var model = {
 		ComponentName: 'pignoseCalendar',
-		ComponentVersion: '1.4.14',
+		ComponentVersion: '1.4.15',
 		ComponentPreference: {
 			supports: {
 				themes: ['light', 'dark', 'blue']

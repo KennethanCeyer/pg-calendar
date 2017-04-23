@@ -455,7 +455,7 @@ define("almond", function(){});
 define('component/models',[], function() {
 	var model = {
 		ComponentName: 'pignoseCalendar',
-		ComponentVersion: '1.4.14',
+		ComponentVersion: '1.4.15',
 		ComponentPreference: {
 			supports: {
 				themes: ['light', 'dark', 'blue']
@@ -464,6 +464,7 @@ define('component/models',[], function() {
 	};
 	return model;
 });
+
 define('component/index',['./models'], function(models) {
 	var m_formatCache = {};
 	var m_classCache = {};
@@ -621,7 +622,7 @@ define('jquery',[], function() {
 
 	return lib;
 });
-define('core',[	
+define('core',[
 		'./manager/index',
 		'./component/index',
 		'./component/models',
@@ -649,6 +650,7 @@ define('core',[
             weeks: {
                 en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                 ko: ['일', '월', '화', '수', '목', '금', '토'],
+								fa: ['شنبه', 'آدینه', 'پنج', 'چهار', 'سه', 'دو', 'یک'],
                 fr: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
                 ch: ['日', '一', '二', '三', '四', '五', '六'],
                 de: ['SO', 'MO', 'DI', 'MI', 'DO', 'FR', 'SA'],
@@ -661,6 +663,7 @@ define('core',[
             monthsLong: {
                 en: ['January', 'February', 'March', 'April', 'May', 'Jun', 'July', 'August', 'September', 'October', 'November', 'December'],
                 ko: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+								fa: ['آذر', 'آبان', 'مهر', 'شهریور', 'مرداد', 'تیر', 'خرداد', 'اردیبهشت', 'فروردین', 'اسفند', 'بهمن', 'دی'],
                 fr: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
                 ch: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
                 de: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
@@ -673,6 +676,7 @@ define('core',[
             months: {
                 en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                 ko: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+								fa: ['آذر', 'آبان', 'مهر', 'شهریور', 'مرداد', 'تیر', 'خرداد', 'اردیبهشت', 'فروردین', 'اسفند', 'بهمن', 'دی'],
                 fr: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'],
                 ch: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
                 de: ['Jän', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
@@ -690,7 +694,7 @@ define('core',[
 	var Component = {
 		init: function(options) {
 			var _this = this;
-			
+
             this.settings = {};
             Component.configure.call(this, options);
 
@@ -767,7 +771,7 @@ define('core',[
 
 				for(var i=_this.settings.week; i<_this.settings.weeks.length + _this.settings.week; i++) {
                     if (i < 0) {
-                        i = global.languages.weeks.en.length - i;                            
+                        i = global.languages.weeks.en.length - i;
                     }
 					var week = _this.settings.weeks[i % _this.settings.weeks.length];
 					if(typeof week !== 'string') {
@@ -808,7 +812,7 @@ define('core',[
                                 event.stopPropagation();
                                 $parent.trigger('cancel.' + Helper.GetClass(models.ComponentName));
                             });
-							
+
 							if($parent.parent().is('body') === false) {
 								$parent.appendTo('body');
 							}
@@ -835,9 +839,9 @@ define('core',[
 							$this.blur();
 						});
 
-					$parent
-                        .unbind('cancel.' + Helper.GetClass(models.ComponentName) + ' ' + 'apply.' + Helper.GetClass(models.ComponentName))
-                        .bind('cancel.' + Helper.GetClass(models.ComponentName) + ' ' + 'apply.' + Helper.GetClass(models.ComponentName), function() {
+						$parent
+              .unbind('cancel.' + Helper.GetClass(models.ComponentName) + ' ' + 'apply.' + Helper.GetClass(models.ComponentName))
+              .bind('cancel.' + Helper.GetClass(models.ComponentName) + ' ' + 'apply.' + Helper.GetClass(models.ComponentName), function() {
     						$overlay.removeClass(overlayActiveClass).hide();
     						$parent.removeClass(wrapperActiveClass).hide();
     					});
@@ -895,37 +899,37 @@ define('core',[
 					}
 				};
 
-                var validDate = function(date) {
-                    if(_this.settings.disabledDates.indexOf(date) !== -1) {
-                        return false;
-                    }
+        var validDate = function(date) {
+            if(_this.settings.disabledDates.indexOf(date) !== -1) {
+                return false;
+            }
 
-                    if (date.diff(_this.settings.maxDate) >= 0) {
-                        return false;
-                    }
+            if (date.diff(_this.settings.maxDate) >= 0) {
+                return false;
+            }
 
-                    if (date.diff(_this.settings.minDate) <= 0) {
-                        return false;
-                    }
+            if (date.diff(_this.settings.minDate) <= 0) {
+                return false;
+            }
 
-                    for (idx in _this.settings.disabledRanges) {
-                        rangeDate = _this.settings.disabledRanges[idx];
-                        var startRangeDate = moment(rangeDate[0]);
-                        var endRangeDate = moment(rangeDate[1]);
+            for (idx in _this.settings.disabledRanges) {
+                rangeDate = _this.settings.disabledRanges[idx];
+                var startRangeDate = moment(rangeDate[0]);
+                var endRangeDate = moment(rangeDate[1]);
 
-                        if(existsBetweenRange(startRangeDate, endRangeDate, date)) {
-                            return false;
-                        }
-                    }
-
-
-                    var weekday = date.weekday();
-                    if(_this.settings.disabledWeekdays.indexOf(weekday) !== -1) {
-                        return false;
-                    }
-
-                    return true;
+                if(existsBetweenRange(startRangeDate, endRangeDate, date)) {
+                    return false;
                 }
+            }
+
+
+            var weekday = date.weekday();
+            if(_this.settings.disabledWeekdays.indexOf(weekday) !== -1) {
+                return false;
+            }
+
+            return true;
+        }
 
 				var validDateArea = function(startDate, endDate) {
 					var idx, date, index;
@@ -992,7 +996,7 @@ define('core',[
 					local.calendar.find(Helper.Format('.{0}-next .{0}-value', _calendarTopClass)).text(_this.settings.months[local.dateManager.nextMonth - 1].toUpperCase());
 
 					if(_this.settings.buttons === true) {
-                        var $super = $this;
+            var $super = $this;
 						$calendarButton.find('.' + _calendarButtonClass).bind('click', function(event) {
 							event.preventDefault();
 							event.stopPropagation();
@@ -1328,7 +1332,7 @@ define('core',[
 
 					for(var i=lastWeekday+1; $unitList.length < _this.settings.weeks.length * 5; i++) {
                         if (i < 0) {
-                            i = global.languages.weeks.en.length - i;                            
+                            i = global.languages.weeks.en.length - i;
                         }
 						var $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('Unit'), global.languages.weeks.en[i % global.languages.weeks.en.length].toLowerCase()));
 						$unitList.push($unit);
@@ -1429,7 +1433,7 @@ define('core',[
                     } else if (language.months.length !== monthsCount) {
                         console.warn('`months` option over ' + monthsCount + ' items. We recommend to give ' + monthsCount + ' items.');
                     }
-                    
+
                     if (global.languages.supports.indexOf(settings.language) === -1) {
                         global.languages.supports.push(settings.language);
                     }
@@ -1461,7 +1465,7 @@ define('core',[
         },
         configure: function(options) {
             var _this = this;
-            
+
             this.settings = $.extend({
                 lang: global.language,
                 languages: global.languages,
@@ -1568,6 +1572,7 @@ define('core',[
 
 	return Component;
 });
+
 define('main',[
 		'core',
 		'component/models'
