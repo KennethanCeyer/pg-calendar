@@ -455,7 +455,7 @@ define("almond", function(){});
 define('component/models',[], function() {
 	var model = {
 		ComponentName: 'pignoseCalendar',
-		ComponentVersion: '1.4.15',
+		ComponentVersion: '1.4.16',
 		ComponentPreference: {
 			supports: {
 				themes: ['light', 'dark', 'blue']
@@ -949,15 +949,15 @@ define('core',[
 					}
 
 
-                    var startWeekday = startDate.weekday();
-                    var endWeekday = endDate.weekday();
-                    var tmp;
+          var startWeekday = startDate.weekday();
+          var endWeekday = endDate.weekday();
+          var tmp;
 
-                    if(startWeekday > endWeekday) {
-                        tmp = startWeekday;
-                        startWeekday = endWeekday;
-                        endWeekday = tmp;
-                    }
+          if(startWeekday > endWeekday) {
+              tmp = startWeekday;
+              startWeekday = endWeekday;
+              endWeekday = tmp;
+          }
 
 					for (idx = 0, index = 0; idx < _this.settings.disabledWeekdays.length && index < 7; idx++) {
 						index++;
@@ -1126,6 +1126,8 @@ define('core',[
 						}
 
 						$unitList.push($unit);
+						var $super = $this;
+						
 						$unit.bind('click', function(event) {
 							event.preventDefault();
 							event.stopPropagation();
@@ -1139,7 +1141,7 @@ define('core',[
 								preventSelect = true;
 							} else {
     							if(local.input === true && _this.settings.multiple === false && _this.settings.buttons === false) {
-    								$this.val(moment(date).format(_this.settings.format));
+    								$super.val(moment(date).format(_this.settings.format));
     								$parent.triggerHandler('apply.' + Helper.GetClass(models.ComponentName));
     							} else {
         							if(

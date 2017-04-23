@@ -129,20 +129,20 @@
 
 		// Default Calendar
 		$('.calendar').pignoseCalendar({
-            select: onSelectHandler
+      select: onSelectHandler
 		});
 
 		// Input Calendar
 		$('.input-calendar').pignoseCalendar({
-            select: onSelectHandler,
-            apply: onApplyHandler,
+      select: onSelectHandler,
+      apply: onApplyHandler,
 			buttons: true, // It means you can give bottom button controller to the modal which be opened when you click.
 		});
 
 		// Calendar modal
 		var $btn = $('.btn-calendar').pignoseCalendar({
-            select: onSelectHandler,
-            apply: onApplyHandler,
+      select: onSelectHandler,
+      apply: onApplyHandler,
 			modal: true, // It means modal will be showed when you click the target button.
 			buttons: true
 		});
@@ -783,13 +783,13 @@
 		<div id="content" class="article">
 			<h3><span>Options</span></h3>
 			<table class="ui table celled">
-                <colgroup>
-                    <col style="width: 120px;">
-                    <col>
-                    <col>
-                    <col>
-                    <col>
-                </colgroup>
+        <colgroup>
+            <col style="width: 120px;">
+            <col>
+            <col>
+            <col>
+            <col>
+        </colgroup>
 				<thead>
 					<tr>
 						<th colspan="2">name</th>
@@ -956,13 +956,13 @@
 						<td>This callback will be called when you select a date on calendar except disabled date (date click).</td>
 						<td></td>
 					</tr>
-                    <tr>
-                        <td colspan="2">click</td>
-                        <td class="center"><span class="ui label">function</span></td>
-                        <td class="center"><span class="ui label">event, context</span></td>
-                        <td>This callback will be called when you click a date on calendar (date click).</td>
-                        <td></td>
-                    </tr>
+          <tr>
+              <td colspan="2">click</td>
+              <td class="center"><span class="ui label">function</span></td>
+              <td class="center"><span class="ui label">event, context</span></td>
+              <td>This callback will be called when you click a date on calendar (date click).</td>
+              <td></td>
+          </tr>
 					<tr>
 						<td colspan="2">apply</td>
 						<td class="center"><span class="ui label">function</span></td>
