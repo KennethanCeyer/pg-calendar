@@ -83,3 +83,19 @@ Please move to [Contribution section](https://github.com/KennethanCeyer/PIGNOSE-
 If you found something problem of this plugin, or you have some question.
 
 Please send me a message to use either [gitter](https://gitter.im/KennethanCeyer/PIGNOSE) or [Github issue](https://github.com/KennethanCeyer/PIGNOSE-Calendar/issues). (gitter url is on the top of the manual)
+
+----
+
+### Achieved plans
+
+- Support Webpack, AMD and CommonJS.
+- Building CI, Automation testing model.
+
+----
+
+### Near future plans
+
+1. Adding timepicker specs.
+2. Move css file to less.
+3. Making many sample codes.
+4. Improvement and building detailed callbacks.
