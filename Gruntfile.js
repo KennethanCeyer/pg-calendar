@@ -77,7 +77,22 @@ module.exports = function (grunt) {
       }
     },
     csslint: {
-      dist: ['src/**.css']
+      dist: ['src/css/**.css']
+    },
+    less: {
+      dist: {
+        options: {
+          paths: ['src/css'],
+          plugins: [
+            new (require('less-plugin-autoprefix'))({
+              browsers: ["last 2 versions"]
+            })
+          ]
+        },
+        files: {
+          'src/css/pignose.calendar.css': 'src/less/index.less'
+        }
+      }
     },
     qunit: {
       files: ['tests/**/*.html']
@@ -130,7 +145,7 @@ module.exports = function (grunt) {
       dist: {
         files: [
           'src/js/**/**.js',
-          'src/css/**/**.css',
+          'src/less/**/**.less',
           'Gruntfile.js'
         ],
         tasks: ['default']
@@ -144,11 +159,12 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-css-url-rewrite');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Default task
-  grunt.registerTask('default', ['jshint', 'csslint', 'copy', 'cssUrlRewrite', 'cssmin', 'requirejs:dist', 'requirejs:full', 'uglify']);
-  grunt.registerTask('test', ['jshint', 'csslint']);
+  grunt.registerTask('default', ['jshint', 'less', 'csslint', 'copy', 'cssUrlRewrite', 'cssmin', 'requirejs:dist', 'requirejs:full', 'uglify']);
+  grunt.registerTask('test', ['jshint', 'less', 'csslint']);
 };

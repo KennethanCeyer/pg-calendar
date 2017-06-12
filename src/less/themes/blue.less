@@ -1,0 +1,78 @@
+.pignose-calendar {
+    &.pignose-calendar-blue {
+        background-color: @color-theme-blue-background;
+
+        .pignose-calendar-top {
+            background-color: @color-theme-blue-primary;
+            border-bottom-color: darken(@color-theme-blue-background, 10%);
+
+            .pignose-calendar-top-month {
+                color: @color-white;
+            }
+
+            .pignose-calendar-top-year {
+                color: @color-white;
+            }
+
+            .pignose-calendar-top-nav {
+                .pignose-calendar-top-value {
+                    color: @color-white;
+                }
+
+                .pignose-calendar-top-icon {
+                    color: @color-white;
+                }
+            }
+        }
+
+        .pignose-calendar-header {
+            .pignose-calendar-week {
+                color: #5c6270;
+
+                &.pignose-calendar-week-sun,
+                &.pignose-calendar-week-sat {
+                    color: @color-red-dark;
+                }
+            }
+        }
+
+        .pignose-calendar-body {
+            .pignose-calendar-row {
+                .pignose-calendar-unit {
+                    a {
+                        color: #5c6270;
+                    }
+                    
+                    &.pignose-calendar-unit-sun a,
+                    &.pignose-calendar-unit-sat a {
+                        color: @color-red-dark;
+                    }
+
+                    &.pignose-calendar-unit-disabled a {
+                        background-color: #efefef;
+                    }
+
+                    &.pignose-calendar-unit-active a {
+                        color: @color-white;
+                        background-color: @color-theme-blue-primary;
+                        box-shadow: 0 1px 3px rgba(0, 0, 0, .75);
+                    }
+
+                    &.pignose-calendar-unit-toggle a {
+                        color: #cccccc;
+                    }
+
+                    &.pignose-calendar-unit-range {
+                        a {
+                            background-color: @color-semilight;
+                        }
+
+                        &.pignose-calendar-unit-disabled a {
+                            background-color: @color-semilight;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
