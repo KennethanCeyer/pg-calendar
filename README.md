@@ -16,6 +16,8 @@ This datepicker supports responsive display and mobile environment.
 
 ![PIGNOSE-Calendar](http://www.pigno.se/barn/PIGNOSE-Calendar/demo/img/screenshot_main.png?t=201701170854)
 
+----
+
 ### Documentation
 
 Check [GitHub WIKI > Documentation](https://github.com/KennethanCeyer/pg-calendar/wiki/Documentation).
