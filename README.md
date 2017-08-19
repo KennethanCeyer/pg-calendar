@@ -8,9 +8,9 @@ Beautiful and eidetic jQuery date picker plugin.
 
 ### Getting started
 
-PIGNOSE-Calendar helps you make more simple and eidetic datepicker in jQuery.
+PIGNOSE-Calendar helps you to make simple and eidetic datepicker with jQuery.
 
-The datepicker supports responsive and mobile environment.
+This datepicker supports responsive display and mobile environment.
 
 [Check demo page](http://www.pigno.se/barn/PIGNOSE-Calendar)
 
@@ -25,14 +25,14 @@ Check `dist/` folder on this repository.
 1. Install from git.
 
  ```bash
-  $ git clone git@github.com:KennethanCeyer/PIGNOSE-Calendar.git
+$ git clone git@github.com:KennethanCeyer/PIGNOSE-Calendar.git
 ```
 
 2. Check distributed folder.
 
  ```bash
-  $ cd ./PIGNOSE-Calendar/dist
-  $ ls -al
+ $ cd ./PIGNOSE-Calendar/dist
+ $ ls -al
 ```
 
 3. Insert snippets at `<head>` tag of your html file.
@@ -54,7 +54,7 @@ See our features which we are supported.
 - Input type controller support.
 - The toggle controll each of date buttons are supported.
 - You can disable specific dates.
-- Multiple languages are supported, (en, ko, fr, ch, de, jp, pt, da, pl, es, fa).
+- Multiple languages are supported, (en, ko, fr, ch, de, jp, pt, da, pl, es, fa, it).
 - Theme system supports (light, dark, blue).
 
 ----
@@ -89,14 +89,13 @@ Please send me a message to use either [gitter](https://gitter.im/KennethanCeyer
 
 ### Achieved plans
 
-- Support Webpack, AMD and CommonJS.
+- Support Webpack, AMD and CommonJS (UMD). (Done)
+- Support ES6 with babel. (Done)
 - Building CI, Automation testing model.
-
-----
 
 ### Near future plans
 
 1. Adding timepicker specs.
-2. Move css file to less.
+2. Move css file to less. (Done)
 3. Making many sample codes.
-4. Improvement and building detailed callbacks.
+4. Improvement and building detailed callbacks. (Progress)
