@@ -1,2 +1,2 @@
-  return require('plugin');
+    return require('plugin');
 }));

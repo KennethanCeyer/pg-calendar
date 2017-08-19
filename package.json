@@ -1,6 +1,6 @@
 {
   "name": "pg-calendar",
-  "version": "1.4.19",
+  "version": "1.4.20",
   "description": "Beautiful and eidetic jQuery date picker plguin.",
   "main": "dist/js/pignose.calendar.js",
   "scripts": {
@@ -39,8 +39,12 @@
   "homepage": "https://www.pigno.se/barn/PIGNOSE-Calendar/",
   "devDependencies": {
     "almond": "^0.3.3",
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
     "grunt": "^1.0.1",
+    "grunt-babel": "^7.0.0",
     "grunt-cli": "^1.2.0",
+    "grunt-contrib-clean": "^1.1.0",
     "grunt-contrib-copy": "1.0.0",
     "grunt-contrib-csslint": "^2.0.0",
     "grunt-contrib-cssmin": "^1.0.2",
