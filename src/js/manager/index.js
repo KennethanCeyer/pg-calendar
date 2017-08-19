@@ -1,4 +1,10 @@
-define(['../component/index', 'moment'], (Helper, moment) => {
+define([
+    '../component/helper',
+    'moment'
+], (
+    Helper,
+    moment
+) => {
     const m_dateCache = {};
     const DateManager = function Constructor(date) {
         if (date instanceof moment === false) {

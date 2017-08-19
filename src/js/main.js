@@ -1,7 +1,7 @@
 define([
     'core',
     'component/models'
-], function (Component, models) {
+], function (Component, Models) {
     'use strict';
 
     const PignoseCalendar = function (element, options) {
@@ -16,8 +16,8 @@ define([
         }
     };
 
-    for (const idx in models) {
-        PignoseCalendar[idx] = models[idx];
+    for (const idx in Models) {
+        PignoseCalendar[idx] = Models[idx];
     }
 
     return PignoseCalendar;

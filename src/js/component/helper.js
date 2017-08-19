@@ -1,4 +1,8 @@
-define(['./models'], models => {
+define([
+    './models'
+], (
+    Models
+) => {
     const m_formatCache = {};
     const m_classCache = {};
     const m_subClassCache = {};
@@ -32,7 +36,7 @@ define(['./models'], models => {
     };
 
     Helper.GetClass = name => {
-        const key = [models.ComponentName, name].join('.');
+        const key = [Models.ComponentName, name].join('.');
 
         if (m_classCache[key]) {
             return m_classCache[key];
@@ -63,7 +67,7 @@ define(['./models'], models => {
 
     Helper.GetSubClass = name => {
         if (!m_subClassCache[name]) {
-            m_subClassCache[name] = Helper.GetClass(Helper.Format('{0}{1}', models.ComponentName, name));
+            m_subClassCache[name] = Helper.GetClass(Helper.Format('{0}{1}', Models.ComponentName, name));
         }
         return m_subClassCache[name];
     };

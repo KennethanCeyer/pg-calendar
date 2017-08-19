@@ -138,7 +138,6 @@
             // Input Calendar
             $('.input-calendar').pignoseCalendar({
                 select: onSelectHandler,
-                apply: onApplyHandler,
                 buttons: true, // It means you can give bottom button controller to the modal which be opened when you click.
             });
 
@@ -351,7 +350,9 @@
         <div class="header">
             <img src="demo/img/pignose-logo.png" alt="" />
             <h1>PIGNOSE Calendar</h1>
-            <a href="https://github.com/KennethanCeyer/PIGNOSE-Calendar" target="_blank" class="ui button primary">View project on Github</a>            <a href="https://github.com/KennethanCeyer/PIGNOSE-Calendar/archive/master.zip" target="_blank" class="ui button teal">Download zip</a>
+            <a href="https://github.com/KennethanCeyer/PIGNOSE-Calendar" target="_blank" class="ui button primary">View project on Github</a>
+            <a href="https://github.com/KennethanCeyer/pg-calendar/wiki/Documentation" target="_blank" class="ui button blue">Documentation</a>
+            <a href="https://github.com/KennethanCeyer/PIGNOSE-Calendar/archive/master.zip" target="_blank" class="ui button teal">Download</a>
             <h4 class="version">Latest version <strong></strong></h4>
         </div>
         <div id="basic" class="article">
@@ -784,6 +785,10 @@
                 <li>jQuery core library</li>
                 <li>Moment library</li>
             </ul>
+            <br />
+            <p>Or you can use full built-in script.</p>
+            <p>If you use it, you don't need to import any dependencies.</p>
+            <pre class="center"><code class="language-html">&lt;script type=&quot;javascript&quot; src=&quot;dist/js/pignose.calendar.full.min.js&quot;&gt;&lt;/script&gt;</code></pre>
         </div>
         <div id="content" class="article">
             <h3><span>Options</span></h3>
@@ -946,7 +951,7 @@
                     <col style="width: 120px;">
                     <col>
                     <col>
-                    <col>
+                    <col style="width: 180px;">
                     <col>
                 </colgroup>
                 <thead>
@@ -955,30 +960,50 @@
                         <th>type</th>
                         <th>arguments</th>
                         <th>description</th>
-                        <th>default</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
+                        <td colspan="2">init</td>
+                        <td class="center"><span class="ui label">function</span></td>
+                        <td class="center"><span class="ui label">context</span></td>
+                        <td>This callback will be called once when you call the pignoseCalendar plugin and created calendar view.</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">page</td>
+                        <td class="center"><span class="ui label">function</span></td>
+                        <td class="center"><span class="ui label">info</span>, <span class="ui label">context</span></td>
+                        <td>This callback will be called when you click prev, next arrow button on the top of calendar.</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">prev</td>
+                        <td class="center"><span class="ui label">function</span></td>
+                        <td class="center"><span class="ui label">info</span>, <span class="ui label">context</span></td>
+                        <td>This callback will be called when you click prev arrow button on the top of calendar.</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">next</td>
+                        <td class="center"><span class="ui label">function</span></td>
+                        <td class="center"><span class="ui label">info</span>, <span class="ui label">context</span></td>
+                        <td>This callback will be called when you click next arrow button on the top of calendar.</td>
+                    </tr>
+                    <tr>
                         <td colspan="2">select</td>
                         <td class="center"><span class="ui label">function</span></td>
-                        <td class="center"><span class="ui label">date, context</span></td>
-                        <td>This callback will be called when you select a date on calendar except disabled date (date click).</td>
-                        <td></td>
+                        <td class="center"><span class="ui label">date</span>, <span class="ui label">context</span></td>
+                        <td>This callback will be called when you select a date of calendar except disabled date (date click).</td>
                     </tr>
                     <tr>
                         <td colspan="2">click</td>
                         <td class="center"><span class="ui label">function</span></td>
-                        <td class="center"><span class="ui label">event, context</span></td>
-                        <td>This callback will be called when you click a date on calendar (date click).</td>
-                        <td></td>
+                        <td class="center"><span class="ui label">event</span>, <span class="ui label">context</span></td>
+                        <td>This callback will be called when you click a date of calendar (date click).</td>
                     </tr>
                     <tr>
                         <td colspan="2">apply</td>
                         <td class="center"><span class="ui label">function</span></td>
-                        <td class="center"><span class="ui label">date, context</span></td>
-                        <td>This callback will be called when you apply a date on calendar. (OK button click).</td>
-                        <td></td>
+                        <td class="center"><span class="ui label">date</span>, <span class="ui label">context</span></td>
+                        <td>This callback will be called when you apply a date of calendar. (OK button click).</td>
                     </tr>
                 </tbody>
             </table>
@@ -998,12 +1023,37 @@
                     <tr>
                         <td>set</td>
                         <td class="center"><span class="ui label">function</span></td>
-                        <td>You can set specific date that you want for using on calendar, The argument type must be <span class="ui label">Options.format</span>                            type that you gave (default format are YYYY-MM-DD).</td>
+                        <td>
+                            You can set the specific date on calendar dynamically.<br />
+                            The first parameter must be <span class="ui label">date string</span> or <span class="ui label">moment</span> type.
+                        </td>
                     </tr>
                     <tr>
                         <td>select</td>
                         <td class="center"><span class="ui label">function</span></td>
-                        <td>You can click day by using this method, First argument must be <span class="ui label">integer</span>                            type.</td>
+                        <td>You can click day by using this method, First argument must be <span class="ui label">integer</span> type.</td>
+                    </tr>
+                    <tr>
+                        <td>setting</td>
+                        <td class="center"><span class="ui label">function</span></td>
+                        <td>You can set the setting option dynamically, The option is the same you gave when initialize the plugin.</td>
+                    </tr>
+                    <tr>
+                        <td>configure</td>
+                        <td class="center"><span class="ui label">function</span></td>
+                        <td>
+                            You can set the global setting by using this method.<br />
+                            If you set default language entirely, Use this method.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>init</td>
+                        <td class="center"><span class="ui label">function</span></td>
+                        <td>
+                            This method is used internal of the plugin.<br />
+                            Use the syntax sugar <span class="ui label">$(element).pignoseCalendar()</span> pattern.<br />
+                            It is exactly the same one as above pattern.
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -1031,5 +1081,4 @@
         </div>
     </div>
 </body>
-
 </html>
