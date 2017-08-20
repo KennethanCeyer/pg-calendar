@@ -24,6 +24,28 @@ Check [GitHub WIKI > Documentation](https://github.com/KennethanCeyer/pg-calenda
 
 ----
 
+## Installation
+
+### NPM
+
+```bash
+$ npm install pg-calendar
+```
+
+### Bower
+
+```bash
+$ bower install pg-calendar
+```
+
+### Yarn
+
+```bash
+$ yarn add pg-calendar
+```
+
+----
+
 ### Usage
 
 Check `dist/` folder on this repository.
