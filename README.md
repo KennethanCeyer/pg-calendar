@@ -93,15 +93,15 @@ Please send me a message to use either [gitter](https://gitter.im/KennethanCeyer
 
 ----
 
-### Achieved plans
+### Todo
 
-- Support Webpack, AMD and CommonJS (UMD). (Done)
-- Support ES6 with babel. (Done)
-- Building CI, Automation testing model.
 
-### Near future plans
 
-1. Adding timepicker specs.
-2. Move css file to less. (Done)
-3. Making many sample codes.
-4. Improvement and building detailed callbacks. (Progress)
+- [x] Support Webpack, AMD and CommonJS (UMD).
+- [x] Support ES6 with babel.
+- [x] Documentation supporting.
+- [x] Move css file to less.
+- [] Building CI, Automation testing model.
+- [] Adding timepicker specs.
+- [] Making many sample codes.
+- [] Improvement and building detailed callbacks. (Progress)
