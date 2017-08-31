@@ -100,6 +100,7 @@ We welcome your support, You can support to notice by send me github issue or us
 - [@pkly](https://www.github.com/pkly)
 - [@TNDecoder](https://www.github.com/TNDecoder)
 - [@acipolla](https://www.github.com/acipolla)
+- [@jan-vince](https://github.com/jan-vince)
 
 #### Join in contribution
 
