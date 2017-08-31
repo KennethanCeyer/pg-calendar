@@ -1,6 +1,6 @@
 define([], () => {
     return {
-        supports: ['en', 'ko', 'fr', 'ch', 'de', 'jp', 'pt', 'da', 'pl', 'es'],
+        supports: ['en', 'ko', 'fr', 'ch', 'de', 'jp', 'pt', 'da', 'pl', 'es', 'cs'],
         weeks: {
             en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
             ko: ['일', '월', '화', '수', '목', '금', '토'],
