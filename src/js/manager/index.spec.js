@@ -168,68 +168,68 @@ describe('test for manager/index', function() {
     });
     
     describe('test initializing with number-like date', () => {
-        it('the year of `1483282800000` must be `2017`', () => {
-            const date = 1483282800000;
+        it('the year of `1483315200000` must be `2017`', () => {
+            const date = 1483315200000;
             const dateManager = new DateManager(date);
             expect(dateManager.year).to.equal(2017);
         });
 
-        it('the month of `1483282800000` must be `1`', () => {
-            const date = 1483282800000;
+        it('the month of `1483315200000` must be `1`', () => {
+            const date = 1483315200000;
             const dateManager = new DateManager(date);
             expect(dateManager.month).to.equal(1);
         });
         
-        it('the day of `1483282800000` must be `2`', () => {
-            const date = 1483282800000;
+        it('the day of `1483315200000` must be `2`', () => {
+            const date = 1483315200000;
             const dateManager = new DateManager(date);
             expect(dateManager.day).to.equal(2);
         });
         
-        it('the first day of `1483282800000` must be `1`', () => {
-            const date = 1483282800000;
+        it('the first day of `1483315200000` must be `1`', () => {
+            const date = 1483315200000;
             const dateManager = new DateManager(date);
             expect(dateManager.firstDay).to.equal(1);
         });
         
-        it('the last day of `1483282800000` must be `31`', () => {
-            const date = 1483282800000;
+        it('the last day of `1483315200000` must be `31`', () => {
+            const date = 1483315200000;
             const dateManager = new DateManager(date);
             expect(dateManager.lastDay).to.equal(31);
         });
         
-        it('the week day of `1483282800000` must be `1`', () => {
-            const date = 1483282800000;
+        it('the week day of `1483315200000` must be `1`', () => {
+            const date = 1483315200000;
             const dateManager = new DateManager(date);
             expect(dateManager.weekDay).to.equal(1);
         });
         
-        it('the prev month of `1483282800000` must be `12`', () => {
-            const date = 1483282800000;
+        it('the prev month of `1483315200000` must be `12`', () => {
+            const date = 1483315200000;
             const dateManager = new DateManager(date);
             expect(dateManager.prevMonth).to.equal(12);
         });
         
-        it('the next month of `1483282800000` must be `2`', () => {
-            const date = 1483282800000;
+        it('the next month of `1483315200000` must be `2`', () => {
+            const date = 1483315200000;
             const dateManager = new DateManager(date);
             expect(dateManager.nextMonth).to.equal(2);
         });
         
-        it('the date of `1483282800000` must be an instance of `moment`', () => {
-            const date = 1483282800000;
+        it('the date of `1483315200000` must be an instance of `moment`', () => {
+            const date = 1483315200000;
             const dateManager = new DateManager(date);
             expect(dateManager.date).to.be.an.instanceof(moment);
         });
         
-        it('the date of `1483282800000` is same of `moment(\'2017-01-02\')`', () => {
-            const date = 1483282800000;
+        it('the date of `1483315200000` is same of `moment(\'2017-01-02\')` as UTC', () => {
+            const date = 1483315200000;
             const dateManager = new DateManager(date);
-            expect(dateManager.date.isSame(moment('2017-01-02'))).to.be.true;
+            expect(dateManager.date.isSame(moment.utc('2017-01-02'))).to.be.true;
         });
         
-        it('`.toString()` to `1491404400000` must be `2017-04-06`', () => {
-            const date = 1491404400000;
+        it('`.toString()` to `1491436800000` must be `2017-04-06`', () => {
+            const date = 1491436800000;
             const dateManager = new DateManager(date);
             expect(dateManager.toString()).to.equal('2017-04-06');
         });
