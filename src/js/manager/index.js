@@ -16,7 +16,7 @@ define([
                 date = moment(date);
             }
             else {
-                console.error('`date` option is invalid type. (date: ' + date + ').');
+                throw new Error('`date` option is invalid type. (date: ' + date + ').');
             }
         }
 

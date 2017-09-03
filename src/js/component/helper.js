@@ -48,10 +48,6 @@ define([
 
             for (let idx = 0, pos = 0; idx < len; idx++) {
                 let char = chars[idx];
-                if (typeof char !== 'string') {
-                    continue;
-                }
-
                 if (m_regex_upper.test(char) === true) {
                     classNames[pos++] = '-';
                     char = char.toString().toLowerCase();
@@ -66,6 +62,12 @@ define([
     };
 
     Helper.GetSubClass = name => {
+        if (name && name.length) {
+            const names = name.split('');
+            names[0] = names[0].toUpperCase();
+            name = names.join('');
+        }
+
         if (!m_subClassCache[name]) {
             m_subClassCache[name] = Helper.GetClass(Helper.Format('{0}{1}', Models.ComponentName, name));
         }

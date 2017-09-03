@@ -4,9 +4,9 @@ define([
     Helper
 ) => {
     return {
-        top: Helper.GetSubClass('Top'),
-        header: Helper.GetSubClass('Header'),
-        body: Helper.GetSubClass('Body'),
-        button: Helper.GetSubClass('Button')
+        top: Helper.GetSubClass('top'),
+        header: Helper.GetSubClass('header'),
+        body: Helper.GetSubClass('body'),
+        button: Helper.GetSubClass('button')
     };
 });

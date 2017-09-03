@@ -51,13 +51,13 @@ define([
             calendarSchedulePinHtml: Helper.Format('<span class="{0}-schedule-pin {0}-schedule-pin-\\{0\\}" style="background-color: \\{1\\};"></span>', ClassNames.button),
         };
 
-        const rangeClass = Helper.GetSubClass('UnitRange');
-        const rangeFirstClass = Helper.GetSubClass('UnitRangeFirst');
-        const rangeLastClass = Helper.GetSubClass('UnitRangeLast');
-        const activeClass = Helper.GetSubClass('UnitActive');
-        const activePositionClasses = [Helper.GetSubClass('UnitFirstActive'), Helper.GetSubClass('UnitSecondActive')];
-        const toggleActiveClass = Helper.GetSubClass('UnitToggleActive');
-        const toggleInactiveClass = Helper.GetSubClass('UnitToggleInactive');
+        const rangeClass = Helper.GetSubClass('unitRange');
+        const rangeFirstClass = Helper.GetSubClass('unitRangeFirst');
+        const rangeLastClass = Helper.GetSubClass('unitRangeLast');
+        const activeClass = Helper.GetSubClass('unitActive');
+        const activePositionClasses = [Helper.GetSubClass('unitFirstActive'), Helper.GetSubClass('unitSecondActive')];
+        const toggleActiveClass = Helper.GetSubClass('unitToggleActive');
+        const toggleInactiveClass = Helper.GetSubClass('unitToggleInactive');
         let $calendarButton = null;
 
         return context.each(function () {
@@ -79,8 +79,8 @@ define([
                     schedules: []
                 },
                 dateManager: new DateManager(context.settings.date),
-                calendarWrapperHtml: Helper.Format('<div class="{0}"></div>', Helper.GetSubClass('Wrapper')),
-                calendarWrapperOverlayHtml: Helper.Format('<div class="{0}"></div>', Helper.GetSubClass('WrapperOverlay')),
+                calendarWrapperHtml: Helper.Format('<div class="{0}"></div>', Helper.GetSubClass('wrapper')),
+                calendarWrapperOverlayHtml: Helper.Format('<div class="{0}"></div>', Helper.GetSubClass('wrapperOverlay')),
                 context: context
             };
             let $parent = $this;
@@ -93,10 +93,10 @@ define([
             this.local = local;
 
             if (context.settings.reverse === true) {
-                local.calendar.addClass(Helper.GetSubClass('Reverse'));
+                local.calendar.addClass(Helper.GetSubClass('reverse'));
             }
             else {
-                local.calendar.addClass(Helper.GetSubClass('Default'));
+                local.calendar.addClass(Helper.GetSubClass('default'));
             }
 
             for (let i = context.settings.week; i < context.settings.weeks.length + context.settings.week; i++) {
@@ -108,7 +108,7 @@ define([
                     continue;
                 }
                 week = week.toUpperCase();
-                const $unit = $(Helper.Format('<div class="{0} {0}-{2}">{1}</div>', Helper.GetSubClass('Week'), week, Global.languages.weeks.en[i % Global.languages.weeks.en.length].toLowerCase()));
+                const $unit = $(Helper.Format('<div class="{0} {0}-{2}">{1}</div>', Helper.GetSubClass('week'), week, Global.languages.weeks.en[i % Global.languages.weeks.en.length].toLowerCase()));
                 $unit.appendTo(local.calendar.find('.' + ClassNames.header));
             }
 
@@ -118,8 +118,8 @@ define([
             }
 
             if (local.input === true || context.settings.modal === true) {
-                const wrapperActiveClass = Helper.GetSubClass('WrapperActive');
-                const overlayActiveClass = Helper.GetSubClass('WrapperOverlayActive');
+                const wrapperActiveClass = Helper.GetSubClass('wrapperActive');
+                const overlayActiveClass = Helper.GetSubClass('wrapperOverlayActive');
                 let $overlay;
 
                 $parent = $(local.calendarWrapperHtml);
@@ -132,7 +132,7 @@ define([
                         event.preventDefault();
                         event.stopPropagation();
                         event.stopImmediatePropagation();
-                        $overlay = $('.' + Helper.GetSubClass('WrapperOverlay'));
+                        $overlay = $('.' + Helper.GetSubClass('wrapperOverlay'));
 
                         if ($overlay.length < 1) {
                             $overlay = $(local.calendarWrapperOverlayHtml);
@@ -207,7 +207,7 @@ define([
                 for (; firstDate.format('YYYY-MM-DD') <= lastDate.format('YYYY-MM-DD'); firstDate.add(1, 'days')) {
                     const date = firstDate.format('YYYY-MM-DD');
                     const isRange = true;
-                    const $target = local.calendar.find(Helper.Format('.{0}[data-date="{1}"]', Helper.GetSubClass('Unit'), date)).addClass(rangeClass);
+                    const $target = local.calendar.find(Helper.Format('.{0}[data-date="{1}"]', Helper.GetSubClass('unit'), date)).addClass(rangeClass);
 
                     if (date === firstDateFixed) {
                         $target.addClass(rangeFirstClass);
@@ -393,31 +393,31 @@ define([
                     maxDate = context.settings.maxDate === null ? null : moment(context.settings.maxDate);
 
                 for (let i = 0; i < firstWeekday; i++) {
-                    var $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('Unit'), Global.languages.weeks.en[i].toLowerCase()));
+                    var $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('unit'), Global.languages.weeks.en[i].toLowerCase()));
                     $unitList.push($unit);
                 }
 
                 for (let i = local.dateManager.firstDay; i <= local.dateManager.lastDay; i++) {
                     const iDate = DateManager.Convert(local.dateManager.year, local.dateManager.month, i);
                     const iDateFormat = iDate.format('YYYY-MM-DD');
-                    const $unit = $(Helper.Format('<div class="{0} {0}-date {0}-{3}" data-date="{1}"><a href="#">{2}</a></div>', Helper.GetSubClass('Unit'), iDate.format('YYYY-MM-DD'), i, Global.languages.weeks.en[iDate.weekday()].toLowerCase()));
+                    const $unit = $(Helper.Format('<div class="{0} {0}-date {0}-{3}" data-date="{1}"><a href="#">{2}</a></div>', Helper.GetSubClass('unit'), iDate.format('YYYY-MM-DD'), i, Global.languages.weeks.en[iDate.weekday()].toLowerCase()));
 
                     if (context.settings.enabledDates.length > 0) {
                         if ($.inArray(iDateFormat, context.settings.enabledDates) === -1) {
-                            $unit.addClass(Helper.GetSubClass('UnitDisabled'));
+                            $unit.addClass(Helper.GetSubClass('unitDisabled'));
                         }
                     }
                     else if (context.settings.disabledWeekdays.length > 0 && $.inArray(iDate.weekday(), context.settings.disabledWeekdays) !== -1) {
-                        $unit.addClass(Helper.GetSubClass('UnitDisabled')).addClass(Helper.GetSubClass('UnitDisabledWeekdays'));
+                        $unit.addClass(Helper.GetSubClass('unitDisabled')).addClass(Helper.GetSubClass('unitDisabledWeekdays'));
                     }
                     else if (
                         (minDate !== null && minDate.diff(iDate) > 0) ||
                         (maxDate !== null && maxDate.diff(iDate) < 0)
                     ) {
-                        $unit.addClass(Helper.GetSubClass('UnitDisabled')).addClass(Helper.GetSubClass('UnitDisabledRange'));
+                        $unit.addClass(Helper.GetSubClass('unitDisabled')).addClass(Helper.GetSubClass('unitDisabledRange'));
                     }
                     else if ($.inArray(iDateFormat, context.settings.disabledDates) !== -1) {
-                        $unit.addClass(Helper.GetSubClass('UnitDisabled'));
+                        $unit.addClass(Helper.GetSubClass('unitDisabled'));
                     }
                     else if (context.settings.disabledRanges.length > 0) {
                         const disabledRangesLength = context.settings.disabledRanges.length;
@@ -426,7 +426,7 @@ define([
                             const disabledRangeLength = disabledRange.length;
 
                             if (iDate.diff(moment(disabledRange[0])) >= 0 && iDate.diff(moment(disabledRange[1])) <= 0) {
-                                $unit.addClass(Helper.GetSubClass('UnitDisabled')).addClass(Helper.GetSubClass('UnitDisabledRange')).addClass(Helper.GetSubClass('UnitDisabledMultipleRange'));
+                                $unit.addClass(Helper.GetSubClass('unitDisabled')).addClass(Helper.GetSubClass('unitDisabledRange')).addClass(Helper.GetSubClass('unitDisabledMultipleRange'));
                                 break;
                             }
                         }
@@ -467,7 +467,7 @@ define([
                             $unit.addClass(toggleInactiveClass);
                         }
                     }
-                    else if ($unit.hasClass(Helper.GetSubClass('UnitDisabled')) === false) {
+                    else if ($unit.hasClass(Helper.GetSubClass('unitDisabled')) === false) {
                         if (context.settings.multiple === true) {
                             if ((currentFormat[0] && iDateFormat === currentFormat[0])) {
                                 $unit.addClass(activeClass).addClass(activePositionClasses[0]);
@@ -498,7 +498,7 @@ define([
                         let position = 0;
                         let preventSelect = false;
 
-                        if ($this.hasClass(Helper.GetSubClass('UnitDisabled'))) {
+                        if ($this.hasClass(Helper.GetSubClass('unitDisabled'))) {
                             preventSelect = true;
                         }
                         else {
@@ -572,7 +572,7 @@ define([
 
                                                 for (let j = 0; j < 2; j++) {
                                                     local.calendar.find('.' + activeClass + '.' + activePositionClasses[j]).removeClass(activeClass).removeClass(activePositionClasses[j]);
-                                                    local.calendar.find(Helper.Format('.{0}[data-date="{1}"]', Helper.GetSubClass('Unit'), local.current[j].format('YYYY-MM-DD'))).addClass(activeClass).addClass(activePositionClasses[j]);
+                                                    local.calendar.find(Helper.Format('.{0}[data-date="{1}"]', Helper.GetSubClass('unit'), local.current[j].format('YYYY-MM-DD'))).addClass(activeClass).addClass(activePositionClasses[j]);
                                                 }
                                             }
                                         }
@@ -698,7 +698,7 @@ define([
                     if (i < 0) {
                         i = Global.languages.weeks.en.length - i;
                     }
-                    const $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('Unit'), Global.languages.weeks.en[i % Global.languages.weeks.en.length].toLowerCase()));
+                    const $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('unit'), Global.languages.weeks.en[i % Global.languages.weeks.en.length].toLowerCase()));
                     $unitList.push($unit);
                 }
 
@@ -711,7 +711,7 @@ define([
                         }
 
                         if (i + 1 < $unitList.length) {
-                            $row = $(Helper.Format('<div class="{0}"></div>', Helper.GetSubClass('Row')));
+                            $row = $(Helper.Format('<div class="{0}"></div>', Helper.GetSubClass('row')));
                         }
                     }
                     $row.append(element);
