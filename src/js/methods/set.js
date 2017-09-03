@@ -1,9 +1,13 @@
 define([
     'jquery',
-    'moment'
+    'moment',
+    '../manager/index',
+    '../component/models'
 ], (
     $,
-    moment
+    moment,
+    DateManager,
+    Models
 ) => {
     return function(date) {
         if (date) {
@@ -14,7 +18,7 @@ define([
 
             this.each(function () {
                 const $this = $(this);
-                const local = $this[0][models.ComponentName];
+                const local = $this[0][Models.ComponentName];
                 const context = local.context;
 
                 const dateArray = [
