@@ -7,12 +7,12 @@ before_install:
   - sh -e /etc/init.d/xvfb start
 install:
   - npm install -g grunt-cli
+  - npm install -g coveralls
   - npm install -g codecov
   - npm install
 script:
+  - grunt test
   - npm test
 after_success:
   - npm run coverage
-#  - codecov
-#  - cat "./coverage/lcov.info" | "./node_modules/coveralls/bin/coveralls.js"
   - npm run clean

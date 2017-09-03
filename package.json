@@ -7,7 +7,7 @@
     "build": "grunt",
     "clean": "rimraf ./coverage ./.nyc_output",
     "test": "npm run clean && nyc --reporter=html --reporter=text ./node_modules/mocha/bin/mocha **/*.spec.js -t 1000",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov | coveralls && codecov"
   },
   "repository": {
     "type": "git",
