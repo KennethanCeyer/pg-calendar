@@ -74,6 +74,20 @@ $ git clone git@github.com:KennethanCeyer/PIGNOSE-Calendar.git
 
 ----
 
+### Test
+
+Current version supports unit tests by using `mocha` and `chai`.
+
+```bash
+# install all dependencies including devdependencies
+$ npm install
+
+# run test script of package.json
+$ npm test
+```
+
+----
+
 ### Overview
 
 See our features which we are supported.
