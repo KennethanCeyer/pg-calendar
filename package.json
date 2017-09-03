@@ -5,7 +5,9 @@
   "main": "dist/js/pignose.calendar.js",
   "scripts": {
     "build": "grunt",
-    "test": "grunt test"
+    "clean": "rimraf ./coverage ./.nyc_output",
+    "test": "npm run clean && nyc --reporter=html --reporter=text ./node_modules/mocha/bin/mocha **/*.spec.js -t 1000",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -41,6 +43,7 @@
     "almond": "^0.3.3",
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.0",
+    "chai": "^4.1.2",
     "grunt": "^1.0.1",
     "grunt-babel": "^7.0.0",
     "grunt-cli": "^1.2.0",
@@ -55,7 +58,10 @@
     "grunt-contrib-watch": "^1.0.0",
     "grunt-css-url-rewrite": "0.3.5",
     "jsdom": "^9.11.0",
-    "less-plugin-autoprefix": "^1.5.1"
+    "less-plugin-autoprefix": "^1.5.1",
+    "mocha": "^3.5.0",
+    "nyc": "^11.1.0",
+    "rimraf": "^2.6.1"
   },
   "dependencies": {
     "jquery": "^3.1.1",

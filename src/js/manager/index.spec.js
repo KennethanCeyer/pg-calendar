@@ -1,0 +1,104 @@
+'use strict';
+
+const requirejs = require('requirejs');
+const requirejsConfig = require('../tests/requirejs.config')
+const chai = require('chai');
+const expect = chai.expect;
+const moment = require('moment');
+requirejs.config(Object.assign(requirejsConfig, {
+}));
+
+describe('test for manager/index', function() {
+    let DateManager;
+    before(done => {
+        requirejs(['manager/index'], _DateManager => {
+            DateManager = _DateManager;
+            done();
+        });
+    });
+
+    describe('test initializing without parameter', () => {
+        it('it will be occured an error', () => {
+            expect(() => new DateManager())
+                .to.throw('first parameter `date` must be gave');
+        });
+    });
+
+    describe('test initializing with moment date', () => {
+        it('the year of `2017-01-02` must be `2017`', () => {
+            const date = moment('2017-01-02');
+            const dateManager = new DateManager(date);
+            expect(dateManager.year).to.equal(2017);
+        });
+
+        it('the month of `2017-01-02` must be `1`', () => {
+            const date = moment('2017-01-02');
+            const dateManager = new DateManager(date);
+            expect(dateManager.month).to.equal(1);
+        });
+        
+        it('the day of `2017-01-02` must be `2`', () => {
+            const date = moment('2017-01-02');
+            const dateManager = new DateManager(date);
+            expect(dateManager.day).to.equal(2);
+        });
+        
+        it('the first day of `2017-01-02` must be `1`', () => {
+            const date = moment('2017-01-02');
+            const dateManager = new DateManager(date);
+            expect(dateManager.firstDay).to.equal(1);
+        });
+        
+        it('the last day of `2017-01-02` must be `31`', () => {
+            const date = moment('2017-01-02');
+            const dateManager = new DateManager(date);
+            expect(dateManager.lastDay).to.equal(31);
+        });
+        
+        it('the week day of `2017-01-02` must be `1`', () => {
+            const date = moment('2017-01-02');
+            const dateManager = new DateManager(date);
+            expect(dateManager.weekDay).to.equal(1);
+        });
+        
+        it('the prev month of `2017-01-02` must be `12`', () => {
+            const date = moment('2017-01-02');
+            const dateManager = new DateManager(date);
+            expect(dateManager.prevMonth).to.equal(12);
+        });
+        
+        it('the next month of `2017-01-02` must be `2`', () => {
+            const date = moment('2017-01-02');
+            const dateManager = new DateManager(date);
+            expect(dateManager.nextMonth).to.equal(2);
+        });
+        
+        it('the date of `2017-01-02` must be an instance of `moment`', () => {
+            const date = moment('2017-01-02');
+            const dateManager = new DateManager(date);
+            expect(dateManager.date).to.be.an.instanceof(moment);
+        });
+        
+        it('the date of `2017-01-02` is same of `moment(\'2017-01-02\')`', () => {
+            const date = moment('2017-01-02');
+            const dateManager = new DateManager(date);
+            expect(dateManager.date.isSame(moment('2017-01-02'))).to.be.true;
+        });
+        
+        it('`.toString()` to `2017-04-06` must be `2017-04-06`', () => {
+            const date = moment('2017-04-06');
+            const dateManager = new DateManager(date);
+            expect(dateManager.toString()).to.equal('2017-04-06');
+        });
+        
+        it('the result of `DateManager.Convert()` must be an instance of `moment`', () => {
+            const result = DateManager.Convert(2017, 8, 2);
+            expect(result).to.be.an.instanceof(moment);
+        });
+        
+        it('the result of `DateManager.Convert(2017, 8, 2)` must be same to `2017-08-02`', () => {
+            const result = DateManager.Convert(2017, 8, 2);
+            expect(result.isSame(moment('2017-08-02'))).to.be.true;
+        });
+    });
+});

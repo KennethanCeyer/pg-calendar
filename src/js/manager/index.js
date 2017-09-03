@@ -7,6 +7,10 @@ define([
 ) => {
     const m_dateCache = {};
     const DateManager = function Constructor(date) {
+        if (!date) {
+            throw new Error('first parameter `date` must be gave');    
+        }
+
         if (date instanceof moment === false) {
             if (typeof date === 'string' || typeof date === 'number') {
                 date = moment(date);
