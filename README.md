@@ -124,7 +124,9 @@ Please send me a message to use either [gitter](https://gitter.im/KennethanCeyer
 - [x] Support ES6 with babel.
 - [x] Documentation supporting.
 - [x] Move css file to less.
-- [ ] Building CI, Automation testing model.
+- [ ] Integration with CI and Coverages.
+- [ ] Add unit tests.
+- [ ] Add e2e tests.
 - [ ] Adding timepicker specs.
 - [ ] Making many sample codes.
 - [ ] Improvement and building detailed callbacks. (Progress)
