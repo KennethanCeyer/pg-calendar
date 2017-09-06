@@ -77,7 +77,7 @@
                 var $element = context.element;
                 var $calendar = context.calendar;
                 var $box = $element.siblings('.box').show();
-                var text = 'You choose date ';
+                var text = 'You selected date ';
 
                 if (date[0] !== null) {
                     text += date[0].format('YYYY-MM-DD');
@@ -137,13 +137,12 @@
 
             // Input Calendar
             $('.input-calendar').pignoseCalendar({
-                select: onSelectHandler,
+                apply: onApplyHandler,
                 buttons: true, // It means you can give bottom button controller to the modal which be opened when you click.
             });
 
             // Calendar modal
             var $btn = $('.btn-calendar').pignoseCalendar({
-                select: onSelectHandler,
                 apply: onApplyHandler,
                 modal: true, // It means modal will be showed when you click the target button.
                 buttons: true
@@ -840,9 +839,9 @@
                         <td>0</td>
                     </tr>
                     <tr>
-                        <td colspan="2">initialized</td>
+                        <td colspan="2">initialize</td>
                         <td class="center"><span class="ui label">boolean</span></td>
-                        <td>You can turn on/off initialized date by this option.</td>
+                        <td>You can turn on/off initialized date or set the initial date by this option.</td>
                         <td>true</td>
                     </tr>
                     <tr>

@@ -18,6 +18,10 @@ define([
 
         context.settings = $.extend(true, {}, Options, settings);
 
+        if (!context.settings.lang) {
+            context.settings.lang = Global.language;
+        }
+
         if (context.settings.lang !== 'en' &&
             $.inArray(context.settings.lang, Global.languages.supports) !== -1) {
             context.settings.weeks = Global.languages.weeks[context.settings.lang];

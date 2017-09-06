@@ -1,7 +1,7 @@
 define([], () => {
     const Model = {
         ComponentName: 'pignoseCalendar',
-        ComponentVersion: '1.4.22',
+        ComponentVersion: '1.4.23',
         ComponentPreference: {
             supports: {
                 themes: ['light', 'dark', 'blue']

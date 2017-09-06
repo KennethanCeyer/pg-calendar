@@ -20,61 +20,61 @@ define([
         Global.language = settings.language;
 
         if (Object.keys(settings.languages).length > 0) {
-            for (const idx in settings.languages) {
-                const language = settings.languages[idx];
+            for (const language in settings.languages) {
+                const languageSetting = settings.languages[language];
 
-                if (typeof idx !== 'string') {
-                    console.error('Global configuration is failed.\nMessage: language key is not a string type.', idx);
+                if (typeof language !== 'string') {
+                    console.error('Global configuration is failed.\nMessage: language key is not a string type.', language);
                 }
 
-                if (!language.weeks) {
-                    console.error('Global configuration is failed.\nMessage: You must give `weeks` option of `' + idx + '` language.');
+                if (!languageSetting.weeks) {
+                    console.error('Global configuration is failed.\nMessage: You must give `weeks` option of `' + language + '` language.');
                     break;
                 }
 
-                if (!language.monthsLong) {
-                    console.error('Global configuration is failed.\nMessage: You must give `monthsLong` option of `' + idx + '` language.');
+                if (!languageSetting.monthsLong) {
+                    console.error('Global configuration is failed.\nMessage: You must give `monthsLong` option of `' + language + '` language.');
                     break;
                 }
 
-                if (!language.months) {
-                    console.error('Global configuration is failed.\nMessage: You must give `months` option of `' + idx + '` language.');
+                if (!languageSetting.months) {
+                    console.error('Global configuration is failed.\nMessage: You must give `months` option of `' + language + '` language.');
                     break;
                 }
 
-                if (language.weeks.length < weeksCount) {
+                if (languageSetting.weeks.length < weeksCount) {
                     console.error('`weeks` must have least ' + weeksCount + ' items.');
                     break;
                 }
-                else if (language.weeks.length !== weeksCount) {
+                else if (languageSetting.weeks.length !== weeksCount) {
                     console.warn('`weeks` option over ' + weeksCount + ' items. We recommend to give ' + weeksCount + ' items.');
                 }
 
-                if (language.monthsLong.length < monthsCount) {
+                if (languageSetting.monthsLong.length < monthsCount) {
                     console.error('`monthsLong` must have least ' + monthsCount + ' items.');
                     break;
                 }
-                else if (language.monthsLong.length !== monthsCount) {
+                else if (languageSetting.monthsLong.length !== monthsCount) {
                     console.warn('`monthsLong` option over ' + monthsCount + ' items. We recommend to give ' + monthsCount + ' items.');
                 }
 
-                if (language.months.length < monthsCount) {
+                if (languageSetting.months.length < monthsCount) {
                     console.error('`months` must have least ' + monthsCount + ' items.');
                     break;
                 }
-                else if (language.months.length !== monthsCount) {
+                else if (languageSetting.months.length !== monthsCount) {
                     console.warn('`months` option over ' + monthsCount + ' items. We recommend to give ' + monthsCount + ' items.');
                 }
 
-                if (Global.languages.supports.indexOf(settings.language) === -1) {
-                    Global.languages.supports.push(settings.language);
+                if (Global.languages.supports.indexOf(language) === -1) {
+                    Global.languages.supports.push(language);
                 }
 
                 ['weeks', 'monthsLong', 'months'].map(key => {
-                    if (Global.languages[key][idx]) {
-                        console.warn('`' + idx + '` language is already given however it will be overwriten.');
+                    if (Global.languages[key][language]) {
+                        console.warn('`' + language + '` language is already given however it will be overwriten.');
                     }
-                    Global.languages[key][idx] = language[key];
+                    Global.languages[key][language] = languageSetting[key];
                 });
             }
         }

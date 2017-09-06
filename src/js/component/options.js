@@ -4,7 +4,7 @@ define([
     Global
 ) => {
     return {
-        lang: Global.language,
+        lang: null,
         languages: Global.languages,
         theme: 'light',
         date: moment(),

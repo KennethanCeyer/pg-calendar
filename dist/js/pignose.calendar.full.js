@@ -459,7 +459,7 @@ define("almond", function(){});
 define('component/models',[], function () {
     var Model = {
         ComponentName: 'pignoseCalendar',
-        ComponentVersion: '1.4.21',
+        ComponentVersion: '1.4.23',
         ComponentPreference: {
             supports: {
                 themes: ['light', 'dark', 'blue']
@@ -514,10 +514,6 @@ define('component/helper',['./models'], function (Models) {
 
             for (var idx = 0, pos = 0; idx < len; idx++) {
                 var char = chars[idx];
-                if (typeof char !== 'string') {
-                    continue;
-                }
-
                 if (m_regex_upper.test(char) === true) {
                     classNames[pos++] = '-';
                     char = char.toString().toLowerCase();
@@ -532,6 +528,12 @@ define('component/helper',['./models'], function (Models) {
     };
 
     Helper.GetSubClass = function (name) {
+        if (name && name.length) {
+            var names = name.split('');
+            names[0] = names[0].toUpperCase();
+            name = names.join('');
+        }
+
         if (!m_subClassCache[name]) {
             m_subClassCache[name] = Helper.GetClass(Helper.Format('{0}{1}', Models.ComponentName, name));
         }
@@ -554,11 +556,15 @@ return k({},n(this))}function Bc(){return n(this).overflow}function Cc(){return{
 define('manager/index',['../component/helper', 'moment'], function (Helper, moment) {
     var m_dateCache = {};
     var DateManager = function Constructor(date) {
+        if (!date) {
+            throw new Error('first parameter `date` must be gave');
+        }
+
         if (date instanceof moment === false) {
             if (typeof date === 'string' || typeof date === 'number') {
                 date = moment(date);
             } else {
-                console.error('`date` option is invalid type. (date: ' + date + ').');
+                throw new Error('`date` option is invalid type. (date: ' + date + ').');
             }
         }
 
@@ -593,10 +599,10 @@ define('manager/index',['../component/helper', 'moment'], function (Helper, mome
 
 define('component/classNames',['../component/helper'], function (Helper) {
     return {
-        top: Helper.GetSubClass('Top'),
-        header: Helper.GetSubClass('Header'),
-        body: Helper.GetSubClass('Body'),
-        button: Helper.GetSubClass('Button')
+        top: Helper.GetSubClass('top'),
+        header: Helper.GetSubClass('header'),
+        body: Helper.GetSubClass('body'),
+        button: Helper.GetSubClass('button')
     };
 });
 //# sourceMappingURL=classNames.js.map
@@ -671,7 +677,7 @@ define('component/global',['../configures/i18n'], function (languages) {
 
 define('component/options',['./global'], function (Global) {
     return {
-        lang: Global.language,
+        lang: null,
         languages: Global.languages,
         theme: 'light',
         date: moment(),
@@ -725,6 +731,10 @@ define('methods/configure',['../component/global', '../component/models', '../co
         var context = this;settings;
 
         context.settings = $.extend(true, {}, Options, settings);
+
+        if (!context.settings.lang) {
+            context.settings.lang = Global.language;
+        }
 
         if (context.settings.lang !== 'en' && $.inArray(context.settings.lang, Global.languages.supports) !== -1) {
             context.settings.weeks = Global.languages.weeks[context.settings.lang];
@@ -788,13 +798,13 @@ define('methods/init',['../manager/index', '../component/classNames', '../compon
             calendarSchedulePinHtml: Helper.Format('<span class="{0}-schedule-pin {0}-schedule-pin-\\{0\\}" style="background-color: \\{1\\};"></span>', ClassNames.button)
         };
 
-        var rangeClass = Helper.GetSubClass('UnitRange');
-        var rangeFirstClass = Helper.GetSubClass('UnitRangeFirst');
-        var rangeLastClass = Helper.GetSubClass('UnitRangeLast');
-        var activeClass = Helper.GetSubClass('UnitActive');
-        var activePositionClasses = [Helper.GetSubClass('UnitFirstActive'), Helper.GetSubClass('UnitSecondActive')];
-        var toggleActiveClass = Helper.GetSubClass('UnitToggleActive');
-        var toggleInactiveClass = Helper.GetSubClass('UnitToggleInactive');
+        var rangeClass = Helper.GetSubClass('unitRange');
+        var rangeFirstClass = Helper.GetSubClass('unitRangeFirst');
+        var rangeLastClass = Helper.GetSubClass('unitRangeLast');
+        var activeClass = Helper.GetSubClass('unitActive');
+        var activePositionClasses = [Helper.GetSubClass('unitFirstActive'), Helper.GetSubClass('unitSecondActive')];
+        var toggleActiveClass = Helper.GetSubClass('unitToggleActive');
+        var toggleInactiveClass = Helper.GetSubClass('unitToggleInactive');
         var $calendarButton = null;
 
         return context.each(function () {
@@ -816,8 +826,8 @@ define('methods/init',['../manager/index', '../component/classNames', '../compon
                     schedules: []
                 },
                 dateManager: new DateManager(context.settings.date),
-                calendarWrapperHtml: Helper.Format('<div class="{0}"></div>', Helper.GetSubClass('Wrapper')),
-                calendarWrapperOverlayHtml: Helper.Format('<div class="{0}"></div>', Helper.GetSubClass('WrapperOverlay')),
+                calendarWrapperHtml: Helper.Format('<div class="{0}"></div>', Helper.GetSubClass('wrapper')),
+                calendarWrapperOverlayHtml: Helper.Format('<div class="{0}"></div>', Helper.GetSubClass('wrapperOverlay')),
                 context: context
             };
             var $parent = $this;
@@ -830,9 +840,9 @@ define('methods/init',['../manager/index', '../component/classNames', '../compon
             this.local = local;
 
             if (context.settings.reverse === true) {
-                local.calendar.addClass(Helper.GetSubClass('Reverse'));
+                local.calendar.addClass(Helper.GetSubClass('reverse'));
             } else {
-                local.calendar.addClass(Helper.GetSubClass('Default'));
+                local.calendar.addClass(Helper.GetSubClass('default'));
             }
 
             for (var i = context.settings.week; i < context.settings.weeks.length + context.settings.week; i++) {
@@ -844,7 +854,7 @@ define('methods/init',['../manager/index', '../component/classNames', '../compon
                     continue;
                 }
                 week = week.toUpperCase();
-                var $unit = $(Helper.Format('<div class="{0} {0}-{2}">{1}</div>', Helper.GetSubClass('Week'), week, Global.languages.weeks.en[i % Global.languages.weeks.en.length].toLowerCase()));
+                var $unit = $(Helper.Format('<div class="{0} {0}-{2}">{1}</div>', Helper.GetSubClass('week'), week, Global.languages.weeks.en[i % Global.languages.weeks.en.length].toLowerCase()));
                 $unit.appendTo(local.calendar.find('.' + ClassNames.header));
             }
 
@@ -854,8 +864,8 @@ define('methods/init',['../manager/index', '../component/classNames', '../compon
             }
 
             if (local.input === true || context.settings.modal === true) {
-                var wrapperActiveClass = Helper.GetSubClass('WrapperActive');
-                var overlayActiveClass = Helper.GetSubClass('WrapperOverlayActive');
+                var wrapperActiveClass = Helper.GetSubClass('wrapperActive');
+                var overlayActiveClass = Helper.GetSubClass('wrapperOverlayActive');
                 var $overlay = void 0;
 
                 $parent = $(local.calendarWrapperHtml);
@@ -867,7 +877,7 @@ define('methods/init',['../manager/index', '../component/classNames', '../compon
                     event.preventDefault();
                     event.stopPropagation();
                     event.stopImmediatePropagation();
-                    $overlay = $('.' + Helper.GetSubClass('WrapperOverlay'));
+                    $overlay = $('.' + Helper.GetSubClass('wrapperOverlay'));
 
                     if ($overlay.length < 1) {
                         $overlay = $(local.calendarWrapperOverlayHtml);
@@ -936,7 +946,7 @@ define('methods/init',['../manager/index', '../component/classNames', '../compon
                 for (; firstDate.format('YYYY-MM-DD') <= lastDate.format('YYYY-MM-DD'); firstDate.add(1, 'days')) {
                     var date = firstDate.format('YYYY-MM-DD');
                     var isRange = true;
-                    var $target = local.calendar.find(Helper.Format('.{0}[data-date="{1}"]', Helper.GetSubClass('Unit'), date)).addClass(rangeClass);
+                    var $target = local.calendar.find(Helper.Format('.{0}[data-date="{1}"]', Helper.GetSubClass('unit'), date)).addClass(rangeClass);
 
                     if (date === firstDateFixed) {
                         $target.addClass(rangeFirstClass);
@@ -1106,25 +1116,25 @@ define('methods/init',['../manager/index', '../component/classNames', '../compon
                     maxDate = context.settings.maxDate === null ? null : moment(context.settings.maxDate);
 
                 for (var _i = 0; _i < firstWeekday; _i++) {
-                    var $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('Unit'), Global.languages.weeks.en[_i].toLowerCase()));
+                    var $unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('unit'), Global.languages.weeks.en[_i].toLowerCase()));
                     $unitList.push($unit);
                 }
 
                 var _loop = function _loop(_i2) {
                     var iDate = DateManager.Convert(local.dateManager.year, local.dateManager.month, _i2);
                     var iDateFormat = iDate.format('YYYY-MM-DD');
-                    var $unit = $(Helper.Format('<div class="{0} {0}-date {0}-{3}" data-date="{1}"><a href="#">{2}</a></div>', Helper.GetSubClass('Unit'), iDate.format('YYYY-MM-DD'), _i2, Global.languages.weeks.en[iDate.weekday()].toLowerCase()));
+                    var $unit = $(Helper.Format('<div class="{0} {0}-date {0}-{3}" data-date="{1}"><a href="#">{2}</a></div>', Helper.GetSubClass('unit'), iDate.format('YYYY-MM-DD'), _i2, Global.languages.weeks.en[iDate.weekday()].toLowerCase()));
 
                     if (context.settings.enabledDates.length > 0) {
                         if ($.inArray(iDateFormat, context.settings.enabledDates) === -1) {
-                            $unit.addClass(Helper.GetSubClass('UnitDisabled'));
+                            $unit.addClass(Helper.GetSubClass('unitDisabled'));
                         }
                     } else if (context.settings.disabledWeekdays.length > 0 && $.inArray(iDate.weekday(), context.settings.disabledWeekdays) !== -1) {
-                        $unit.addClass(Helper.GetSubClass('UnitDisabled')).addClass(Helper.GetSubClass('UnitDisabledWeekdays'));
+                        $unit.addClass(Helper.GetSubClass('unitDisabled')).addClass(Helper.GetSubClass('unitDisabledWeekdays'));
                     } else if (minDate !== null && minDate.diff(iDate) > 0 || maxDate !== null && maxDate.diff(iDate) < 0) {
-                        $unit.addClass(Helper.GetSubClass('UnitDisabled')).addClass(Helper.GetSubClass('UnitDisabledRange'));
+                        $unit.addClass(Helper.GetSubClass('unitDisabled')).addClass(Helper.GetSubClass('unitDisabledRange'));
                     } else if ($.inArray(iDateFormat, context.settings.disabledDates) !== -1) {
-                        $unit.addClass(Helper.GetSubClass('UnitDisabled'));
+                        $unit.addClass(Helper.GetSubClass('unitDisabled'));
                     } else if (context.settings.disabledRanges.length > 0) {
                         var disabledRangesLength = context.settings.disabledRanges.length;
                         for (var j = 0; j < disabledRangesLength; j++) {
@@ -1132,7 +1142,7 @@ define('methods/init',['../manager/index', '../component/classNames', '../compon
                             var disabledRangeLength = disabledRange.length;
 
                             if (iDate.diff(moment(disabledRange[0])) >= 0 && iDate.diff(moment(disabledRange[1])) <= 0) {
-                                $unit.addClass(Helper.GetSubClass('UnitDisabled')).addClass(Helper.GetSubClass('UnitDisabledRange')).addClass(Helper.GetSubClass('UnitDisabledMultipleRange'));
+                                $unit.addClass(Helper.GetSubClass('unitDisabled')).addClass(Helper.GetSubClass('unitDisabledRange')).addClass(Helper.GetSubClass('unitDisabledMultipleRange'));
                                 break;
                             }
                         }
@@ -1167,7 +1177,7 @@ define('methods/init',['../manager/index', '../component/classNames', '../compon
                         } else {
                             $unit.addClass(toggleInactiveClass);
                         }
-                    } else if ($unit.hasClass(Helper.GetSubClass('UnitDisabled')) === false) {
+                    } else if ($unit.hasClass(Helper.GetSubClass('unitDisabled')) === false) {
                         if (context.settings.multiple === true) {
                             if (currentFormat[0] && iDateFormat === currentFormat[0]) {
                                 $unit.addClass(activeClass).addClass(activePositionClasses[0]);
@@ -1195,7 +1205,7 @@ define('methods/init',['../manager/index', '../component/classNames', '../compon
                         var position = 0;
                         var preventSelect = false;
 
-                        if ($this.hasClass(Helper.GetSubClass('UnitDisabled'))) {
+                        if ($this.hasClass(Helper.GetSubClass('unitDisabled'))) {
                             preventSelect = true;
                         } else {
                             if (local.input === true && context.settings.multiple === false && context.settings.buttons === false) {
@@ -1250,7 +1260,7 @@ define('methods/init',['../manager/index', '../component/classNames', '../compon
 
                                                 for (var _j2 = 0; _j2 < 2; _j2++) {
                                                     local.calendar.find('.' + activeClass + '.' + activePositionClasses[_j2]).removeClass(activeClass).removeClass(activePositionClasses[_j2]);
-                                                    local.calendar.find(Helper.Format('.{0}[data-date="{1}"]', Helper.GetSubClass('Unit'), local.current[_j2].format('YYYY-MM-DD'))).addClass(activeClass).addClass(activePositionClasses[_j2]);
+                                                    local.calendar.find(Helper.Format('.{0}[data-date="{1}"]', Helper.GetSubClass('unit'), local.current[_j2].format('YYYY-MM-DD'))).addClass(activeClass).addClass(activePositionClasses[_j2]);
                                                 }
                                             }
                                         } else {
@@ -1369,7 +1379,7 @@ define('methods/init',['../manager/index', '../component/classNames', '../compon
                     if (_i3 < 0) {
                         _i3 = Global.languages.weeks.en.length - _i3;
                     }
-                    var _$unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('Unit'), Global.languages.weeks.en[_i3 % Global.languages.weeks.en.length].toLowerCase()));
+                    var _$unit = $(Helper.Format('<div class="{0} {0}-{1}"></div>', Helper.GetSubClass('unit'), Global.languages.weeks.en[_i3 % Global.languages.weeks.en.length].toLowerCase()));
                     $unitList.push(_$unit);
                 }
 
@@ -1382,7 +1392,7 @@ define('methods/init',['../manager/index', '../component/classNames', '../compon
                         }
 
                         if (_i4 + 1 < $unitList.length) {
-                            $row = $(Helper.Format('<div class="{0}"></div>', Helper.GetSubClass('Row')));
+                            $row = $(Helper.Format('<div class="{0}"></div>', Helper.GetSubClass('row')));
                         }
                     }
                     $row.append(element);
@@ -1456,63 +1466,63 @@ define('methods/setting',['../component/global', 'jquery', 'moment'], function (
         Global.language = settings.language;
 
         if (Object.keys(settings.languages).length > 0) {
-            var _loop = function _loop(idx) {
-                var language = settings.languages[idx];
+            var _loop = function _loop(language) {
+                var languageSetting = settings.languages[language];
 
-                if (typeof idx !== 'string') {
-                    console.error('Global configuration is failed.\nMessage: language key is not a string type.', idx);
+                if (typeof language !== 'string') {
+                    console.error('Global configuration is failed.\nMessage: language key is not a string type.', language);
                 }
 
-                if (!language.weeks) {
-                    console.error('Global configuration is failed.\nMessage: You must give `weeks` option of `' + idx + '` language.');
+                if (!languageSetting.weeks) {
+                    console.error('Global configuration is failed.\nMessage: You must give `weeks` option of `' + language + '` language.');
                     return 'break';
                 }
 
-                if (!language.monthsLong) {
-                    console.error('Global configuration is failed.\nMessage: You must give `monthsLong` option of `' + idx + '` language.');
+                if (!languageSetting.monthsLong) {
+                    console.error('Global configuration is failed.\nMessage: You must give `monthsLong` option of `' + language + '` language.');
                     return 'break';
                 }
 
-                if (!language.months) {
-                    console.error('Global configuration is failed.\nMessage: You must give `months` option of `' + idx + '` language.');
+                if (!languageSetting.months) {
+                    console.error('Global configuration is failed.\nMessage: You must give `months` option of `' + language + '` language.');
                     return 'break';
                 }
 
-                if (language.weeks.length < weeksCount) {
+                if (languageSetting.weeks.length < weeksCount) {
                     console.error('`weeks` must have least ' + weeksCount + ' items.');
                     return 'break';
-                } else if (language.weeks.length !== weeksCount) {
+                } else if (languageSetting.weeks.length !== weeksCount) {
                     console.warn('`weeks` option over ' + weeksCount + ' items. We recommend to give ' + weeksCount + ' items.');
                 }
 
-                if (language.monthsLong.length < monthsCount) {
+                if (languageSetting.monthsLong.length < monthsCount) {
                     console.error('`monthsLong` must have least ' + monthsCount + ' items.');
                     return 'break';
-                } else if (language.monthsLong.length !== monthsCount) {
+                } else if (languageSetting.monthsLong.length !== monthsCount) {
                     console.warn('`monthsLong` option over ' + monthsCount + ' items. We recommend to give ' + monthsCount + ' items.');
                 }
 
-                if (language.months.length < monthsCount) {
+                if (languageSetting.months.length < monthsCount) {
                     console.error('`months` must have least ' + monthsCount + ' items.');
                     return 'break';
-                } else if (language.months.length !== monthsCount) {
+                } else if (languageSetting.months.length !== monthsCount) {
                     console.warn('`months` option over ' + monthsCount + ' items. We recommend to give ' + monthsCount + ' items.');
                 }
 
-                if (Global.languages.supports.indexOf(settings.language) === -1) {
-                    Global.languages.supports.push(settings.language);
+                if (Global.languages.supports.indexOf(language) === -1) {
+                    Global.languages.supports.push(language);
                 }
 
                 ['weeks', 'monthsLong', 'months'].map(function (key) {
-                    if (Global.languages[key][idx]) {
-                        console.warn('`' + idx + '` language is already given however it will be overwriten.');
+                    if (Global.languages[key][language]) {
+                        console.warn('`' + language + '` language is already given however it will be overwriten.');
                     }
-                    Global.languages[key][idx] = language[key];
+                    Global.languages[key][language] = languageSetting[key];
                 });
             };
 
-            for (var idx in settings.languages) {
-                var _ret = _loop(idx);
+            for (var language in settings.languages) {
+                var _ret = _loop(language);
 
                 if (_ret === 'break') break;
             }
@@ -1545,7 +1555,7 @@ define('methods/select',['../component/helper', 'jquery', 'moment'], function (H
             var local = this.local;
             var dateManager = local.dateManager;
             var date = Helper.Format('{0}-{1}-{2}', dateManager.year, dateManager.month, day);
-            $(this).find(Helper.Format('.{0}[data-date="{1}"]', Helper.GetSubClass('Unit'), date)).triggerHandler('click');
+            $(this).find(Helper.Format('.{0}[data-date="{1}"]', Helper.GetSubClass('unit'), date)).triggerHandler('click');
         });
     };
 });
