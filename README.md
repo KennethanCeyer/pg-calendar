@@ -22,7 +22,9 @@ This datepicker supports responsive display and mobile environment.
 
 ### Documentation
 
-Check [GitHub WIKI > Documentation](https://github.com/KennethanCeyer/pg-calendar/wiki/Documentation).
+Check [:book: GitHub wiki](https://github.com/KennethanCeyer/pg-calendar/wiki/Documentation).
+
+or [:package: Codepen.io collection](https://codepen.io/collection/Dbgpqm/)
 
 ----
 
