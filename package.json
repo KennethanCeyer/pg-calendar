@@ -1,6 +1,6 @@
 {
   "name": "pg-calendar",
-  "version": "1.4.23",
+  "version": "1.4.24",
   "description": "Beautiful and eidetic jQuery date picker plguin.",
   "main": "dist/js/pignose.calendar.js",
   "scripts": {
@@ -57,8 +57,10 @@
     "grunt-contrib-uglify": "^2.0.0",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-css-url-rewrite": "0.3.5",
+    "grunt-umd": "^2.4.0",
     "jsdom": "^9.11.0",
     "less-plugin-autoprefix": "^1.5.1",
+    "libumd": "^0.8.0",
     "mocha": "^3.5.0",
     "nyc": "^11.1.0",
     "rimraf": "^2.6.1"

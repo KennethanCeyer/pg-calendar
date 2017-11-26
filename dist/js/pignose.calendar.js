@@ -1,23 +1,20 @@
+
 (function (root, factory) {
-    if (typeof define !== 'undefined' && define.amd) {
-        // AMD loader type declaration.
-        define(['jquery', 'moment'], function(jquery, moment) {
-            factory(window, document, jquery, moment);
+    if (root === undefined && window !== undefined) root = window;
+    if (typeof define === 'function' && define.amd) {
+        define(["jquery","moment"], function (jquery, moment) {
+            return (factory(jquery, moment));
         });
+    } else if (typeof module === 'object' && module.exports) {
+        var module_exports = factory(require("jquery"),require("moment"));
+        module.exports = module_exports;
+
+    } else {
+        factory(root["jquery"],root["moment"]);
     }
-    else if (typeof module === 'object') {
-        var jsdom = require('jsdom').jsdom;
-        var _document = jsdom('<html></html>', {});
-        var _window = _document.defaultView;
-        var _jquery = require('jquery')(_window);
-        var _moment = require('moment');
-        module.exports = factory(_window, _document, _jquery, _moment);
-    }
-    else {
-        root.pignoseCalendar = factory(window, document, jQuery, moment);
-    }
-}(this, function (window, document, jquery, moment) {
-/**
+}(this, function (jquery, moment) {
+
+    /**
  * @license almond 0.3.3 Copyright jQuery Foundation and other contributors.
  * Released under MIT license, http://github.com/requirejs/almond/LICENSE
  */
@@ -700,47 +697,47 @@ define('component/global',['../configures/i18n'], function (languages) {
 ;
 
 
-define('component/options',['./global'], function (Global) {
-    return {
-        lang: null,
-        languages: Global.languages,
-        theme: 'light',
-        date: moment(),
-        format: Global.format,
-        enabledDates: [],
-        disabledDates: [],
-        disabledWeekdays: [],
-        disabledRanges: [],
-        schedules: [],
-        scheduleOptions: {
-            colors: {}
-        },
-        week: Global.week,
-        weeks: Global.languages.weeks.en,
-        monthsLong: Global.languages.monthsLong.en,
-        months: Global.languages.months.en,
-        pickWeeks: false,
-        initialize: true,
-        multiple: false,
-        toggle: false,
-        reverse: false,
-        buttons: false,
-        modal: false,
-        selectOver: false,
-        minDate: null,
-        maxDate: null,
+define('component/options',['moment', './global'], function (moment, Global) {
+  return {
+    lang: null,
+    languages: Global.languages,
+    theme: 'light',
+    date: moment(),
+    format: Global.format,
+    enabledDates: [],
+    disabledDates: [],
+    disabledWeekdays: [],
+    disabledRanges: [],
+    schedules: [],
+    scheduleOptions: {
+      colors: {}
+    },
+    week: Global.week,
+    weeks: Global.languages.weeks.en,
+    monthsLong: Global.languages.monthsLong.en,
+    months: Global.languages.months.en,
+    pickWeeks: false,
+    initialize: true,
+    multiple: false,
+    toggle: false,
+    reverse: false,
+    buttons: false,
+    modal: false,
+    selectOver: false,
+    minDate: null,
+    maxDate: null,
 
-        /********************************************
-         * EVENTS
-         *******************************************/
-        init: null,
-        select: null,
-        apply: null,
-        click: null,
-        page: null,
-        prev: null,
-        next: null
-    };
+    /********************************************
+     * EVENTS
+     *******************************************/
+    init: null,
+    select: null,
+    apply: null,
+    click: null,
+    page: null,
+    prev: null,
+    next: null
+  };
 });
 //# sourceMappingURL=options.js.map
 ;
@@ -1720,20 +1717,28 @@ define('main',['core', 'component/models'], function (Component, Models) {
 ;
 
 
-define('plugin',['main', 'component/models', 'jquery'], function (Constructor, models, $) {
-    'use strict';
+var Constructor = require('main');
+var models = require('component/models');
+var $ = require('jquery');
 
-    $.fn[models.ComponentName] = function (options) {
-        return Constructor.apply(Constructor, [this, options].concat(Array.prototype.splice.call(arguments, 1)));
-    };
+var root = window ? window : undefined || {};
 
-    for (var idx in models) {
-        $.fn[models.ComponentName][idx] = models[idx];
-    }
+root.moment = require('moment');
 
-    return Constructor;
-});
+$.fn[models.ComponentName] = function (options) {
+  return Constructor.apply(Constructor, [this, options].concat(Array.prototype.splice.call(arguments, 1)));
+};
+
+for (var key in models) {
+  $.fn[models.ComponentName][key] = models[key];
+}
 //# sourceMappingURL=jquery.js.map
 ;
-    return require('plugin');
+define("plugins/jquery.js", function(){});
+
+
+
+
+    return ;
+
 }));

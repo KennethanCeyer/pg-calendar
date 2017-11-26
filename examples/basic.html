@@ -15,7 +15,7 @@
 	<link rel="stylesheet" type="text/css" href="../demo/css/prism.css" />
 	<link rel="stylesheet" type="text/css" href="../demo/css/calendar-style.css" />
 	<link rel="stylesheet" type="text/css" href="../demo/css/style.css" />
-	<link rel="stylesheet" type="text/css" href="../dist/css/pignose.calendar.css" />
+	<link rel="stylesheet" type="text/css" href="../dist/css/pignose.calendar.min.css" />
 	<style type="text/css">
 		.input-calendar {
 			display: block;
@@ -28,9 +28,6 @@
 			padding: 0 1.2em;
 			border: 1px solid #d8d8d8;
 			box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
-			-o-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
-			-moz-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
-			-webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
 		}
 
 		.btn-calendar {
@@ -45,65 +42,12 @@
 			color: #ffffff !important;
 			text-decoration: none !important;
 			box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
-			-o-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
-			-moz-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
-			-webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
 		}
 
 		.btn-calendar:hover {
 			background-color: #5a6268;
 		}
 	</style>
-	<script type="text/javascript" src="../demo/js/jquery.latest.min.js"></script>
-	<script type="text/javascript" src="../demo/js/moment.latest.min.js"></script>
-	<script type="text/javascript" src="../demo/js/semantic.ui.min.js"></script>
-	<script type="text/javascript" src="../demo/js/prism.min.js"></script>
-	<script type="text/javascript" src="../dist/js/pignose.calendar.js"></script>
-	<script type="text/javascript">
-	//<![CDATA[
-	$(function() {
-		$('#wrapper .version strong').text('v' + $.fn.pignoseCalendar.ComponentVersion);
-
-		function onClickHandler(date, obj) {
-			/**
-			 * @date is an array which be included dates(clicked date at first index)
-			 * @obj is an object which stored calendar interal data.
-			 * @obj.calendar is an element reference.
-			 * @obj.storage.activeDates is all toggled data, If you use toggle type calendar.
-             * @obj.storage.events is all events associated to this date
-			 */
-
-			var $calendar = obj.calendar;
-			var $box = $calendar.parent().siblings('.box').show();
-			var text = 'You choose date ';
-
-			if(date[0] !== null) {
-				text += date[0].format('YYYY-MM-DD');
-			}
-
-			if(date[0] !== null && date[1] !== null) {
-				text += ' ~ ';
-			} else if(date[0] === null && date[1] == null) {
-				text += 'nothing';
-			}
-
-			if(date[1] !== null) {
-				text += date[1].format('YYYY-MM-DD');
-			}
-
-			$box.text(text);
-		}
-
-		// Default Calendar
-		$('.calendar').pignoseCalendar({
-			select: onClickHandler
-		});
-
-		// This use for DEMO page tab component.
-		$('.menu .item').tab();
-	});
-	//]]>
-	</script>
 </head>
 <body>
 	<div id="wrapper">
@@ -131,5 +75,54 @@
 			</div>
 		</div>
 	</div>
+    <script type="text/javascript" src="../demo/js/jquery.latest.min.js"></script>
+    <script type="text/javascript" src="../demo/js/semantic.ui.min.js"></script>
+    <script type="text/javascript" src="../demo/js/prism.min.js"></script>
+    <script type="text/javascript" src="../dist/js/pignose.calendar.full.min.js"></script>
+    <script type="text/javascript">
+        //<![CDATA[
+        $(function() {
+            $('#wrapper .version strong').text('v' + $.fn.pignoseCalendar.ComponentVersion);
+
+            function onClickHandler(date, obj) {
+                /**
+                 * @date is an array which be included dates(clicked date at first index)
+                 * @obj is an object which stored calendar interal data.
+                 * @obj.calendar is an element reference.
+                 * @obj.storage.activeDates is all toggled data, If you use toggle type calendar.
+                 * @obj.storage.events is all events associated to this date
+                 */
+
+                var $calendar = obj.calendar;
+                var $box = $calendar.parent().siblings('.box').show();
+                var text = 'You choose date ';
+
+                if(date[0] !== null) {
+                    text += date[0].format('YYYY-MM-DD');
+                }
+
+                if(date[0] !== null && date[1] !== null) {
+                    text += ' ~ ';
+                } else if(date[0] === null && date[1] == null) {
+                    text += 'nothing';
+                }
+
+                if(date[1] !== null) {
+                    text += date[1].format('YYYY-MM-DD');
+                }
+
+                $box.text(text);
+            }
+
+            // Default Calendar
+            $('.calendar').pignoseCalendar({
+                select: onClickHandler
+            });
+
+            // This use for DEMO page tab component.
+            $('.menu .item').tab();
+        });
+        //]]>
+    </script>
 </body>
 </html>
