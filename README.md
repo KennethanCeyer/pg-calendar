@@ -143,8 +143,36 @@ Please send me a message to use either [gitter](https://gitter.im/KennethanCeyer
 - [x] Documentation supporting.
 - [x] Move css file to less.
 - [x] Integration with CI and Coverages.
-- [ ] Add unit tests.
+- [x] Add unit tests.
 - [ ] Add e2e tests.
 - [ ] Adding timepicker specs.
 - [ ] Making many sample codes.
 - [ ] Improvement and building detailed callbacks. (Progress)
+
+----
+
+### Roadmap
+
+**1.4.x**
+
+- 100% coverage unit test
+- support UMD
+- support Webpack
+- support typescript definition
+- complete documentation
+
+**1.5.x**
+
+- complete examples for combination of all options
+- support e2e testing with nightwatch
+- support codepen examples
+- following convention (webstorm convention of JetBrains)
+- making integrated library with react
+- making integrated library with angular
+- making integrated library with vuejs
+
+**1.6.x**
+
+- extended option usage `time picker`
+- advanced option `custom button (today, last 7days, last 30 days, last a month, last 6 month, last year)`
+- advanced option `attach below of input`
