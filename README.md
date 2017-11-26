@@ -6,6 +6,8 @@ Beautiful and eidetic jQuery date picker plugin.
 
 [![npm version](https://badge.fury.io/js/pg-calendar.svg)](https://badge.fury.io/js/pg-calendar) [![Bower version](https://badge.fury.io/bo/pg-calendar.svg)](https://badge.fury.io/bo/pg-calendar) [![ghit.me](https://ghit.me/badge.svg?repo=KennethanCeyer/PIGNOSE-Calendar)](https://ghit.me/repo/KennethanCeyer/PIGNOSE-Calendar) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Join the chat at https://gitter.im/KennethanCeyer/PIGNOSE](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/KennethanCeyer/PIGNOSE?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+[![dependencies Status](https://david-dm.org/kennethanceyer/pg-calendar/status.svg)](https://david-dm.org/kennethanceyer/pg-calendar) [![devDependencies Status](https://david-dm.org/kennethanceyer/pg-calendar/dev-status.svg)](https://david-dm.org/kennethanceyer/pg-calendar?type=dev)
+
 ----
 
 ### Getting started
@@ -100,7 +102,7 @@ See our features which we are supported.
 - Input type controller support.
 - The toggle controll each of date buttons are supported.
 - You can disable specific dates.
-- Multiple languages are supported, (en, ko, fr, ch, de, jp, pt, da, pl, es, fa, it).
+- Multiple languages are supported, (en, ko, fr, ch, de, jp, pt, da, pl, es, fa, it, cs, uk, ru).
 - Theme system supports (light, dark, blue).
 
 ----
@@ -119,6 +121,7 @@ We welcome your support, You can support to notice by send me github issue or us
 - [@TNDecoder](https://www.github.com/TNDecoder)
 - [@acipolla](https://www.github.com/acipolla)
 - [@jan-vince](https://github.com/jan-vince)
+- [@SMHFandA](https://github.com/SMHFandA)
 
 #### Join in contribution
 
