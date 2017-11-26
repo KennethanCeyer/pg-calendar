@@ -10,39 +10,38 @@ const moment = require('moment');
 const packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../../..', 'package.json'), 'utf8'));
 const version = packageJson.version;
 
-requirejs.config(Object.assign(requirejsConfig, {
-}));
+requirejs.config(Object.assign(requirejsConfig, {}));
 
-describe('test for component/models', function() {
-    let Models;
-    before(done => {
-        requirejs(['component/models'], _Models => {
-            Models = _Models;
-            done();
-        });
+describe('test for component/models', function () {
+  let models;
+  before(done => {
+    requirejs(['component/models'], _models => {
+      models = _models;
+      done();
     });
-    
-    describe('type validation of models', () => {
-        it('name must be pignoseCalendar', () => {
-            expect(Models.ComponentName)
-                .to.equal('pignoseCalendar');
-        });
+  });
 
-        it('`supports` preference must be object type', () => {
-            expect(Models.ComponentPreference.supports)
-                .to.be.an('object');
-        });
-        
-        it('the `themes` of `supports` preference must be object type', () => {
-            expect(Models.ComponentPreference.supports.themes)
-                .to.be.an('array');
-        });
+  describe('type validation of models', () => {
+    it('name must be pignoseCalendar', () => {
+      expect(models.name)
+        .to.equal('pignoseCalendar');
     });
 
-    describe('test that declared version of models is latest', () => {
-        it('version must be latest', () => {
-            expect(Models.ComponentVersion)
-                .to.equal(version);
-        });
+    it('`supports` preference must be object type', () => {
+      expect(models.preference.supports)
+        .to.be.an('object');
     });
+
+    it('the `themes` of `supports` preference must be object type', () => {
+      expect(models.preference.supports.themes)
+        .to.be.an('array');
+    });
+  });
+
+  describe('test that declared version of models is latest', () => {
+    it('version must be latest', () => {
+      expect(models.version)
+        .to.equal(version);
+    });
+  });
 });

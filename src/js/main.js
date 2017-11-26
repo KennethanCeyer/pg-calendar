@@ -1,24 +1,25 @@
 define([
-    'core',
-    'component/models'
-], function (Component, Models) {
-    'use strict';
+  'core',
+  'component/models'
+], function (component, models) {
+  'use strict';
 
-    const PignoseCalendar = function (element, options) {
-        if (typeof Component[options] !== 'undefined') {
-            return Component[options].apply(element, Array.prototype.slice.call(arguments, 2));
-        }
-        else if (typeof options === 'object' || !options) {
-            return Component.init.apply(element, Array.prototype.slice.call(arguments, 1));
-        }
-        else {
-            console.error('Argument error are occured.');
-        }
-    };
-
-    for (const idx in Models) {
-        PignoseCalendar[idx] = Models[idx];
+  const pignoseCalendar = function (element, options) {
+    if (typeof component[options] !== 'undefined') {
+      return component[options].apply(element, Array.prototype.slice.call(arguments, 2));
     }
+    else if (typeof options === 'object' || !options) {
+      return component.init.apply(element, Array.prototype.slice.call(arguments, 1));
+    }
+    else {
+      console.error('Argument error are occured.');
+    }
+  };
 
-    return PignoseCalendar;
+  pignoseCalendar.component = {};
+  for (const idx in models) {
+    pignoseCalendar.component[idx] = models[idx];
+  }
+
+  return pignoseCalendar;
 });

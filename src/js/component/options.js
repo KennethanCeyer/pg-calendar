@@ -1,13 +1,13 @@
 define([
   'moment',
   './global'
-], (moment, Global) => {
+], (moment, global) => {
   return {
     lang: null,
-    languages: Global.languages,
+    languages: global.languages,
     theme: 'light',
     date: moment(),
-    format: Global.format,
+    format: global.format,
     enabledDates: [],
     disabledDates: [],
     disabledWeekdays: [],
@@ -16,10 +16,11 @@ define([
     scheduleOptions: {
       colors: {}
     },
-    week: Global.week,
-    weeks: Global.languages.weeks.en,
-    monthsLong: Global.languages.monthsLong.en,
-    months: Global.languages.months.en,
+    week: global.week,
+    weeks: global.languages.weeks.en,
+    monthsLong: global.languages.monthsLong.en,
+    months: global.languages.months.en,
+    controls: global.languages.controls.en,
     pickWeeks: false,
     initialize: true,
     multiple: false,
