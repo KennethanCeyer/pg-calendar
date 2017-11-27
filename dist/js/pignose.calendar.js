@@ -456,7 +456,7 @@ define("almond", function(){});
 define('component/models',[], function () {
   var models = {
     name: 'pignoseCalendar',
-    version: '1.4.25',
+    version: '1.4.27',
     preference: {
       supports: {
         themes: ['light', 'dark', 'blue']
@@ -740,12 +740,12 @@ define('configures/i18n',[], function () {
         cancel: 'Zrušit'
       },
       uk: {
-        ok: 'Перевірте',
+        ok: 'Вибрати',
         cancel: 'Скасувати'
       },
       ru: {
-        ok: 'подтверждение',
-        cancel: 'отменен'
+        ok: 'Выбрать',
+        cancel: 'Отмена'
       }
     }
   };
