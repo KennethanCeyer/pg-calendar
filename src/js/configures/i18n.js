@@ -75,7 +75,7 @@ define([], () => {
         cancel: '取消'
       },
       de: {
-        ok: 'Scheck',
+        ok: 'Okay',
         cancel: 'Abbrechen'
       },
       jp: {
