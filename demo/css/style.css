@@ -19,7 +19,7 @@ pre, code, code span {
 	font-size: 14px;
 	font-family: 'Consolas', sans-serif !important;
 	text-shadow: none !important;
-	-webkit-text-shadow: none !important;
+	text-align: left;
 }
 
 #wrapper {
