@@ -1,12 +1,10 @@
 define([
-    '../component/helper'
-], (
-    Helper
-) => {
-    return {
-        top: Helper.GetSubClass('top'),
-        header: Helper.GetSubClass('header'),
-        body: Helper.GetSubClass('body'),
-        button: Helper.GetSubClass('button')
-    };
+  '../component/helper'
+], (helper) => {
+  return {
+    top: helper.getSubClass('top'),
+    header: helper.getSubClass('header'),
+    body: helper.getSubClass('body'),
+    button: helper.getSubClass('button')
+  };
 });

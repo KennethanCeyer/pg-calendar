@@ -1,12 +1,12 @@
 define([], () => {
-    const Model = {
-        ComponentName: 'pignoseCalendar',
-        ComponentVersion: '1.4.23',
-        ComponentPreference: {
-            supports: {
-                themes: ['light', 'dark', 'blue']
-            }
-        }
-    };
-    return Model;
+  const models = {
+    name: 'pignoseCalendar',
+    version: '1.4.28',
+    preference: {
+      supports: {
+        themes: ['light', 'dark', 'blue']
+      }
+    }
+  };
+  return models;
 });
