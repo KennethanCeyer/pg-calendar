@@ -1,12 +1,12 @@
 {
   "name": "pg-calendar",
-  "version": "1.4.28",
+  "version": "1.4.29",
   "description": "Beautiful and eidetic jQuery date picker plguin.",
   "main": "dist/js/pignose.calendar.js",
   "scripts": {
     "build": "grunt",
     "clean": "rimraf ./coverage ./.nyc_output",
-    "test": "npm run clean && nyc --reporter=html --reporter=text ./node_modules/mocha/bin/mocha **/*.spec.js -t 1000",
+    "test": "npm run clean && nyc --reporter=html --reporter=json ./node_modules/mocha/bin/mocha **/*.spec.js -t 1000",
     "coverage": "nyc report --reporter=text-lcov > ./coverage/coverage.lcov && cat ./coverage/coverage.lcov | coveralls && codecov -t e0e9165c-fa05-48bd-8b42-9e221c01f84d"
   },
   "repository": {

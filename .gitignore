@@ -1,7 +1,6 @@
-node_modules/
-.idea/
 .nyc_output/
-*.DS_Store
-build
+.rpt2_cache/
+.idea/
+node_modules/
 coverage/
-package-lock.json
+src/**/*.js

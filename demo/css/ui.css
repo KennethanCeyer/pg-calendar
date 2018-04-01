@@ -1,0 +1,69 @@
+h5 {
+    text-align: center;
+}
+
+.title {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.title h3 {
+    margin-bottom: 0;
+}
+
+.pignose-calendar {
+    font-family: 'Lato', 'Open Sans', sans-serif;
+    font-size: 14px !important;
+}
+
+.box {
+    text-align: center;
+}
+
+.language-calender .pignose-calender {
+    margin-top: .4em !important;
+}
+
+.input-calendar {
+    display: block;
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+    height: 3.2em;
+    line-height: 3.2em;
+    font: inherit;
+    padding: 0 1.2em;
+    border: 1px solid #d8d8d8;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+    -o-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+    -moz-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+    -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+}
+
+.btn-calendar {
+    display: block;
+    text-align: center;
+    width: 100%;
+    max-width: 360px;
+    height: 3.2em;
+    line-height: 3.2em;
+    background-color: #52555a;
+    margin: 0 auto;
+    font-weight: 600;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+    -o-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+    -moz-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+    -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+}
+
+.btn-calendar:hover {
+    background-color: #5a6268;
+}
+
+@media screen and (max-width: 640px) {
+    .pignose-calendar {
+        font-size: 12px !important;
+    }
+}
