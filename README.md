@@ -1,4 +1,4 @@
-<h1 align="center">PIGNOSE Calendar</h1>
+<h1 align="center">PIGNOSE Calendar :date:</h1>
 
 <p align="center">Beautiful and eidetic jQuery date picker plugin</p>
 
@@ -22,7 +22,7 @@
  <a href="https://david-dm.org/kennethanceyer/pg-calendar?type=dev"><img src="https://david-dm.org/kennethanceyer/pg-calendar/dev-status.svg" alt="devDependencies Status"></a>
 </p>
 
-## Getting started
+## :clap: Getting started
 
 PIGNOSE-Calendar helps you to make simple and eidetic datepicker with jQuery.
 
@@ -32,13 +32,13 @@ This datepicker supports responsive display and mobile environment.
 
 ![PIGNOSE-Calendar](http://www.pigno.se/barn/PIGNOSE-Calendar/demo/img/screenshot_main.png?t=201701170854)
 
-## Documentation
+## :page_with_curl: Documentation
 
 Check [:book: GitHub wiki](https://github.com/KennethanCeyer/pg-calendar/wiki/Documentation).
 
 or [:package: Codepen.io collection](https://codepen.io/collection/Dbgpqm/)
 
-## Installation
+## :package: Installation
 
 ### npm
 
@@ -52,7 +52,7 @@ $ npm install pg-calendar
 $ yarn add pg-calendar
 ```
 
-## Usage
+## :triumph: Usage
 
 Check `dist/` folder on this repository.
 
@@ -76,7 +76,7 @@ $ git clone git@github.com:KennethanCeyer/PIGNOSE-Calendar.git
 <link type="text/css" href="./dist/css/pignose.calendar.min.css" />
 ```
 
-## Test
+## :space_invader: Test
 
 Current version supports unit tests by using `mocha` and `chai`.
 
@@ -88,20 +88,20 @@ $ npm install
 $ npm test
 ```
 
-## Overview
+## :beer: Overview
 
-See our features which we are supported.
+See our features which we are supported
 
-- Responsive and mobile friendly display.
-- Multiple range datepicker support.
-- Scheduling calendar support.
-- Input type controller support.
-- The toggle controll each of date buttons are supported.
-- You can disable specific dates.
-- Multiple languages are supported, (en, ko, fr, ch, de, jp, pt, da, pl, es, fa, it, cs, uk, ru).
-- Theme system supports (light, dark, blue).
+- Responsive and mobile friendly display
+- Multiple range datepicker support
+- Scheduling calendar support
+- Input type controller support
+- The toggle controll each of date buttons are supported
+- You can disable specific dates
+- Multiple languages are supported, (en, ko, fr, ch, de, jp, pt, da, pl, es, fa, it, cs, uk, ru)
+- Theme system supports (light, dark, blue)
 
-## Contributors
+## :octocat: Contributors
 
 We welcome your support, You can support to notice by send me github issue or using gitter.
 
@@ -121,7 +121,7 @@ We welcome your support, You can support to notice by send me github issue or us
 
 Please move to [Contribution section](https://github.com/KennethanCeyer/PIGNOSE-Calendar/wiki/Contribution).
 
-## Roadmap
+## :triangular_flag_on_post: Roadmap
 
 - [x] Support Webpack, AMD and CommonJS (UMD)
 - [x] Support ES6 with babel
@@ -158,7 +158,7 @@ Please move to [Contribution section](https://github.com/KennethanCeyer/PIGNOSE-
 - [ ] advanced option `custom button (today, last 7days, last 30 days, last a month, last 6 month, last year)`
 - [ ] advanced option `attach below of input`
 
-## License
+## :mag: License
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FKennethanCeyer%2Fpg-calendar.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FKennethanCeyer%2Fpg-calendar?ref=badge_large)
 
