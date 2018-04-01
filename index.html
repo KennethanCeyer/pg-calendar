@@ -1,60 +1,24 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, user-scalable=no"/>
     <meta property="og:url" content="http://www.pigno.se/barn/PIGNOSE-Calendar">
     <meta property="og:type" content="product"/>
     <meta property="og:title" content="PIGNOSE Calendar"/>
-    <meta property="og:description" content="PIGNOSE Calendar is beautiful and eidetic jQuery date picker plguin."/>
+    <meta property="og:description" content="PIGNOSE Calendar is beautiful and eidetic jQuery date picker plugin"/>
     <meta property="og:image" content="http://www.pigno.se/barn/PIGNOSE-Calendar/demo/img/cover@250.png"/>
     <meta property="og:site_name" content="PIGNOSE"/>
     <title>PIGNOSE Calendar</title>
+    <meta name="description" content="PIGNOSE Calendar is beautiful and eidetic jQuery date picker plugin"/>
     <link rel="shortcut icon" type="image/x-icon" href="demo/img/pignose-ico.ico"/>
-    <link rel="stylesheet" type="text/css" href="demo/css/semantic.ui.min.css">
-    <link rel="stylesheet" type="text/css" href="demo/css/calendar-style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.13.0/themes/prism.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/components/icon.min.css">
     <link rel="stylesheet" type="text/css" href="demo/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="demo/css/ui.css"/>
     <link rel="stylesheet" type="text/css" href="dist/css/pignose.calendar.min.css"/>
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.13.0/themes/prism.min.css" />
-    <style type="text/css">
-        .input-calendar {
-            display: block;
-            width: 100%;
-            max-width: 360px;
-            margin: 0 auto;
-            height: 3.2em;
-            line-height: 3.2em;
-            font: inherit;
-            padding: 0 1.2em;
-            border: 1px solid #d8d8d8;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
-            -o-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
-            -moz-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
-            -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
-        }
-
-        .btn-calendar {
-            display: block;
-            width: 100%;
-            max-width: 360px;
-            height: 3.2em;
-            line-height: 3.2em;
-            background-color: #52555a;
-            margin: 0 auto;
-            font-weight: 600;
-            color: #ffffff !important;
-            text-decoration: none !important;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
-            -o-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
-            -moz-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
-            -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
-        }
-
-        .btn-calendar:hover {
-            background-color: #5a6268;
-        }
-    </style>
 </head>
 
 <body>
@@ -62,17 +26,19 @@
     <div class="header">
         <img src="demo/img/pignose-logo.png" alt=""/>
         <h1>PIGNOSE Calendar</h1>
-        <a href="https://github.com/KennethanCeyer/PIGNOSE-Calendar" target="_blank" class="ui button primary">View
+        <a href="https://github.com/KennethanCeyer/pg-calendar" target="_blank" class="ui button black">View
             project on Github</a>
         <a href="https://github.com/KennethanCeyer/pg-calendar/wiki/Documentation" target="_blank"
            class="ui button blue">Documentation</a>
-        <a href="https://github.com/KennethanCeyer/PIGNOSE-Calendar/archive/master.zip" target="_blank"
+        <a href="https://github.com/KennethanCeyer/pg-calendar/archive/master.zip" target="_blank"
            class="ui button teal">Download</a>
         <h4 class="version">Latest version <strong></strong></h4>
     </div>
     <div id="basic" class="article">
-        <h3><span>Calendar</span></h3>
-        <h4>PIGNOSE Calendar is beautiful and eidetic jQuery date picker plguin.</h4>
+        <div class="title">
+            <h3><span>Calendar</span></h3>
+            <h4>PIGNOSE Calendar is beautiful and eidetic jQuery date picker plguin</h4>
+        </div>
         <div class="calendar"></div>
         <div class="box"></div>
         <ul class="ui top pointing secondary menu">
@@ -89,8 +55,10 @@
         </div>
     </div>
     <div id="input" class="article">
-        <h3><span>Input type</span></h3>
-        <h4>You can use calendar by input power ups.</h4>
+        <div class="title">
+            <h3><span>Input type</span></h3>
+            <h4>You can use calendar by input power ups</h4>
+        </div>
         <input type="text" class="input-calendar"/>
         <div class="box"></div>
         <ul class="ui top pointing secondary menu">
@@ -103,14 +71,16 @@
         <div role="tabpanel" class="ui tab segment" data-tab="javascript-input">
                 <pre><code class="language-js">$(function() {
     $('input.calendar').pignoseCalendar({
-		format: 'YYYY-MM-DD' // date format string. (2017-02-02)
+		format: 'YYYY-MM-DD' // date format <span class="ui label"><i class="fas fa-code"></i>string</span>. (2017-02-02)
 	});
 });</code></pre>
         </div>
     </div>
     <div id="modal" class="article">
-        <h3><span>Modal</span></h3>
-        <h4>You can display calendar by modal popup.</h4>
+        <div class="title">
+            <h3><span>Modal</span></h3>
+            <h4>You can display calendar by modal popup</h4>
+        </div>
         <a href="#" class="btn-calendar">Open Modal</a>
         <div class="box"></div>
         <ul class="ui top pointing secondary menu">
@@ -123,14 +93,16 @@
         <div role="tabpanel" class="ui tab segment" data-tab="javascript-modal">
                 <pre><code class="language-js">$(function() {
     $('a.calendar').pignoseCalendar({
-		format: 'YYYY-MM-DD' // date format string. (2017-02-02)
+		format: 'YYYY-MM-DD' // date format <span class="ui label"><i class="fas fa-code"></i>string</span>. (2017-02-02)
 	});
 });</code></pre>
         </div>
     </div>
     <div id="theme-dark" class="article">
-        <h3><span>Dark theme support</span></h3>
-        <h4>Dark theme type supports, And we have a plan to add other themes.</h4>
+        <div class="title">
+            <h3><span>Dark theme support</span></h3>
+            <h4>Dark theme type supports, And we have a plan to add other themes</h4>
+        </div>
         <div class="calendar-dark"></div>
         <div class="box"></div>
         <ul class="ui top pointing secondary menu">
@@ -149,7 +121,9 @@
         </div>
     </div>
     <div id="theme-blue" class="article">
-        <h3><span>Blue theme support</span></h3>
+        <div class="title">
+            <h3><span>Blue theme support</span></h3>
+        </div>
         <div class="calendar-blue"></div>
         <div class="box"></div>
         <ul class="ui top pointing secondary menu">
@@ -168,7 +142,9 @@
         </div>
     </div>
     <div id="schedules" class="article">
-        <h3><span>Schedule Calendar</span></h3>
+        <div class="title">
+            <h3><span>Schedule Calendar</span></h3>
+        </div>
         <div class="calendar-schedules"></div>
         <div class="box"></div>
         <ul class="ui top pointing secondary menu">
@@ -203,8 +179,10 @@
         </div>
     </div>
     <div id="multiple" class="article">
-        <h3><span>Multiple range Calendar</span></h3>
-        <h4>PIGNOSE Calendar supports multiple range picker.</h4>
+        <div class="title">
+            <h3><span>Multiple range Calendar</span></h3>
+            <h4>PIGNOSE Calendar supports multiple range picker</h4>
+        </div>
         <div class="multi-select-calendar"></div>
         <div class="box"></div>
         <ul class="ui top pointing secondary menu">
@@ -223,8 +201,10 @@
         </div>
     </div>
     <div id="toggle" class="article">
-        <h3><span>Toggle Calendar</span></h3>
-        <h4>You can toggle date and get those dates as array.</h4>
+        <div class="title">
+            <h3><span>Toggle Calendar</span></h3>
+            <h4>You can toggle date and get those dates as array</h4>
+        </div>
         <div class="toggle-calendar"></div>
         <div class="box"></div>
         <ul class="ui top pointing secondary menu">
@@ -246,8 +226,10 @@
         </div>
     </div>
     <div id="disabled" class="article">
-        <h3><span>Disabled Dates Calendar</span></h3>
-        <h4>You can turn off the specific dates.</h4>
+        <div class="title">
+            <h3><span>Disabled Dates Calendar</span></h3>
+            <h4>You can turn off the specific dates</h4>
+        </div>
         <div class="guide">
             <h5>You turned off dates below [random]</h5>
             <div class="guide-dates"></div>
@@ -274,8 +256,10 @@
         </div>
     </div>
     <div id="disabled-weekdays" class="article">
-        <h3><span>Disabled Weekdays Calendar</span></h3>
-        <h4>You can disable dates by specific weekday numbers (0 ~ 6, 0 is sunday).</h4>
+        <div class="title">
+            <h3><span>Disabled Weekdays Calendar</span></h3>
+            <h4>You can disable dates by specific weekday numbers (0 ~ 6, 0 is sunday)</h4>
+        </div>
         <div class="disabled-weekdays-calendar"></div>
         <div class="box"></div>
         <ul class="ui top pointing secondary menu">
@@ -294,8 +278,10 @@
         </div>
     </div>
     <div id="disabled-range" class="article">
-        <h3><span>Disabled Range Calendar</span></h3>
-        <h4>You can give disabled range(minimum, maximum) by date string(YYYY-MM-DD).</h4>
+        <div class="title">
+            <h3><span>Disabled Range Calendar</span></h3>
+            <h4>You can give disabled range(minimum, maximum) by date <span class="ui label"><i class="fas fa-code"></i>string</span>(YYYY-MM-DD)</h4>
+        </div>
         <div class="disabled-range-calendar"></div>
         <div class="box"></div>
         <ul class="ui top pointing secondary menu">
@@ -315,8 +301,10 @@
         </div>
     </div>
     <div id="disabled-multiple-range" class="article">
-        <h3><span>Disabled Multiple Ranges Calendar</span></h3>
-        <h4><strong>Advanced</strong> - You can give multiple disabled date ranges by string(YYYY-MM-DD).</h4>
+        <div class="title">
+            <h3><span>Disabled Multiple Ranges Calendar</span></h3>
+            <h4><strong>Advanced</strong> - You can give multiple disabled date ranges by <span class="ui label"><i class="fas fa-code"></i>string</span>(YYYY-MM-DD)</h4>
+        </div>
         <div class="disabled-ranges-calendar"></div>
         <div class="box"></div>
         <ul class="ui top pointing secondary menu">
@@ -348,8 +336,10 @@
         </div>
     </div>
     <div id="pick-weeks" class="article">
-        <h3><span>Multiple Weeks Calendar</span></h3>
-        <h4><strong>Advanced</strong> - You can turn on/off weeks date range by clicking.</h4>
+        <div class="title">
+            <h3><span>Multiple Weeks Calendar</span></h3>
+            <h4><strong>Advanced</strong> - You can turn on/off weeks date range by clicking</h4>
+        </div>
         <div class="pick-weeks-calendar"></div>
         <div class="box"></div>
         <ul class="ui top pointing secondary menu">
@@ -369,8 +359,10 @@
         </div>
     </div>
     <div id="i18n" class="article">
-        <h3><span>I18N Support</span></h3>
-        <h4>PIGNOSE Calendar supports various languages.</h4>
+        <div class="title">
+            <h3><span>I18N Support</span></h3>
+            <h4>PIGNOSE Calendar supports various languages.</h4>
+        </div>
 
         <div class="group">
             <h5>Korean</h5>
@@ -499,30 +491,26 @@
     </div>
     <div class="article">
         <h3><span>Dependency</span></h3>
-        <h4>This plugin has dependencies some javascript library.</h4>
-        <p>Check belows and import it.</p>
-        <ul>
-            <li>jQuery core library</li>
-            <li>Moment library</li>
-        </ul>
-        <br/>
-        <p>Or you can use full built-in script.</p>
-        <p>If you use it, you don't need to import any dependencies.</p>
-        <pre class="center"><code class="language-html">&lt;script type=&quot;javascript&quot; src=&quot;dist/js/pignose.calendar.full.min.js&quot;&gt;&lt;/script&gt;</code></pre>
+        <p>This plugin has dependencies some javascript library.</p>
+        <div class="ui piled segments">
+            <div class="ui segment"><strong><a href="https://www.npmjs.com/package/jquery" target="_blank">jquery</a></strong></div>
+            <div class="ui segment"><strong><a href="https://www.npmjs.com/package/jquery" target="_blank">moment</a></strong></div>
+        </div>
+        <p>or you can use full built-in script</p>
+        <pre><code class="language-html">&lt;script type=&quot;javascript&quot; src=&quot;dist/js/pignose.calendar.full.min.js&quot;&gt;&lt;/script&gt;</code></pre>
     </div>
     <div id="options" class="article">
         <h3><span>Options</span></h3>
         <table class="ui table celled">
             <colgroup>
-                <col style="width: 120px;">
+                <col style="width: 240px;">
+                <col style="width: 160px;">
                 <col>
-                <col>
-                <col>
-                <col>
+                <col style="width: 240px;">
             </colgroup>
             <thead>
             <tr>
-                <th colspan="2">name</th>
+                <th>name</th>
                 <th>type</th>
                 <th>description</th>
                 <th>default</th>
@@ -530,144 +518,143 @@
             </thead>
             <tbody>
             <tr>
-                <td colspan="2">lang</td>
-                <td class="center"><span class="ui label">string</span></td>
-                <td>A language to set to the Calendar.</td>
-                <td>en</td>
+                <td class="code inline"><pre><code class="language-javascript">lang</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>string</span></td>
+                <td>A language to set to the Calendar</td>
+                <td class="code inline"><pre><code class="language-javascript">'en'</code></pre></td>
             </tr>
             <tr>
-                <td colspan="2">theme</td>
-                <td class="center"><span class="ui label">string</span></td>
-                <td>A theme to set to the Calendar. (light, dark, blue).</td>
-                <td>light</td>
+                <td class="code inline"><pre><code class="language-javascript">theme</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>string</span></td>
+                <td>A theme to set to the Calendar. (light, dark, blue)</td>
+                <td class="code inline"><pre><code class="language-javascript">'light'</code></pre></td>
             </tr>
             <tr>
-                <td colspan="2">format</td>
-                <td class="center"><span class="ui label">string</span></td>
-                <td>The date format that you want to print to input element by value.</td>
-                <td>YYYY-MM-DD</td>
+                <td class="code inline"><pre><code class="language-javascript">format</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>string</span></td>
+                <td>The date format that you want to print to input element by value</td>
+                <td class="code inline"><pre><code class="language-javascript">'YYYY-MM-DD'</code></pre></td>
             </tr>
             <tr>
-                <td colspan="2">date</td>
-                <td class="center"><span class="ui label">moment date object</span></td>
-                <td>You can change auto initialized date at first.</td>
-                <td>moment()</td>
+                <td class="code inline"><pre><code class="language-javascript">date</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>moment</span></td>
+                <td>You can change auto initialized date at first</td>
+                <td class="code inline"><pre><code class="language-javascript">moment()</code></pre></td>
             </tr>
             <tr>
-                <td colspan="2">week</td>
-                <td class="center"><span class="ui label">number</span></td>
-                <td>Your first day of week (0: Sunday ~ 6: Saturday).</td>
-                <td>0</td>
+                <td class="code inline"><pre><code class="language-javascript">week</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>number</span></td>
+                <td>Your first day of week (0: Sunday ~ 6: Saturday)</td>
+                <td class="code inline"><pre><code class="language-javascript">0</code></pre></td>
             </tr>
             <tr>
-                <td colspan="2">initialize</td>
-                <td class="center"><span class="ui label">boolean</span></td>
-                <td>You can turn on/off initialized date or set the initial date by this option.</td>
-                <td>true</td>
+                <td class="code inline"><pre><code class="language-javascript">initialize</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>boolean</span></td>
+                <td>You can turn on/off initialized date or set the initial date by this option</td>
+                <td class="code inline"><pre><code class="language-javascript">true</code></pre></td>
             </tr>
             <tr>
-                <td colspan="2">modal</td>
-                <td class="center"><span class="ui label">boolean</span></td>
-                <td>If you want display calendar as modal, You can use by setting modal option to true.</td>
-                <td>false</td>
+                <td class="code inline"><pre><code class="language-javascript">modal</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>boolean</span></td>
+                <td>If you want display calendar as modal, You can use by setting modal option to true</td>
+                <td class="code inline"><pre><code class="language-javascript">false</code></pre></td>
             </tr>
             <tr>
-                <td colspan="2">buttons</td>
-                <td class="center"><span class="ui label">boolean</span></td>
-                <td>If you are using input type calendar, You can add button controller for confirm by user.</td>
-                <td>false</td>
+                <td class="code inline"><pre><code class="language-javascript">buttons</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>boolean</span></td>
+                <td>If you are using input type calendar, You can add button controller for confirm by user</td>
+                <td class="code inline"><pre><code class="language-javascript">false</code></pre></td>
             </tr>
             <tr>
-                <td colspan="2">toggle</td>
-                <td class="center"><span class="ui label">boolean</span></td>
-                <td>If you set true this option, You can use toggle on your Calendar.</td>
-                <td>false</td>
+                <td class="code inline"><pre><code class="language-javascript">toggle</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>boolean</span></td>
+                <td>If you set true this option, You can use toggle on your Calendar</td>
+                <td class="code inline"><pre><code class="language-javascript">false</code></pre></td>
             </tr>
             <tr>
-                <td colspan="2">reverse</td>
-                <td class="center"><span class="ui label">boolean</span></td>
+                <td class="code inline"><pre><code class="language-javascript">reverse</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>boolean</span></td>
                 <td>If you toggle option turned on and this option also set true, Inital calendar dates start as
-                    inactive.
+                    inactive
                 </td>
-                <td>false</td>
+                <td class="code inline"><pre><code class="language-javascript">false</code></pre></td>
             </tr>
             <tr>
-                <td colspan="2">multiple</td>
-                <td class="center"><span class="ui label">boolean</span></td>
-                <td>If you set true this option, You can use multiple picker on your Calendar.</td>
-                <td>false</td>
+                <td class="code inline"><pre><code class="language-javascript">multiple</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>boolean</span></td>
+                <td>If you set true this option, You can use multiple picker on your Calendar</td>
+                <td class="code inline"><pre><code class="language-javascript">false</code></pre></td>
             </tr>
             <tr>
-                <td colspan="2">pickWeeks</td>
-                <td class="center"><span class="ui label">boolean</span></td>
-                <td>If you set true this option, You can use multiple range picker by one click on your Calendar.</td>
-                <td>false</td>
+                <td class="code inline"><pre><code class="language-javascript">pickWeeks</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>boolean</span></td>
+                <td>If you set true this option, You can use multiple range picker by one click on your Calendar</td>
+                <td class="code inline"><pre><code class="language-javascript">false</code></pre></td>
             </tr>
             <tr>
-                <td colspan="2">selectOver</td>
-                <td class="center"><span class="ui label">boolean</span></td>
-                <td>If you set true this option, You can pass the check of disabled dates when multiple mode enabled.
+                <td class="code inline"><pre><code class="language-javascript">selectOver</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>boolean</span></td>
+                <td>If you set true this option, You can pass the check of disabled dates when multiple mode enabled
                 </td>
-                <td>false</td>
+                <td class="code inline"><pre><code class="language-javascript">false</code></pre></td>
             </tr>
             <tr>
-                <td colspan="2">enabledDates</td>
-                <td class="center"><span class="ui label">array</span></td>
-                <td>You can set enabled dates by using date string array by formatted to 'YYYY-MM-DD'.</td>
-                <td>[]</td>
+                <td class="code inline"><pre><code class="language-javascript">enabledDates</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>array</span></td>
+                <td>You can set enabled dates by using date <span class="code inline"><code class="language-javascript">string</code></span> array by formatted to 'YYYY-MM-DD'</td>
+                <td class="code inline"><pre><code class="language-javascript">[]</code></pre></td>
             </tr>
             <tr>
-                <td colspan="2">disabledDates</td>
-                <td class="center"><span class="ui label">array</span></td>
-                <td>You can set disabled dates by using date string array by formatted to 'YYYY-MM-DD'.</td>
-                <td>[]</td>
+                <td class="code inline"><pre><code class="language-javascript">disabledDates</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>array</span></td>
+                <td>You can set disabled dates by using date <span class="code inline"><code class="language-javascript">string</code></span> array by formatted to 'YYYY-MM-DD'</td>
+                <td class="code inline"><pre><code class="language-javascript">[]</code></pre></td>
             </tr>
             <tr>
-                <td colspan="2">disabledWeekdays</td>
-                <td class="center"><span class="ui label">array</span></td>
+                <td class="code inline"><pre><code class="language-javascript">disabledWeekdays</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>array</span></td>
                 <td>You can set disabled date by using a weekday number array (This is a sequential number start from
-                    0 [sunday]).
+                    0 [sunday])
                 </td>
-                <td>[]</td>
+                <td class="code inline"><pre><code class="language-javascript">[]</code></pre></td>
             </tr>
             <tr>
-                <td colspan="2">disabledRanges</td>
-                <td class="center"><span class="ui label">array</span></td>
+                <td class="code inline"><pre><code class="language-javascript">disabledRanges</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>array</span></td>
                 <td>This option is advanced way to using disable settings, You can give multiple disabled range by
                     double
-                    array date string by formatted to 'YYYY-MM-DD'.
+                    array date <span class="code inline"><code class="language-javascript">string</code></span> by formatted to 'YYYY-MM-DD'
                 </td>
-                <td>[]</td>
+                <td class="code inline"><pre><code class="language-javascript">[]</code></pre></td>
             </tr>
             <tr>
-                <td colspan="2">schedules</td>
-                <td class="center"><span class="ui label">array</span></td>
-                <td>Set and array of events to pin on calendar. Each event is an object that must contain a date string
+                <td class="code inline"><pre><code class="language-javascript">schedules</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>array</span></td>
+                <td>Set and array of events to pin on calendar. Each event is an object that must contain a date <span class="code inline"><code class="language-javascript">string</code></span>
                     formatted to 'YYYY-MM-DD' and class key that belong to classOnEvents dictionary indicating its
                     color on calendar. Events with not color class suitable are all pin with <span
-                            style="display: inline-block; width: .8em; height: .8em; background-color: #5c6270;"></span>&nbsp;#5c6270.
+                        style="display: inline-block; width: .8em; height: .8em; background-color: #5c6270;"></span>&nbsp;#5c6270
                     Issues may arise when the number of color class increase, this could break the calendar cell.
                 </td>
-                <td>[]</td>
+                <td class="code inline"><pre><code class="language-javascript">[]</code></pre></td>
             </tr>
             <tr>
-                <td>scheduleOptions</td>
-                <td>colors</td>
-                <td class="center"><span class="ui label">object</span></td>
-                <td>Set a dictionary with class 'key' and color code 'value' used for pin events class by date.</td>
-                <td>{}</td>
+                <td class="code inline"><pre><code class="language-javascript">scheduleOptions.colors</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>object</span></td>
+                <td>Set a dictionary with class 'key' and color code 'value' used for pin events class by date</td>
+                <td class="code inline"><pre><code class="language-javascript">{}</code></pre></td>
             </tr>
             <tr>
-                <td colspan="2">minDate</td>
-                <td class="center"><span class="ui label">string</span></td>
-                <td>You can give a minimum disable date range by 'YYYY-MM-DD' formatted string.</td>
-                <td>null</td>
+                <td class="code inline"><pre><code class="language-javascript">minDate</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>string</span></td>
+                <td>You can give a minimum disable date range by 'YYYY-MM-DD' formatted <span class="code inline"><code class="language-javascript">string</code></span></td>
+                <td class="code inline"><pre><code class="language-javascript">null</code></pre></td>
             </tr>
             <tr>
-                <td colspan="2">maxDate</td>
-                <td class="center"><span class="ui label">array</span></td>
-                <td>You can give a maximum disable date range by 'YYYY-MM-DD' formatted string.</td>
-                <td>null</td>
+                <td class="code inline"><pre><code class="language-javascript">maxDate</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>array</span></td>
+                <td>You can give a maximum disable date range by 'YYYY-MM-DD' formatted <span class="code inline"><code class="language-javascript">string</code></span></td>
+                <td class="code inline"><pre><code class="language-javascript">null</code></pre></td>
             </tr>
             </tbody>
         </table>
@@ -676,73 +663,68 @@
         <h3><span>Callbacks</span></h3>
         <table class="ui table celled">
             <colgroup>
-                <col style="width: 120px;">
-                <col>
-                <col>
-                <col style="width: 180px;">
+                <col style="width: 240px;">
+                <col style="width: 160px;">
                 <col>
             </colgroup>
             <thead>
             <tr>
-                <th colspan="2">name</th>
+                <th>name</th>
                 <th>type</th>
-                <th>arguments</th>
                 <th>description</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td colspan="2">init</td>
-                <td class="center"><span class="ui label">function</span></td>
-                <td class="center"><span class="ui label">context</span></td>
+                <td class="code inline"><pre><code class="language-javascript">init(context)</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>function</span></td>
                 <td>This callback will be called once when you call the pignoseCalendar plugin and created calendar
-                    view.
+                    view
                 </td>
             </tr>
             <tr>
-                <td colspan="2">page</td>
-                <td class="center"><span class="ui label">function</span></td>
-                <td class="center"><span class="ui label">info</span>, <span class="ui label">context</span></td>
-                <td>This callback will be called when you click prev, next arrow button on the top of calendar.</td>
+                <td class="code inline"><pre><code class="language-javascript">page(info, context)</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>function</span></td>
+                <td>This callback will be called when you click prev, next arrow button on the top of calendar</td>
             </tr>
             <tr>
-                <td colspan="2">prev</td>
-                <td class="center"><span class="ui label">function</span></td>
-                <td class="center"><span class="ui label">info</span>, <span class="ui label">context</span></td>
-                <td>This callback will be called when you click prev arrow button on the top of calendar.</td>
+                <td class="code inline"><pre><code class="language-javascript">prev(info, context)</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>function</span></td>
+                <td>This callback will be called when you click prev arrow button on the top of calendar</td>
             </tr>
             <tr>
-                <td colspan="2">next</td>
-                <td class="center"><span class="ui label">function</span></td>
-                <td class="center"><span class="ui label">info</span>, <span class="ui label">context</span></td>
-                <td>This callback will be called when you click next arrow button on the top of calendar.</td>
+                <td class="code inline"><pre><code class="language-javascript">next(info, context)</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>function</span></td>
+                <td>This callback will be called when you click next arrow button on the top of calendar</td>
             </tr>
             <tr>
-                <td colspan="2">select</td>
-                <td class="center"><span class="ui label">function</span></td>
-                <td class="center"><span class="ui label">date</span>, <span class="ui label">context</span></td>
-                <td>This callback will be called when you select a date of calendar except disabled date (date click).
+                <td class="code inline"><pre><code class="language-javascript">select(date, context)</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>function</span></td>
+                <td>This callback will be called when you select a date of calendar except disabled date (date click)
                 </td>
             </tr>
             <tr>
-                <td colspan="2">click</td>
-                <td class="center"><span class="ui label">function</span></td>
-                <td class="center"><span class="ui label">event</span>, <span class="ui label">context</span></td>
-                <td>This callback will be called when you click a date of calendar (date click).</td>
+                <td class="code inline"><pre><code class="language-javascript">click(event, context)</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>function</span></td>
+                <td>This callback will be called when you click a date of calendar (date click)</td>
             </tr>
             <tr>
-                <td colspan="2">apply</td>
-                <td class="center"><span class="ui label">function</span></td>
-                <td class="center"><span class="ui label">date</span>, <span class="ui label">context</span></td>
-                <td>This callback will be called when you apply a date of calendar. (OK button click).</td>
+                <td class="code inline"><pre><code class="language-javascript">apply(date, context)</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>function</span></td>
+                <td>This callback will be called when you apply a date of calendar. (OK button click)</td>
             </tr>
             </tbody>
         </table>
     </div>
     <div id="methods" class="article">
         <h3><span>Methods</span></h3>
-        <h4>You can use the method like <span
-                class="ui label blue">$element.pignoseCalendar('Method Name', arguments);</span> format.</h4>
+        <p>
+            You can use the method like
+            <span class="code inline">
+                <code class="language-javascript">$element.pignoseCalendar('method name', arguments);</code>
+            </span>
+            format.
+        </p>
         <table class="ui table celled">
             <thead>
             <tr>
@@ -753,75 +735,69 @@
             </thead>
             <tbody>
             <tr>
-                <td>set</td>
-                <td class="center"><span class="ui label">function</span></td>
+                <td class="code inline"><pre><code class="language-javascript">set(date)</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>function</span></td>
                 <td>
                     You can set the specific date on calendar dynamically.<br/>
-                    The first parameter must be <span class="ui label">date string</span> or <span class="ui label">moment</span>
+                    The first parameter must <span class="code inline"><code class="language-javascript">string</code></span> or <span class="code inline"><code class="language-javascript">moment</code></span>
                     type.
                 </td>
             </tr>
             <tr>
-                <td>select</td>
-                <td class="center"><span class="ui label">function</span></td>
-                <td>You can click day by using this method, First argument must be <span class="ui label">integer</span>
+                <td class="code inline"><pre><code class="language-javascript">select(day)</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>function</span></td>
+                <td>You can click day by using this method, First argument must be <span class="code inline"><code class="language-javascript">number</code></span>
                     type.
                 </td>
             </tr>
             <tr>
-                <td>setting</td>
-                <td class="center"><span class="ui label">function</span></td>
+                <td class="code inline"><pre><code class="language-javascript">setting(object)</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>function</span></td>
                 <td>You can set the setting option dynamically, The option is the same you gave when initialize the
-                    plugin.
+                    plugin
                 </td>
             </tr>
             <tr>
-                <td>configure</td>
-                <td class="center"><span class="ui label">function</span></td>
+                <td class="code inline"><pre><code class="language-javascript">configure(object)</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>function</span></td>
                 <td>
-                    You can set the global setting by using this method.<br/>
-                    If you set default language entirely, Use this method.
+                    You can set the global setting by using this method, If you set default language entirely, Use this method
                 </td>
             </tr>
             <tr>
-                <td>init</td>
-                <td class="center"><span class="ui label">function</span></td>
+                <td class="code inline"><pre><code class="language-javascript">init()</code></pre></td>
+                <td class="center"><span class="ui label"><i class="fas fa-code"></i>function</span></td>
                 <td>
                     This method is used internal of the plugin.<br/>
-                    Use the syntax sugar <span class="ui label">$(element).pignoseCalendar()</span> pattern.<br/>
-                    It is exactly the same one as above pattern.
+                    Use the syntax sugar <span class="code inline"><code class="language-javascript">$element.pignoseCalendar()</code></span> pattern<br/>
+                    It is exactly the same one as above pattern
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
-    <div id="bower" class="article">
-        <h3><span>bower</span></h3>
-        <blockquote>
-            <p>If you use bower.</p>
-        </blockquote>
-        <pre><code class="language-bash">$ bower install pg-calendar</code></pre>
+    <div id="star" class="article">
+        <h3>
+            <span>😗 do star it!</span>
+        </h3>
+        <p>If you enjoyed it, please just click the star into below github link</p>
+        <a href="https://github.com/KennethanCeyer/pg-calendar" target="_blank" class="ui black button thin">
+            <i class="fab fa-github-alt"></i>
+            GitHub
+        </a>
     </div>
     <div id="npm" class="article">
         <h3><span>npm</span></h3>
-        <blockquote>
-            <p>If you use npm.</p>
-        </blockquote>
         <pre><code class="language-bash">$ npm install pg-calendar</code></pre>
     </div>
     <div id="yarn" class="article">
         <h3><span>yarn</span></h3>
-        <blockquote>
-            <p>If you use yarn.</p>
-        </blockquote>
         <pre><code class="language-bash">$ yarn add pg-calendar</code></pre>
     </div>
 </div>
-<script type="text/javascript" src="demo/js/jquery.latest.min.js"></script>
-<script type="text/javascript" src="demo/js/semantic.ui.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.13.0/prism.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.13.0/components/prism-javascript.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.13.0/components/prism-json.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
 <script type="text/javascript" src="dist/js/pignose.calendar.full.min.js"></script>
 <script type="text/javascript">
     //<![CDATA[
@@ -1014,7 +990,7 @@
 
                 for (var idx in context.storage.activeDates) {
                     var date = context.storage.activeDates[idx];
-                    if (typeof date !== 'string') {
+                    if (typeof date !== '<span class="ui label"><i class="fas fa-code"></i>string</span>') {
                         continue;
                     }
                     $target.find('.active-dates').append('<span class="ui label default">' + date + '</span>');
@@ -1106,5 +1082,10 @@
     });
     //]]>
 </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.13.0/prism.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.13.0/components/prism-javascript.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.13.0/components/prism-typescript.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.13.0/components/prism-json.min.js"></script>
+<script type="text/javascript" src="https://twemoji.maxcdn.com/2/twemoji.min.js?2.5"></script>
 </body>
 </html>
