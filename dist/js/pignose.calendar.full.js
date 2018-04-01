@@ -456,7 +456,7 @@ define("almond", function(){});
 define('component/models',[], function () {
   var models = {
     name: 'pignoseCalendar',
-    version: '1.4.28',
+    version: '1.4.29',
     preference: {
       supports: {
         themes: ['light', 'dark', 'blue']
