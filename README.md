@@ -3,6 +3,7 @@
 Beautiful and eidetic jQuery date picker plugin.
 
 [![Build Status](https://travis-ci.org/KennethanCeyer/pg-calendar.svg?branch=master)](https://travis-ci.org/KennethanCeyer/pg-calendar) [![Coverage Status](https://coveralls.io/repos/github/KennethanCeyer/pg-calendar/badge.svg?branch=master)](https://coveralls.io/github/KennethanCeyer/pg-calendar?branch=master) [![codecov](https://codecov.io/gh/KennethanCeyer/pg-calendar/branch/master/graph/badge.svg)](https://codecov.io/gh/KennethanCeyer/pg-calendar)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FKennethanCeyer%2Fpg-calendar.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FKennethanCeyer%2Fpg-calendar?ref=badge_shield)
 
 [![npm version](https://badge.fury.io/js/pg-calendar.svg)](https://badge.fury.io/js/pg-calendar) [![npm downloads](https://img.shields.io/npm/dm/pg-calendar.svg?maxAge=2592000)](https://www.npmjs.com/package/pg-calendar) [![Bower version](https://badge.fury.io/bo/pg-calendar.svg)](https://badge.fury.io/bo/pg-calendar) [![GitHub license](https://img.shields.io/github/license/KennethanCeyer/pg-calendar.svg)](https://github.com/KennethanCeyer/pg-calendar/blob/master/LICENSE) [![Join the chat at https://gitter.im/KennethanCeyer/PIGNOSE](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/KennethanCeyer/PIGNOSE?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -179,3 +180,7 @@ Please send me a message to use either [gitter](https://gitter.im/KennethanCeyer
 - extended option usage `time picker`
 - advanced option `custom button (today, last 7days, last 30 days, last a month, last 6 month, last year)`
 - advanced option `attach below of input`
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FKennethanCeyer%2Fpg-calendar.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FKennethanCeyer%2Fpg-calendar?ref=badge_large)
