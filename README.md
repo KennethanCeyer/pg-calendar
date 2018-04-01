@@ -5,21 +5,24 @@
 <p align="center"><a href="https://nodei.co/npm/pg-calendar/"><img src="https://nodei.co/npm/pg-calendar.png" alt="NPM"></a></p>
 
 <p align="center">
- <a href="https://travis-ci.org/KennethanCeyer/pg-calendar"><img src="https://travis-ci.org/KennethanCeyer/pg-calendar.svg?branch=master" alt="Build Status"></a>
- <a href="https://coveralls.io/github/KennethanCeyer/pg-calendar?branch=master"><img src="https://coveralls.io/repos/github/KennethanCeyer/pg-calendar/badge.svg?branch=master" alt="Coverage Status"></a>
- <a href="https://codecov.io/gh/KennethanCeyer/pg-calendar"><img src="https://codecov.io/gh/KennethanCeyer/pg-calendar/branch/master/graph/badge.svg" alt="codecov"></a>
+  <a href="https://travis-ci.org/KennethanCeyer/pg-calendar"><img src="https://travis-ci.org/KennethanCeyer/pg-calendar.svg?branch=master" alt="Build Status"></a>
+  <a href="https://coveralls.io/github/KennethanCeyer/pg-calendar?branch=master"><img src="https://coveralls.io/repos/github/KennethanCeyer/pg-calendar/badge.svg?branch=master" alt="Coverage Status"></a>
+  <a href="https://codecov.io/gh/KennethanCeyer/pg-calendar"><img src="https://codecov.io/gh/KennethanCeyer/pg-calendar/branch/master/graph/badge.svg" alt="codecov"></a>
 </p>
 
 <p align="center">
- <a href="https://badge.fury.io/js/pg-calendar"><img src="https://badge.fury.io/js/pg-calendar.svg" alt="npm version"></a>
- <a href="https://www.npmjs.com/package/pg-calendar"><img src="https://img.shields.io/npm/dm/pg-calendar.svg?maxAge=2592000" alt="npm downloads"></a>
- <a href="https://github.com/KennethanCeyer/pg-calendar/blob/master/LICENSE"><img src="https://img.shields.io/github/license/KennethanCeyer/pg-calendar.svg" alt="GitHub license"></a>
- <a href="https://gitter.im/KennethanCeyer/PIGNOSE?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/KennethanCeyer/PIGNOSE"></a>
+  <a href="https://badge.fury.io/js/pg-calendar"><img src="https://badge.fury.io/js/pg-calendar.svg" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/pg-calendar"><img src="https://img.shields.io/npm/dm/pg-calendar.svg?maxAge=2592000" alt="npm downloads"></a>
+  <a href="https://github.com/KennethanCeyer/pg-calendar/blob/master/LICENSE"><img src="https://img.shields.io/github/license/KennethanCeyer/pg-calendar.svg" alt="GitHub license"></a>
+  <a href="https://gitter.im/KennethanCeyer/PIGNOSE?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/KennethanCeyer/PIGNOSE"></a>
 </p>
 
 <p align="center">
- <a href="https://david-dm.org/kennethanceyer/pg-calendar"><img src="https://david-dm.org/kennethanceyer/pg-calendar/status.svg" alt="dependencies Status"></a>
- <a href="https://david-dm.org/kennethanceyer/pg-calendar?type=dev"><img src="https://david-dm.org/kennethanceyer/pg-calendar/dev-status.svg" alt="devDependencies Status"></a>
+  <a href="https://www.codefactor.io/repository/github/kennethanceyer/pg-calendar"><img src="https://www.codefactor.io/repository/github/kennethanceyer/pg-calendar/badge" /></a>
+  <a href="https://codeclimate.com/github/KennethanCeyer/pg-calendar/maintainability"><img src="https://api.codeclimate.com/v1/badges/e46890fbd4a5f14603b4/maintainability" /></a>
+  <a href="https://codeclimate.com/github/KennethanCeyer/pg-calendar/test_coverage"><img src="https://api.codeclimate.com/v1/badges/e46890fbd4a5f14603b4/test_coverage" /></a>
+  <a href="https://david-dm.org/kennethanceyer/pg-calendar"><img src="https://david-dm.org/kennethanceyer/pg-calendar/status.svg" alt="dependencies Status"></a>
+  <a href="https://david-dm.org/kennethanceyer/pg-calendar?type=dev"><img src="https://david-dm.org/kennethanceyer/pg-calendar/dev-status.svg" alt="devDependencies Status"></a>
 </p>
 
 ## :clap: Getting started
