@@ -1,0 +1,6 @@
+exclude_patterns:
+- src/**/*.spec.ts
+- dist/**/*
+- demo/**/*
+- docs/**/*
+- examples/**/*

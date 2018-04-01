@@ -16,3 +16,4 @@ script:
 after_success:
   - npm run coverage
   - npm run clean
+  - CODECLIMATE_REPO_TOKEN=191371dd88a596d5362fd89c93fd5de9ab71205a6c7291e3fbdffed2ce7621ef codeclimate-test-reporter < ./coverage/lcov.info
