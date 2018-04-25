@@ -424,6 +424,9 @@ define([
 
               if (iDate.diff(moment(disabledRange[0])) >= 0 && iDate.diff(moment(disabledRange[1])) <= 0) {
                 $unit.addClass(helper.getSubClass('unitDisabled')).addClass(helper.getSubClass('unitDisabledRange')).addClass(helper.getSubClass('unitDisabledMultipleRange'));
+                if(disabledRange[2] !== undefined) {
+                  $unit.addClass(disabledRange[2]);
+                }
                 break;
               }
             }
