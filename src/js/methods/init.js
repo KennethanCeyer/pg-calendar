@@ -56,8 +56,8 @@ define([
         const toggleInactiveClass = helper.getSubClass('unitToggleInactive');
         let $calendarButton = null;
 
-        return context.each(function () {
-            const $this = $(this);
+        return context.each((_, element) => {
+            const $this = $(element);
             const local = {
                 initialize: null,
                 element: $this,
@@ -92,13 +92,13 @@ define([
                 local.calendar.addClass(helper.getSubClass('default'));
 
             for (let i = context.settings.week; i < context.settings.weeks.length + context.settings.week; i++) {
-                if (i < 0) {
+                if (i < 0)
                     i = global.languages.weeks.en.length - i;
-                }
+
                 let week = context.settings.weeks[i % context.settings.weeks.length];
-                if (typeof week !== 'string') {
+                if (typeof week !== 'string')
                     continue;
-                }
+
                 week = week.toUpperCase();
                 const $unit = $(helper.format('<div class="{0} {0}-{2}">{1}</div>', helper.getSubClass('week'), week, global.languages.weeks.en[i % global.languages.weeks.en.length].toLowerCase()));
                 $unit.appendTo(local.calendar.find(`.${classNames.header}`));
@@ -159,7 +159,7 @@ define([
                             $parent.addClass(wrapperActiveClass);
                         }, 25);
                     })
-                    .bind('focus', event => $(this.currentTarget).blur());
+                    .bind('focus', event => $(event.currentTarget).blur());
 
                 $parent
                     .unbind(`cancel.${helper.getClass(models.name)} apply.${helper.getClass(models.name)}`)
@@ -180,11 +180,8 @@ define([
                 const firstDateIsUndered = (firstDate.format('YYYY-MM-DD') !== firstSelectDate);
                 const lastDateIsOvered = (lastDate.format('YYYY-MM-DD') !== lastSelectDate);
 
-                if (!firstDateIsUndered)
-                    firstDate.add(1, 'days');
-
-                if (!lastDateIsOvered)
-                    lastDate.add(-1, 'days');
+                if (!firstDateIsUndered) firstDate.add(1, 'days');
+                if (!lastDateIsOvered) lastDate.add(-1, 'days');
 
                 const firstDateFixed = firstDate.format('YYYY-MM-DD');
                 const lastDateFixed = lastDate.format('YYYY-MM-DD');
@@ -203,12 +200,8 @@ define([
                 }
             };
 
-            const existsBetweenRange = (startDate, endDate, targetDate) => {
-                if (!targetDate)
-                    return false;
-
-                return startDate.diff(targetDate) < 0 && endDate.diff(targetDate) > 0
-            };
+            const existsBetweenRange = (startDate, endDate, targetDate) =>
+                targetDate && startDate.diff(targetDate) < 0 && endDate.diff(targetDate) > 0;
 
             const validDate = date => {
                 if (context.settings.disabledDates.includes(date)) return false;
@@ -286,12 +279,12 @@ define([
 
                 if (context.settings.buttons && $calendarButton) {
                     const $super = $this;
-                    $calendarButton.find('.' + classNames.button).bind('click', event => {
+                    $calendarButton.find(`.${classNames.button}`).bind('click', event => {
                         event.preventDefault();
                         event.stopPropagation();
-                        const $this = $(this.currentTarget);
+                        const $this = $(event.currentTarget);
 
-                        if ($this.hasClass(classNames.button + '-apply')) {
+                        if ($this.hasClass(`${classNames.button}-apply`)) {
                             $this.trigger('apply.' + models.name, local);
                             let value = '';
                             if (context.settings.toggle)
@@ -317,10 +310,11 @@ define([
 
                             if (typeof context.settings.apply === 'function')
                                 context.settings.apply.call(local.calendar, local.current, local);
-                            $parent.triggerHandler('apply.' + helper.getClass(models.name));
+
+                            $parent.triggerHandler(`apply.${helper.getClass(models.name)}`);
                         }
                         else
-                            $parent.triggerHandler('cancel.' + helper.getClass(models.name));
+                            $parent.triggerHandler(`cancel.${helper.getClass(models.name)}`);
                     });
                 }
 
@@ -330,19 +324,23 @@ define([
                 let firstWeekday = firstDate.weekday() - context.settings.week;
                 let lastWeekday = lastDate.weekday() - context.settings.week;
 
-                if (firstWeekday < 0) {
+                if (firstWeekday < 0)
                     firstWeekday += context.settings.weeks.length;
-                }
 
-                const $unitList = [], currentFormat = [
+                const $unitList = [];
+                const currentFormat = [
                         local.current[0] === null ? null : local.current[0].format('YYYY-MM-DD'),
                         local.current[1] === null ? null : local.current[1].format('YYYY-MM-DD')
-                    ], minDate = context.settings.minDate === null ? null : moment(context.settings.minDate),
-                    maxDate = context.settings.maxDate === null ? null : moment(context.settings.maxDate);
+                    ];
+                const minDate = context.settings.minDate === null ? null : moment(context.settings.minDate);
+                const maxDate = context.settings.maxDate === null ? null : moment(context.settings.maxDate);
 
                 for (let i = 0; i < firstWeekday; i++) {
-                    var $unit = $(helper.format('<div class="{0} {0}-{1}"></div>', helper.getSubClass('unit'), global.languages.weeks.en[i].toLowerCase()));
-                    $unitList.push($unit);
+                    $unitList.push($(helper.format(
+                        '<div class="{0} {0}-{1}"></div>',
+                        helper.getSubClass('unit'),
+                        global.languages.weeks.en[i].toLowerCase()
+                    )));
                 }
 
                 for (let i = local.dateManager.firstDay; i <= local.dateManager.lastDay; i++) {
@@ -359,7 +357,9 @@ define([
                         context.settings.disabledWeekdays.length &&
                         context.settings.disabledWeekdays.includes(iDate.weekday())
                     )
-                        $unit.addClass(helper.getSubClass('unitDisabled')).addClass(helper.getSubClass('unitDisabledWeekdays'));
+                        $unit
+                            .addClass(helper.getSubClass('unitDisabled'))
+                            .addClass(helper.getSubClass('unitDisabledWeekdays'));
                     else if (
                         (minDate !== null && minDate.diff(iDate) > 0) ||
                         (maxDate !== null && maxDate.diff(iDate) < 0)
@@ -369,7 +369,7 @@ define([
                     else if ($.inArray(iDateFormat, context.settings.disabledDates) !== -1) {
                         $unit.addClass(helper.getSubClass('unitDisabled'));
                     }
-                    else if (context.settings.disabledRanges.length > 0) {
+                    else if (context.settings.disabledRanges.length) {
                         const disabledRangesLength = context.settings.disabledRanges.length;
                         for (let j = 0; j < disabledRangesLength; j++) {
                             const disabledRange = context.settings.disabledRanges[j];
@@ -381,7 +381,7 @@ define([
                     }
 
                     if (
-                        context.settings.schedules.length > 0 &&
+                        context.settings.schedules.length &&
                         typeof context.settings.scheduleOptions === 'object' &&
                         typeof context.settings.scheduleOptions.colors === 'object'
                     ) {
@@ -441,14 +441,14 @@ define([
                         else {
                             if (local.input && !context.settings.multiple && !context.settings.buttons) {
                                 $super.val(moment(date).format(context.settings.format));
-                                $parent.triggerHandler('apply.' + helper.getClass(models.name));
+                                $parent.triggerHandler(`apply.${helper.getClass(models.name)}`);
                             }
                             else if (
-                                local.initialize &&
-                                local.initialize.format('YYYY-MM-DD') !== date &&
-                                !context.settings.toggle
+                                !local.initialize ||
+                                local.initialize.format('YYYY-MM-DD') !== date ||
+                                context.settings.toggle
                             ) {
-                                if (context.settings.toggle === true) {
+                                if (context.settings.toggle) {
                                     const match = local.storage.activeDates.filter(activeDate => activeDate === date);
                                     local.current[position] = moment(date);
 
@@ -487,18 +487,30 @@ define([
                                     if (context.settings.pickWeeks) {
                                         if ($this.hasClass(activeClass) || $this.hasClass(rangeClass)) {
                                             for (let j = 0; j < 2; j++) {
-                                                local.calendar.find('.' + activeClass + '.' + activePositionClasses[j]).removeClass(activeClass).removeClass(activePositionClasses[j]);
+                                                local.calendar
+                                                    .find(`.${activeClass}.${activePositionClasses[j]}`)
+                                                    .removeClass(activeClass)
+                                                    .removeClass(activePositionClasses[j]);
+                                                local.current[j] = null;
                                             }
-
-                                            local.current[0] = null;
-                                            local.current[1] = null;
                                         } else {
                                             local.current[0] = moment(date).startOf('week').add(context.settings.week, 'days');
                                             local.current[1] = moment(date).endOf('week').add(context.settings.week, 'days');
 
                                             for (let j = 0; j < 2; j++) {
-                                                local.calendar.find('.' + activeClass + '.' + activePositionClasses[j]).removeClass(activeClass).removeClass(activePositionClasses[j]);
-                                                local.calendar.find(helper.format('.{0}[data-date="{1}"]', helper.getSubClass('unit'), local.current[j].format('YYYY-MM-DD'))).addClass(activeClass).addClass(activePositionClasses[j]);
+                                                local.calendar
+                                                    .find(`.${activeClass}.${activePositionClasses[j]}`)
+                                                    .removeClass(activeClass)
+                                                    .removeClass(activePositionClasses[j]);
+
+                                                local.calendar
+                                                    .find(helper.format(
+                                                        '.{0}[data-date="{1}"]',
+                                                        helper.getSubClass('unit'),
+                                                        local.current[j].format('YYYY-MM-DD')
+                                                    ))
+                                                    .addClass(activeClass)
+                                                    .addClass(activePositionClasses[j]);
                                             }
                                         }
                                     } else {
@@ -510,31 +522,30 @@ define([
                                             else {
                                                 position = 0;
                                                 local.current[1] = null;
-                                                local.calendar.find('.' + activeClass + '.' + activePositionClasses[1]).removeClass(activeClass).removeClass(activePositionClasses[1]);
+                                                local.calendar
+                                                    .find(`.${activeClass}.${activePositionClasses[1]}`)
+                                                    .removeClass(activeClass)
+                                                    .removeClass(activePositionClasses[1]);
                                             }
                                         }
 
-                                        local.calendar.find('.' + activeClass + '.' + activePositionClasses[position]).removeClass(activeClass).removeClass(activePositionClasses[position]);
+                                        local.calendar
+                                            .find(`.${activeClass}.${activePositionClasses[position]}`)
+                                            .removeClass(activeClass)
+                                            .removeClass(activePositionClasses[position]);
                                         $this.addClass(activeClass).addClass(activePositionClasses[position]);
                                         local.current[position] = moment(date);
                                     }
 
                                     if (local.current[0] && local.current[1]) {
                                         if (local.current[0].diff(local.current[1]) > 0) {
-                                            let tmp = local.current[0];
+                                            const tmp = local.current[0];
                                             local.current[0] = local.current[1];
                                             local.current[1] = tmp;
-                                            tmp = null;
 
-                                            local.calendar
-                                                .find(`.${activeClass}`)
-                                                .each((_, element) => {
-                                                    const $this = $(element);
-                                                    for (const idx in activePositionClasses) {
-                                                        const className = activePositionClasses[idx];
-                                                        $this.toggleClass(className);
-                                                    }
-                                                });
+                                            const $activeDateUnits = local.calendar.find(`.${activeClass}`);
+                                            activePositionClasses.forEach(className =>
+                                                $activeDateUnits.toggleClass(className));
                                         }
 
                                         if (
@@ -629,7 +640,7 @@ define([
                 let $row = null;
                 for (let i = 0; i < $unitList.length; i++) {
                     const element = $unitList[i];
-                    if (i % context.settings.weeks.length == 0 || i + 1 >= $unitList.length) {
+                    if (i % context.settings.weeks.length === 0 || i + 1 >= $unitList.length) {
                         if ($row)
                             $row.appendTo($calendarBody);
 
@@ -644,6 +655,7 @@ define([
                     .bind('click', event => {
                         event.preventDefault();
                         event.stopPropagation();
+
                         const $this = $(event.currentTarget);
                         let type = 'unkown';
 
@@ -656,29 +668,31 @@ define([
                             local.dateManager = new DateManager(local.dateManager.date.clone().add(1, 'months'));
                         }
 
-                        if (typeof context.settings.page === 'function') {
+                        if (typeof context.settings.page === 'function')
                             context.settings.page.call($this, {
                                 type: type,
                                 year: local.dateManager.year,
                                 month: local.dateManager.month,
                                 day: local.dateManager.day
                             }, local);
-                        }
 
-                        if (typeof context.settings[type] === 'function') {
+                        if (typeof context.settings[type] === 'function')
                             context.settings[type].call($this, {
                                 type: type,
                                 year: local.dateManager.year,
                                 month: local.dateManager.month,
                                 day: local.dateManager.day
                             }, local);
-                        }
 
                         local.renderer.call();
                     });
 
                 if (context.settings.multiple) {
-                    local.calendar.find('.' + rangeClass).removeClass(rangeClass).removeClass(rangeFirstClass).removeClass(rangeLastClass);
+                    local.calendar
+                        .find(`.${rangeClass}`)
+                        .removeClass(rangeClass)
+                        .removeClass(rangeFirstClass)
+                        .removeClass(rangeLastClass);
                     generateDateRange.call();
                 }
             };
