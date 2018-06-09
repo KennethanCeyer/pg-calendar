@@ -89,7 +89,7 @@ var requirejs, require, define;
                     // as an ID it is less than ideal. In larger point
                     // releases, may be better to just kick out an error.
                     if (i === 0 || (i === 1 && name[2] === '..') || name[i - 1] === '..') {
-                        continue;
+
                     } else if (i > 0) {
                         name.splice(i - 1, 2);
                         i -= 2;
@@ -466,10 +466,7 @@ define('component/models',[], function () {
   return models;
 });
 //# sourceMappingURL=models.js.map
-;
-
-
-define('component/helper',['./models'], function (models) {
+    define('component/helper',['./models'], function (models) {
   var m_formatCache = {};
   var m_classCache = {};
   var m_subClassCache = {};
@@ -540,10 +537,7 @@ define('component/helper',['./models'], function (models) {
   return helper;
 });
 //# sourceMappingURL=helper.js.map
-;
-
-
-define('shim/utils',[], function () {
+    define('shim/utils',[], function () {
   return {
     register: function register(name, install, lib) {
       if (!lib) {
@@ -559,23 +553,16 @@ define('shim/utils',[], function () {
   };
 });
 //# sourceMappingURL=utils.js.map
-;
-
-
-define('moment',['./shim/utils'], function (utils) {
+    define('moment',['./shim/utils'], function (utils) {
   var lib = void 0;
   try {
     lib = moment;
   } catch (e) {
-    ;
   }
   return utils.register('moment', 'npm install moment --save', lib);
 });
 //# sourceMappingURL=moment.js.map
-;
-
-
-define('manager/index',['../component/helper', 'moment'], function (helper, moment) {
+    define('manager/index',['../component/helper', 'moment'], function (helper, moment) {
   var m_dateCache = {};
   var DateManager = function Constructor(date) {
     if (!date) {
@@ -616,10 +603,7 @@ define('manager/index',['../component/helper', 'moment'], function (helper, mome
   return DateManager;
 });
 //# sourceMappingURL=index.js.map
-;
-
-
-define('component/classNames',['../component/helper'], function (helper) {
+    define('component/classNames',['../component/helper'], function (helper) {
   return {
     top: helper.getSubClass('top'),
     header: helper.getSubClass('header'),
@@ -628,10 +612,7 @@ define('component/classNames',['../component/helper'], function (helper) {
   };
 });
 //# sourceMappingURL=classNames.js.map
-;
-
-
-define('configures/i18n',[], function () {
+    define('configures/i18n',[], function () {
   return {
     defaultLanguage: 'en',
     supports: ['en', 'ko', 'fr', 'ch', 'de', 'jp', 'pt', 'da', 'pl', 'es', 'cs', 'uk', 'ru'],
@@ -751,10 +732,7 @@ define('configures/i18n',[], function () {
   };
 });
 //# sourceMappingURL=i18n.js.map
-;
-
-
-define('component/global',['../configures/i18n'], function (languages) {
+    define('component/global',['../configures/i18n'], function (languages) {
   return {
     language: languages.defaultLanguage,
     languages: languages,
@@ -763,10 +741,7 @@ define('component/global',['../configures/i18n'], function (languages) {
   };
 });
 //# sourceMappingURL=global.js.map
-;
-
-
-define('component/options',['moment', './global'], function (moment, global) {
+    define('component/options',['moment', './global'], function (moment, global) {
   return {
     lang: null,
     languages: global.languages,
@@ -810,23 +785,16 @@ define('component/options',['moment', './global'], function (moment, global) {
   };
 });
 //# sourceMappingURL=options.js.map
-;
-
-
-define('jquery',['./shim/utils'], function (utils) {
+    define('jquery',['./shim/utils'], function (utils) {
   var lib = void 0;
   try {
     lib = jQuery || $;
   } catch (e) {
-    ;
   }
   return utils.register('jquery', 'npm install jquery --save', lib);
 });
 //# sourceMappingURL=jquery.js.map
-;
-
-
-define('methods/configure',['../component/global', '../component/models', '../component/options', '../configures/i18n', 'jquery'], function (global, models, options, language, $) {
+    define('methods/configure',['../component/global', '../component/models', '../component/options', '../configures/i18n', 'jquery'], function (global, models, options, language, $) {
   return function (settings) {
     var context = this;
     settings;
@@ -864,10 +832,7 @@ define('methods/configure',['../component/global', '../component/models', '../co
   };
 });
 //# sourceMappingURL=configure.js.map
-;
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+    var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 define('methods/init',['../manager/index', '../component/classNames', '../component/helper', '../component/models', '../component/global', './configure', 'jquery', 'moment'], function (DateManager, classNames, helper, models, global, methodConfigure, $, moment) {
   var $window = $(window);
@@ -1554,10 +1519,7 @@ define('methods/init',['../manager/index', '../component/classNames', '../compon
   };
 });
 //# sourceMappingURL=init.js.map
-;
-
-
-define('methods/setting',['../component/global', '../configures/i18n', 'jquery'], function (global, language, $) {
+    define('methods/setting',['../component/global', '../configures/i18n', 'jquery'], function (global, language, $) {
   return function (options) {
     var settings = $.extend({
       language: global.language,
@@ -1674,10 +1636,7 @@ define('methods/setting',['../component/global', '../configures/i18n', 'jquery']
   };
 });
 //# sourceMappingURL=setting.js.map
-;
-
-
-define('methods/select',['../component/helper', 'jquery'], function (helper, $) {
+    define('methods/select',['../component/helper', 'jquery'], function (helper, $) {
   return function (day) {
     this.each(function () {
       var local = this.local;
@@ -1688,10 +1647,7 @@ define('methods/select',['../component/helper', 'jquery'], function (helper, $) 
   };
 });
 //# sourceMappingURL=select.js.map
-;
-
-
-define('methods/set',['jquery', 'moment', '../manager/index', '../component/models'], function ($, moment, DateManager, models) {
+    define('methods/set',['jquery', 'moment', '../manager/index', '../component/models'], function ($, moment, DateManager, models) {
   return function (date) {
     if (date) {
       var dateSplit = date.split('~').map(function (element) {
@@ -1726,10 +1682,7 @@ define('methods/set',['jquery', 'moment', '../manager/index', '../component/mode
   };
 });
 //# sourceMappingURL=set.js.map
-;
-
-
-define('methods/index',['./init', './configure', './setting', './select', './set'], function (methodInit, methodConfigure, methodSetting, methodSelect, methodSet) {
+    define('methods/index',['./init', './configure', './setting', './select', './set'], function (methodInit, methodConfigure, methodSetting, methodSelect, methodSet) {
   return {
     init: methodInit,
     configure: methodConfigure,
@@ -1739,10 +1692,7 @@ define('methods/index',['./init', './configure', './setting', './select', './set
   };
 });
 //# sourceMappingURL=index.js.map
-;
-
-
-define('component/polyfills',[], function () {
+    define('component/polyfills',[], function () {
   if (!Array.prototype.filter) {
     Array.prototype.filter = function (func) {
       'use strict';
@@ -1773,10 +1723,7 @@ define('component/polyfills',[], function () {
   }
 });
 //# sourceMappingURL=polyfills.js.map
-;
-
-
-define('core',['./methods/index', './component/models', './component/polyfills'], function (methods, models) {
+    define('core',['./methods/index', './component/models', './component/polyfills'], function (methods, models) {
   'use strict';
 
   window[models.name] = {
@@ -1787,10 +1734,7 @@ define('core',['./methods/index', './component/models', './component/polyfills']
   return Component;
 });
 //# sourceMappingURL=core.js.map
-;
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+    var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 define('main',['core', 'component/models'], function (component, models) {
   'use strict';
@@ -1813,10 +1757,7 @@ define('main',['core', 'component/models'], function (component, models) {
   return pignoseCalendar;
 });
 //# sourceMappingURL=main.js.map
-;
-
-
-var main = require('main');
+    var main = require('main');
 var models = require('component/models');
 var $ = require('jquery');
 
@@ -1832,12 +1773,11 @@ for (var key in models) {
   $.fn[models.name][key] = models[key];
 }
 //# sourceMappingURL=jquery.js.map
-;
-define("plugins/jquery.js", function(){});
+    define("plugins/jquery.js", function(){});
 
 
 
 
-    return ;
+
 
 }));

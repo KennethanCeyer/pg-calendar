@@ -1,29 +1,28 @@
 define([], () => {
-  if (!Array.prototype.filter) {
+    if (!Array.prototype.filter)
+        return;
+
     Array.prototype.filter = function (func) {
-      'use strict';
-      if (this === null) {
-        throw new TypeError();
-      }
+        'use strict';
 
-      const t = Object(this);
-      const len = t.length >>> 0;
+        if (typeof func !== 'function')
+            return [];
 
-      if (typeof func !== 'function') {
-        return [];
-      }
+        if (!this)
+            throw new TypeError();
 
-      const res = [];
-      const thisp = arguments[1];
-      for (let i = 0; i < len; i++) {
-        if (i in t) {
-          const val = t[i];
-          if (func.call(thisp, val, i, t)) {
-            res.push(val);
-          }
+        const thisObject = Object(this);
+        const len = thisObject.length >>> 0;
+        const filteredResult = [];
+        const hofThis = arguments[1];
+
+        for (let i = 0; i < len; i++) {
+            if (i in thisObject) {
+                const val = thisObject[i];
+                if (func.call(hofThis, val, i, thisObject))
+                    filteredResult.push(val);
+            }
         }
-      }
-      return res;
-    };
-  }
+        return filteredResult;
+    }
 });
