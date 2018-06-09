@@ -456,198 +456,188 @@ define([
                         }
                     }
 
-                    if (context.settings.toggle === true) {
-                        if ($.inArray(iDateFormat, local.storage.activeDates) !== -1 && local.storage.activeDates.length > 0) {
-                            $unit.addClass(toggleActiveClass);
-                        }
-                        else {
-                            $unit.addClass(toggleInactiveClass);
-                        }
-                    }
-                    else if ($unit.hasClass(helper.getSubClass('unitDisabled')) === false) {
-                        if (context.settings.multiple === true) {
-                            if ((currentFormat[0] && iDateFormat === currentFormat[0])) {
+                    if (context.settings.toggle)
+                        $unit.addClass(
+                            (local.storage.activeDates.includes(iDateFormat) && local.storage.activeDates.length)
+                                ? toggleActiveClass
+                                : toggleInactiveClass
+                        );
+                    else if (!$unit.hasClass(helper.getSubClass('unitDisabled'))) {
+                        if (context.settings.multiple) {
+                            if ((currentFormat[0] && iDateFormat === currentFormat[0]))
                                 $unit.addClass(activeClass).addClass(activePositionClasses[0]);
-                            }
 
-                            if ((currentFormat[1] && iDateFormat === currentFormat[1])) {
+                            if ((currentFormat[1] && iDateFormat === currentFormat[1]))
                                 $unit.addClass(activeClass).addClass(activePositionClasses[1]);
-                            }
                         }
                         else {
                             if ((currentFormat[0] && iDateFormat === currentFormat[0]) &&
                                 $.inArray(currentFormat[0], context.settings.disabledDates) === -1 &&
-                                (context.settings.enabledDates.length < 1 || $.inArray(currentFormat[0], context.settings.enabledDates) !== -1)) {
+                                (!context.settings.enabledDates.length || context.settings.enabledDates.includes(currentFormat[0])))
                                 $unit.addClass(activeClass).addClass(activePositionClasses[0]);
-                            }
                         }
                     }
 
                     $unitList.push($unit);
                     const $super = $this;
 
-                    $unit.bind('click', function (event) {
+                    $unit.bind('click', event => {
                         event.preventDefault();
                         event.stopPropagation();
 
-                        const $this = $(this);
+                        const $this = $(event.target);
                         const date = $this.data('date');
                         let position = 0;
                         let preventSelect = false;
 
-                        if ($this.hasClass(helper.getSubClass('unitDisabled'))) {
+                        if ($this.hasClass(helper.getSubClass('unitDisabled')))
                             preventSelect = true;
-                        }
                         else {
-                            if (local.input === true && context.settings.multiple === false && context.settings.buttons === false) {
+                            if (local.input && !context.settings.multiple && !context.settings.buttons) {
                                 $super.val(moment(date).format(context.settings.format));
                                 $parent.triggerHandler('apply.' + helper.getClass(models.name));
                             }
-                            else {
-                                if (
-                                    local.initialize !== null &&
-                                    local.initialize.format('YYYY-MM-DD') === date &&
-                                    context.settings.toggle === false
-                                ) {
-                                }
-                                else {
-                                    if (context.settings.toggle === true) {
-                                        const match = local.storage.activeDates.filter(function (e, i) {
-                                            return e === date;
-                                        });
-                                        local.current[position] = moment(date);
+                            else if (
+                                !local.initialize &&
+                                local.initialize.format('YYYY-MM-DD') !== date &&
+                                !context.settings.toggle
+                            ) {
+                                if (context.settings.toggle === true) {
+                                    const match = local.storage.activeDates.filter(function (e, i) {
+                                        return e === date;
+                                    });
+                                    local.current[position] = moment(date);
 
-                                        if (match.length < 1) {
-                                            local.storage.activeDates.push(date);
-                                            $this.addClass(toggleActiveClass).removeClass(toggleInactiveClass);
-                                        }
-                                        else {
-                                            let index = 0;
-                                            for (let idx = 0; idx < local.storage.activeDates.length; idx++) {
-                                                const targetDate = local.storage.activeDates[idx];
-
-                                                if (date === targetDate) {
-                                                    index = idx;
-                                                    break;
-                                                }
-                                            }
-                                            local.storage.activeDates.splice(index, 1);
-                                            $this.removeClass(toggleActiveClass).addClass(toggleInactiveClass);
-                                        }
-                                    }
-                                    else if (
-                                        $this.hasClass(activeClass) === true &&
-                                        context.settings.pickWeeks === false
-                                    ) {
-                                        if (context.settings.multiple === true) {
-                                            if ($this.hasClass(activePositionClasses[0])) {
-                                                position = 0;
-                                            }
-                                            else if (activePositionClasses[1]) {
-                                                position = 1;
-                                            }
-                                        }
-                                        $this.removeClass(activeClass).removeClass(activePositionClasses[position]);
-                                        local.current[position] = null;
+                                    if (match.length < 1) {
+                                        local.storage.activeDates.push(date);
+                                        $this.addClass(toggleActiveClass).removeClass(toggleInactiveClass);
                                     }
                                     else {
-                                        if (context.settings.pickWeeks === true) {
-                                            if (
-                                                $this.hasClass(activeClass) === true ||
-                                                $this.hasClass(rangeClass) === true
-                                            ) {
-                                                for (let j = 0; j < 2; j++) {
-                                                    local.calendar.find('.' + activeClass + '.' + activePositionClasses[j]).removeClass(activeClass).removeClass(activePositionClasses[j]);
-                                                }
+                                        let index = 0;
+                                        for (let idx = 0; idx < local.storage.activeDates.length; idx++) {
+                                            const targetDate = local.storage.activeDates[idx];
 
-                                                local.current[0] = null;
-                                                local.current[1] = null;
-                                            }
-                                            else {
-                                                local.current[0] = moment(date).startOf('week').add(context.settings.week, 'days');
-                                                local.current[1] = moment(date).endOf('week').add(context.settings.week, 'days');
-
-                                                for (let j = 0; j < 2; j++) {
-                                                    local.calendar.find('.' + activeClass + '.' + activePositionClasses[j]).removeClass(activeClass).removeClass(activePositionClasses[j]);
-                                                    local.calendar.find(helper.format('.{0}[data-date="{1}"]', helper.getSubClass('unit'), local.current[j].format('YYYY-MM-DD'))).addClass(activeClass).addClass(activePositionClasses[j]);
-                                                }
+                                            if (date === targetDate) {
+                                                index = idx;
+                                                break;
                                             }
                                         }
-                                        else {
-                                            if (context.settings.multiple === true) {
-                                                if (local.current[0] === null) {
-                                                    position = 0;
-                                                }
-                                                else if (local.current[1] === null) {
-                                                    position = 1;
-                                                }
-                                                else {
-                                                    position = 0;
-                                                    local.current[1] = null;
-                                                    local.calendar.find('.' + activeClass + '.' + activePositionClasses[1]).removeClass(activeClass).removeClass(activePositionClasses[1]);
-                                                }
+                                        local.storage.activeDates.splice(index, 1);
+                                        $this.removeClass(toggleActiveClass).addClass(toggleInactiveClass);
+                                    }
+                                }
+                                else if (
+                                    $this.hasClass(activeClass) === true &&
+                                    context.settings.pickWeeks === false
+                                ) {
+                                    if (context.settings.multiple === true) {
+                                        if ($this.hasClass(activePositionClasses[0])) {
+                                            position = 0;
+                                        }
+                                        else if (activePositionClasses[1]) {
+                                            position = 1;
+                                        }
+                                    }
+                                    $this.removeClass(activeClass).removeClass(activePositionClasses[position]);
+                                    local.current[position] = null;
+                                }
+                                else {
+                                    if (context.settings.pickWeeks === true) {
+                                        if (
+                                            $this.hasClass(activeClass) === true ||
+                                            $this.hasClass(rangeClass) === true
+                                        ) {
+                                            for (let j = 0; j < 2; j++) {
+                                                local.calendar.find('.' + activeClass + '.' + activePositionClasses[j]).removeClass(activeClass).removeClass(activePositionClasses[j]);
                                             }
 
-                                            local.calendar.find('.' + activeClass + '.' + activePositionClasses[position]).removeClass(activeClass).removeClass(activePositionClasses[position]);
-                                            $this.addClass(activeClass).addClass(activePositionClasses[position]);
-                                            local.current[position] = moment(date);
+                                            local.current[0] = null;
+                                            local.current[1] = null;
+                                        }
+                                        else {
+                                            local.current[0] = moment(date).startOf('week').add(context.settings.week, 'days');
+                                            local.current[1] = moment(date).endOf('week').add(context.settings.week, 'days');
+
+                                            for (let j = 0; j < 2; j++) {
+                                                local.calendar.find('.' + activeClass + '.' + activePositionClasses[j]).removeClass(activeClass).removeClass(activePositionClasses[j]);
+                                                local.calendar.find(helper.format('.{0}[data-date="{1}"]', helper.getSubClass('unit'), local.current[j].format('YYYY-MM-DD'))).addClass(activeClass).addClass(activePositionClasses[j]);
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        if (context.settings.multiple === true) {
+                                            if (local.current[0] === null) {
+                                                position = 0;
+                                            }
+                                            else if (local.current[1] === null) {
+                                                position = 1;
+                                            }
+                                            else {
+                                                position = 0;
+                                                local.current[1] = null;
+                                                local.calendar.find('.' + activeClass + '.' + activePositionClasses[1]).removeClass(activeClass).removeClass(activePositionClasses[1]);
+                                            }
+                                        }
+
+                                        local.calendar.find('.' + activeClass + '.' + activePositionClasses[position]).removeClass(activeClass).removeClass(activePositionClasses[position]);
+                                        $this.addClass(activeClass).addClass(activePositionClasses[position]);
+                                        local.current[position] = moment(date);
+                                    }
+
+                                    if (
+                                        local.current[0] &&
+                                        local.current[1]
+                                    ) {
+                                        if (local.current[0].diff(local.current[1]) > 0) {
+                                            let tmp = local.current[0];
+                                            local.current[0] = local.current[1];
+                                            local.current[1] = tmp;
+                                            tmp = null;
+
+                                            local.calendar.find('.' + activeClass).each(function () {
+                                                const $this = $(this);
+                                                for (const idx in activePositionClasses) {
+                                                    const className = activePositionClasses[idx];
+                                                    $this.toggleClass(className);
+                                                }
+                                            });
                                         }
 
                                         if (
-                                            local.current[0] &&
-                                            local.current[1]
+                                            validDateArea(local.current[0], local.current[1]) === false &&
+                                            context.settings.selectOver === false
                                         ) {
-                                            if (local.current[0].diff(local.current[1]) > 0) {
-                                                let tmp = local.current[0];
-                                                local.current[0] = local.current[1];
-                                                local.current[1] = tmp;
-                                                tmp = null;
+                                            local.current[0] = null;
+                                            local.current[1] = null;
+                                            local.calendar.find('.' + activeClass).removeClass(activeClass).removeClass(activePositionClasses[0]).removeClass(activePositionClasses[1]);
+                                        }
 
-                                                local.calendar.find('.' + activeClass).each(function () {
-                                                    const $this = $(this);
-                                                    for (const idx in activePositionClasses) {
-                                                        const className = activePositionClasses[idx];
-                                                        $this.toggleClass(className);
-                                                    }
-                                                });
+                                        if (local.input === true && context.settings.buttons === false) {
+                                            const dateValues = [];
+
+                                            if (local.current[0] !== null) {
+                                                dateValues.push(local.current[0].format(context.settings.format));
                                             }
 
-                                            if (
-                                                validDateArea(local.current[0], local.current[1]) === false &&
-                                                context.settings.selectOver === false
-                                            ) {
-                                                local.current[0] = null;
-                                                local.current[1] = null;
-                                                local.calendar.find('.' + activeClass).removeClass(activeClass).removeClass(activePositionClasses[0]).removeClass(activePositionClasses[1]);
+                                            if (local.current[1] !== null) {
+                                                dateValues.push(local.current[1].format(context.settings.format));
                                             }
 
-                                            if (local.input === true && context.settings.buttons === false) {
-                                                const dateValues = [];
-
-                                                if (local.current[0] !== null) {
-                                                    dateValues.push(local.current[0].format(context.settings.format));
-                                                }
-
-                                                if (local.current[1] !== null) {
-                                                    dateValues.push(local.current[1].format(context.settings.format));
-                                                }
-
-                                                $this.val(dateValues.join(', '));
-                                                $parent.trigger('apply.' + helper.getClass(models.name));
-                                            }
+                                            $this.val(dateValues.join(', '));
+                                            $parent.trigger('apply.' + helper.getClass(models.name));
                                         }
                                     }
+                                }
 
-                                    if (context.settings.multiple === true) {
-                                        local.calendar.find('.' + rangeClass).removeClass(rangeClass).removeClass(rangeFirstClass).removeClass(rangeLastClass);
-                                        generateDateRange.call();
-                                    }
+                                if (context.settings.multiple === true) {
+                                    local.calendar.find('.' + rangeClass).removeClass(rangeClass).removeClass(rangeFirstClass).removeClass(rangeLastClass);
+                                    generateDateRange.call();
+                                }
 
-                                    if (context.settings.schedules.length > 0) {
-                                        local.storage.schedules = context.settings.schedules.filter(event => {
-                                            return event.date === date;
-                                        });
-                                    }
+                                if (context.settings.schedules.length > 0) {
+                                    local.storage.schedules = context.settings.schedules.filter(event => {
+                                        return event.date === date;
+                                    });
                                 }
                             }
                         }
@@ -759,9 +749,8 @@ define([
             local.renderer.call();
             $this[0][models.name] = local;
 
-            if (typeof context.settings.init === 'function') {
+            if (typeof context.settings.init === 'function')
                 context.settings.init.call($this, local);
-            }
         });
     };
 });
