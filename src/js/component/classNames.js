@@ -1,6 +1,6 @@
 define([
     '../component/helper'
-], (helper) => ({
+], helper => ({
     top: helper.getSubClass('top'),
     header: helper.getSubClass('header'),
     body: helper.getSubClass('body'),

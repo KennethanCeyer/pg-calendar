@@ -1,10 +1,12 @@
 define([
     './methods/index',
-    './component/models',
-    './component/polyfills',
-], (methods,
-    models) => {
+    './component/models'
+], (
+    methods,
+    models
+) => {
     'use strict';
+
     window[models.name] = {
         version: models.version
     };

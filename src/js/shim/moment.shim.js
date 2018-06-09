@@ -1,6 +1,6 @@
 define([
     './shim/utils'
-], (utils) => {
+], utils => {
     let lib;
     try {
         lib = moment;

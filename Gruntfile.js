@@ -38,6 +38,7 @@ module.exports = function (grunt) {
         },
         uglify: {
             options: {
+                sourceMap: true,
                 banner: '//================================================================================\n' +
                         '// [<%= pkg.name %>]\n' +
                         '// version: <%= pkg.version %>\n' +
@@ -52,8 +53,7 @@ module.exports = function (grunt) {
                     'dist/js/pignose.calendar.full.min.js': [
                         'dist/js/pignose.calendar.full.js'
                     ]
-                },
-                sourceMap: true
+                }
             },
         },
         cssUrlRewrite: {

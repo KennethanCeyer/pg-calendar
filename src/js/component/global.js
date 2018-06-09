@@ -1,6 +1,6 @@
 define([
     '../configures/i18n'
-], (languages) => ({
+], languages => ({
     language: languages.defaultLanguage,
     languages: languages,
     week: 0,

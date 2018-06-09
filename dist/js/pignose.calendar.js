@@ -468,75 +468,83 @@ define('component/models',[], function () {
 ;
 
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 define('component/helper',['./models'], function (models) {
-    var m_formatCache = {};
-    var m_classCache = {};
-    var m_subClassCache = {};
-    var m_regex_upper = /[A-Z]/;
+    var formatCache = {};
+    var classCache = {};
+    var subClassCache = {};
+    var regexUpper = /[A-Z]/;
 
-    var helper = function Constructor() {};
+    return function () {
+        function Helper() {
+            _classCallCheck(this, Helper);
+        }
 
-    helper.format = function (format) {
-        if (!format) {
-            return '';
-        } else {
-            var args = Array.prototype.slice.call(arguments, 1);
-            var key = format + args.join('.');
+        _createClass(Helper, null, [{
+            key: 'format',
+            value: function format(template) {
+                if (!template) return '';
 
-            if (m_formatCache[key]) {
-                return m_formatCache[key];
-            } else {
-                var len = args.length;
-                for (var idx = 0; idx < len; idx++) {
-                    var value = args[idx];
-                    format = format.replace(new RegExp('((?!\\\\)?\\{' + idx + '(?!\\\\)?\\})', 'g'), value);
+                for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+                    args[_key - 1] = arguments[_key];
                 }
-                format = format.replace(new RegExp('\\\\{([0-9]+)\\\\}', 'g'), '{$1}');
+
+                var key = '' + template + args.join('.');
+
+                if (formatCache[key]) return formatCache[key];
+
+                args.forEach(function (value, idx) {
+                    return template = template.replace(new RegExp('((?!\\\\)?\\{' + idx + '(?!\\\\)?\\})', 'g'), value);
+                });
+                template = template.replace(new RegExp('\\\\{([0-9]+)\\\\}', 'g'), '{$1}');
+                formatCache[key] = template;
+
+                return template;
             }
-            m_formatCache[key] = format;
-            return format;
-        }
-    };
+        }, {
+            key: 'getClass',
+            value: function getClass(name) {
+                var key = [models.name, name].join('.');
 
-    helper.getClass = function (name) {
-        var key = [models.name, name].join('.');
+                if (classCache[key]) return classCache[key];
 
-        if (m_classCache[key]) {
-            return m_classCache[key];
-        } else {
-            var chars = name.split('');
-            var classNames = [];
-            var len = chars.length;
+                var chars = name.split('');
+                var classNames = [];
 
-            for (var idx = 0, pos = 0; idx < len; idx++) {
-                var char = chars[idx];
-                if (m_regex_upper.test(char) === true) {
-                    classNames[pos++] = '-';
-                    char = char.toString().toLowerCase();
+                for (var idx = 0, pos = 0; idx < chars.length; idx++) {
+                    var char = chars[idx];
+                    if (regexUpper.test(char)) {
+                        classNames[pos++] = '-';
+                        char = String(char).toLowerCase();
+                    }
+                    classNames[pos++] = char;
                 }
-                classNames[pos++] = char;
+
+                var className = classNames.join('');
+                classCache[key] = className;
+
+                return className;
             }
+        }, {
+            key: 'getSubClass',
+            value: function getSubClass(name) {
+                var nameSplit = name && name.length ? name.split('') : [];
 
-            var className = classNames.join('');
-            m_classCache[key] = className;
-            return className;
-        }
-    };
+                if (nameSplit[0]) nameSplit[0] = nameSplit[0].toUpperCase();
 
-    helper.getSubClass = function (name) {
-        if (name && name.length) {
-            var names = name.split('');
-            names[0] = names[0].toUpperCase();
-            name = names.join('');
-        }
+                var nameJoined = nameSplit.join('');
 
-        if (!m_subClassCache[name]) {
-            m_subClassCache[name] = helper.getClass(helper.format('{0}{1}', models.name, name));
-        }
-        return m_subClassCache[name];
-    };
+                if (!subClassCache[nameJoined]) subClassCache[nameJoined] = Helper.getClass('' + models.name + nameJoined);
 
-    return helper;
+                return subClassCache[nameJoined];
+            }
+        }]);
+
+        return Helper;
+    }();
 });
 //# sourceMappingURL=helper.js.map
 ;
@@ -545,14 +553,13 @@ define('component/helper',['./models'], function (models) {
 define('shim/utils',[], function () {
     return {
         register: function register(name, install, lib) {
-            if (!lib) {
-                var message = 'PIGNOSE Calendar needs ' + name + ' library.\nIf you want to use built-in plugin, Import dist/pignose.calendar.full.js.\nType below code in your command line to install the library.';
+            if (lib) return lib;
 
-                if (console && typeof console.error === 'function') {
-                    console.warn(message);
-                    console.warn('$ ' + install);
-                }
-            }
+            if (!console || typeof console.error !== 'function') return lib;
+
+            console.warn('PIGNOSE Calendar needs ' + name + ' library.\nIf you want to use built-in plugin, Import dist/pignose.calendar.full.js.\nType below code in your command line to install the library.');
+            console.warn('$ ' + install);
+
             return lib;
         }
     };
@@ -572,42 +579,53 @@ define('moment',['./shim/utils'], function (utils) {
 ;
 
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 define('manager/index',['../component/helper', 'moment'], function (helper, moment) {
-    var m_dateCache = {};
-    var DateManager = function Constructor(date) {
-        if (!date) {
-            throw new Error('first parameter `date` must be gave');
+    var dateCache = {};
+    return function () {
+        function DateManager(date) {
+            _classCallCheck(this, DateManager);
+
+            if (!date) throw new Error('first parameter `date` must be gave');
+
+            if (!(date instanceof moment)) {
+                if (typeof date !== 'string' && typeof date !== 'number') throw new Error('`date` option is invalid type. (date: ' + date + ').');
+
+                date = moment(date);
+            }
+
+            this.year = parseInt(date.format('YYYY'), 10);
+            this.month = parseInt(date.format('MM'), 10);
+            this.prevMonth = parseInt(date.clone().add(-1, 'months').format('MM'), 10);
+            this.nextMonth = parseInt(date.clone().add(1, 'months').format('MM'), 10);
+            this.day = parseInt(date.format('DD'), 10);
+            this.firstDay = 1;
+            this.lastDay = parseInt(date.clone().endOf('month').format('DD'), 10);
+            this.weekDay = date.weekday();
+            this.date = date;
         }
 
-        if (!(date instanceof moment)) {
-            if (typeof date !== 'string' && typeof date !== 'number') throw new Error('`date` option is invalid type. (date: ' + date + ').');
+        _createClass(DateManager, [{
+            key: 'toString',
+            value: function toString() {
+                return this.date.format('YYYY-MM-DD');
+            }
+        }], [{
+            key: 'Convert',
+            value: function Convert(year, month, day) {
+                var date = year + '-' + month + '-' + day;
 
-            date = moment(date);
-        }
+                if (!dateCache[date]) dateCache[date] = moment(date, 'YYYY-MM-DD');
 
-        this.year = parseInt(date.format('YYYY'), 10);
-        this.month = parseInt(date.format('MM'), 10);
-        this.prevMonth = parseInt(date.clone().add(-1, 'months').format('MM'), 10);
-        this.nextMonth = parseInt(date.clone().add(1, 'months').format('MM'), 10);
-        this.day = parseInt(date.format('DD'), 10);
-        this.firstDay = 1;
-        this.lastDay = parseInt(date.clone().endOf('month').format('DD'), 10);
-        this.weekDay = date.weekday();
-        this.date = date;
-    };
+                return dateCache[date];
+            }
+        }]);
 
-    DateManager.prototype.toString = function () {
-        return this.date.format('YYYY-MM-DD');
-    };
-
-    DateManager.Convert = function (year, month, day) {
-        var date = helper.format('{0}-{1}-{2}', year, month, day);
-        if (!m_dateCache[date]) m_dateCache[date] = moment(date, 'YYYY-MM-DD');
-
-        return m_dateCache[date];
-    };
-
-    return DateManager;
+        return DateManager;
+    }();
 });
 //# sourceMappingURL=index.js.map
 ;
@@ -778,38 +796,23 @@ define('jquery',['./shim/utils'], function (utils) {
 
 
 define('methods/configure',['../component/global', '../component/models', '../component/options', '../configures/i18n', 'jquery'], function (global, models, options, language, $) {
-    return function (settings) {
-        var context = this;
+    return function Configure(_settings) {
+        var languages = global.languages;
 
-        context.settings = $.extend(true, {}, options, settings);
+        this.settings = $.extend(true, {}, options, _settings);
+        var settings = this.settings;
 
-        if (!context.settings.lang) {
-            context.settings.lang = global.language;
-        }
+        if (!settings.lang) settings.lang = global.language;
 
-        if (context.settings.lang !== language.defaultLanguage && $.inArray(context.settings.lang, global.languages.supports) !== -1) {
-            // weeks
-            context.settings.weeks = global.languages.weeks[context.settings.lang] || global.languages.weeks[language.defaultLanguage];
+        if (settings.lang !== language.defaultLanguage && languages.supports.includes(settings.lang)) ['weeks', 'monthsLong', 'months', 'controls'].forEach(function (key) {
+            return settings[key] = languages[key][settings.lang] || languages[key][language.defaultLanguage];
+        });
 
-            // monthsLong
-            context.settings.monthsLong = global.languages.monthsLong[context.settings.lang] || global.languages.monthsLong[language.defaultLanguage];
+        if (settings.theme !== 'light' && !models.preference.supports.themes.includes(settings.theme)) settings.theme = 'light';
 
-            // months
-            context.settings.months = global.languages.months[context.settings.lang] || global.languages.months[language.defaultLanguage];
+        if (settings.pickWeeks) if (!settings.multiple) console.error('You must give true at settings.multiple options on PIGNOSE-Calendar for using in pickWeeks option.');else if (settings.toggle) console.error('You must give false at settings.toggle options on PIGNOSE-Calendar for using in pickWeeks option.');
 
-            // controls
-            context.settings.controls = global.languages.controls[context.settings.lang] || global.languages.controls[language.defaultLanguage];
-        }
-
-        if (context.settings.theme !== 'light' && $.inArray(context.settings.theme, models.preference.supports.themes) === -1) {
-            context.settings.theme = 'light';
-        }
-
-        if (context.settings.pickWeeks) {
-            if (context.settings.multiple === false) console.error('You must give true at settings.multiple options on PIGNOSE-Calendar for using in pickWeeks option.');else if (context.settings.toggle) console.error('You must give false at settings.toggle options on PIGNOSE-Calendar for using in pickWeeks option.');
-        }
-
-        context.settings.week %= context.settings.weeks.length;
+        settings.week %= settings.weeks.length;
     };
 });
 //# sourceMappingURL=configure.js.map
@@ -1384,106 +1387,52 @@ define('methods/setting',['../component/global', '../configures/i18n', 'jquery']
 
         global.language = settings.language;
 
-        if (Object.keys(settings.languages).length > 0) {
-            var _loop = function _loop(_language) {
-                var languageSetting = settings.languages[_language];
+        if (Object.keys(settings.languages).length) {
+            settings.languages.forEach(function (languageSetting, language) {
+                if (typeof language !== 'string') console.error('global configuration is failed.\nMessage: language key is not a string type.', language);
 
-                if (typeof _language !== 'string') {
-                    console.error('global configuration is failed.\nMessage: language key is not a string type.', _language);
-                }
+                if (!languageSetting.weeks) console.warn('Warning: `weeks` option of `' + language + '` language is missing.');
 
-                if (!languageSetting.weeks) {
-                    console.warn('Warning: `weeks` option of `' + _language + '` language is missing.');
-                    return 'break';
-                }
+                if (!languageSetting.monthsLong) console.warn('Warning: `monthsLong` option of `' + language + '` language is missing.');
 
-                if (!languageSetting.monthsLong) {
-                    console.warn('Warning: `monthsLong` option of `' + _language + '` language is missing.');
-                    return 'break';
-                }
+                if (!languageSetting.months) console.warn('Warning: `months` option of `' + language + '` language is missing.');
 
-                if (!languageSetting.months) {
-                    console.warn('Warning: `months` option of `' + _language + '` language is missing.');
-                    return 'break';
-                }
-
-                if (!languageSetting.controls) {
-                    console.warn('Warning: `controls` option of `' + _language + '` language is missing.');
-                    return 'break';
-                }
+                if (!languageSetting.controls) console.warn('Warning: `controls` option of `' + language + '` language is missing.');
 
                 if (languageSetting.weeks) {
-                    if (languageSetting.weeks.length < weeksCount) {
-                        console.error('`weeks` must have least ' + weeksCount + ' items.');
-                        return 'break';
-                    } else if (languageSetting.weeks.length !== weeksCount) {
-                        console.warn('`weeks` option over ' + weeksCount + ' items. We recommend to give ' + weeksCount + ' items.');
-                    }
+                    if (languageSetting.weeks.length < weeksCount) console.error('`weeks` must have least ' + weeksCount + ' items.');else if (languageSetting.weeks.length !== weeksCount) console.warn('`weeks` option over ' + weeksCount + ' items. We recommend to give ' + weeksCount + ' items.');
                 }
 
                 if (languageSetting.monthsLong) {
-                    if (languageSetting.monthsLong.length < monthsCount) {
-                        console.error('`monthsLong` must have least ' + monthsCount + ' items.');
-                        return 'break';
-                    } else if (languageSetting.monthsLong.length !== monthsCount) {
-                        console.warn('`monthsLong` option over ' + monthsCount + ' items. We recommend to give ' + monthsCount + ' items.');
-                    }
+                    if (languageSetting.monthsLong.length < monthsCount) console.error('`monthsLong` must have least ' + monthsCount + ' items.');else if (languageSetting.monthsLong.length !== monthsCount) console.warn('`monthsLong` option over ' + monthsCount + ' items. We recommend to give ' + monthsCount + ' items.');
                 }
 
                 if (languageSetting.months) {
-                    if (languageSetting.months.length < monthsCount) {
-                        console.error('`months` must have least ' + monthsCount + ' items.');
-                        return 'break';
-                    } else if (languageSetting.months.length !== monthsCount) {
-                        console.warn('`months` option over ' + monthsCount + ' items. We recommend to give ' + monthsCount + ' items.');
-                    }
+                    if (languageSetting.months.length < monthsCount) console.error('`months` must have least ' + monthsCount + ' items.');else if (languageSetting.months.length !== monthsCount) console.warn('`months` option over ' + monthsCount + ' items. We recommend to give ' + monthsCount + ' items.');
                 }
 
                 if (languageSetting.controls) {
-                    if (!languageSetting.controls.ok) {
-                        console.error('`controls.ok` value is missing in your language setting');
-                        return 'break';
-                    }
+                    if (!languageSetting.controls.ok) console.error('`controls.ok` value is missing in your language setting');
 
-                    if (!languageSetting.controls.cancel) {
-                        console.error('`controls.cancel` value is missing in your language setting');
-                        return 'break';
-                    }
+                    if (!languageSetting.controls.cancel) console.error('`controls.cancel` value is missing in your language setting');
                 }
 
-                if (global.languages.supports.indexOf(_language) === -1) {
-                    global.languages.supports.push(_language);
-                }
+                if (!global.languages.supports.includes(language)) global.languages.supports.push(language);
 
-                ['weeks', 'monthsLong', 'months', 'controls'].map(function (key) {
-                    if (global.languages[key][_language]) {
-                        console.warn('`' + _language + '` language is already given however it will be overwriten.');
-                    }
-                    global.languages[key][_language] = languageSetting[key] || global.languages[key][_language.defaultLanguage];
+                ['weeks', 'monthsLong', 'months', 'controls'].forEach(function (key) {
+                    if (global.languages[key][language]) console.warn('`' + language + '` language is already given however it will be overwritten.');
+
+                    global.languages[key][language] = languageSetting[key] || global.languages[key][language.defaultLanguage];
                 });
-            };
-
-            for (var _language in settings.languages) {
-                var _ret = _loop(_language);
-
-                if (_ret === 'break') break;
-            }
+            });
         }
 
         if (settings.week) {
-            if (typeof settings.week === 'number') {
-                global.week = settings.week;
-            } else {
-                console.error('global configuration is failed.\nMessage: You must give `week` option as number type.');
-            }
+            if (typeof settings.week === 'number') global.week = settings.week;else console.error('global configuration is failed.\nMessage: You must give `week` option as number type.');
         }
 
         if (settings.format) {
-            if (typeof settings.format === 'string') {
-                global.format = settings.format;
-            } else {
-                console.error('global configuration is failed.\nMessage: You must give `format` option as string type.');
-            }
+            if (typeof settings.format === 'string') global.format = settings.format;else console.error('global configuration is failed.\nMessage: You must give `format` option as string type.');
         }
     };
 });
@@ -1493,11 +1442,11 @@ define('methods/setting',['../component/global', '../configures/i18n', 'jquery']
 
 define('methods/select',['../component/helper', 'jquery'], function (helper, $) {
     return function (day) {
-        this.each(function () {
-            var local = this.local;
+        this.each(function (_, element) {
+            var local = element.local;
             var dateManager = local.dateManager;
             var date = helper.format('{0}-{1}-{2}', dateManager.year, dateManager.month, day);
-            $(this).find(helper.format('.{0}[data-date="{1}"]', helper.getSubClass('unit'), date)).triggerHandler('click');
+            $(element).find('.' + helper.getSubClass('unit') + '[data-date="' + date + '"]').triggerHandler('click');
         });
     };
 });
@@ -1507,36 +1456,30 @@ define('methods/select',['../component/helper', 'jquery'], function (helper, $) 
 
 define('methods/set',['jquery', 'moment', '../manager/index', '../component/models'], function ($, moment, DateManager, models) {
     return function (date) {
-        if (date) {
-            var dateSplit = date.split('~').map(function (element) {
-                var format = $.trim(element);
-                return !format ? null : format;
-            });
+        if (!date) return;
 
-            this.each(function () {
-                var $this = $(this);
-                var local = $this[0][models.name];
-                var context = local.context;
+        var dateSplit = date.split('~').map(function (element) {
+            return !$.trim(element) ? null : $.trim(element);
+        });
 
-                var dateArray = [!dateSplit[0] ? null : moment(dateSplit[0], context.settings.format), !dateSplit[1] ? null : moment(dateSplit[1], context.settings.format)];
-                local.dateManager = new DateManager(dateArray[0]);
+        this.each(function (_, element) {
+            var local = $(element)[0][models.name];
+            var context = local.context;
 
-                if (context.settings.pickWeeks === true) {
-                    if (dateArray[0]) {
-                        var _date = dateArray[0];
-                        dateArray[0] = _date.clone().startOf('week');
-                        dateArray[1] = _date.clone().endOf('week');
-                    }
+            var dateArray = [!dateSplit[0] ? null : moment(dateSplit[0], context.settings.format), !dateSplit[1] ? null : moment(dateSplit[1], context.settings.format)];
+            local.dateManager = new DateManager(dateArray[0]);
+
+            if (context.settings.pickWeeks) {
+                if (dateArray[0]) {
+                    var _date = dateArray[0];
+                    dateArray[0] = _date.clone().startOf('week');
+                    dateArray[1] = _date.clone().endOf('week');
                 }
+            }
 
-                if (context.settings.toggle === true) {
-                    local.storage.activeDates = dateSplit;
-                } else {
-                    local.current = dateArray;
-                }
-                local.renderer.call();
-            });
-        }
+            if (context.settings.toggle) local.storage.activeDates = dateSplit;else local.current = dateArray;
+            local.renderer.call();
+        });
     };
 });
 //# sourceMappingURL=set.js.map
@@ -1556,35 +1499,7 @@ define('methods/index',['./init', './configure', './setting', './select', './set
 ;
 
 
-define('component/polyfills',[], function () {
-    if (!Array.prototype.filter) return;
-
-    Array.prototype.filter = function (func) {
-        'use strict';
-
-        if (typeof func !== 'function') return [];
-
-        if (!this) throw new TypeError();
-
-        var thisObject = Object(this);
-        var len = thisObject.length >>> 0;
-        var filteredResult = [];
-        var hofThis = arguments[1];
-
-        for (var i = 0; i < len; i++) {
-            if (i in thisObject) {
-                var val = thisObject[i];
-                if (func.call(hofThis, val, i, thisObject)) filteredResult.push(val);
-            }
-        }
-        return filteredResult;
-    };
-});
-//# sourceMappingURL=polyfills.js.map
-;
-
-
-define('core',['./methods/index', './component/models', './component/polyfills'], function (methods, models) {
+define('core',['./methods/index', './component/models'], function (methods, models) {
     'use strict';
 
     window[models.name] = {

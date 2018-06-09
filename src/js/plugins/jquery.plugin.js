@@ -4,7 +4,9 @@ const main = require('main');
 const models = require('component/models');
 const $ = require('jquery');
 
-const root = window ? window : (this || {});
+const root = window
+    ? window
+    : (this || {});
 
 root.moment = require('moment');
 
