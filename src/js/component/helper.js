@@ -1,76 +1,69 @@
 define([
-  './models'
-], (models) => {
-  const m_formatCache = {};
-  const m_classCache = {};
-  const m_subClassCache = {};
-  const m_regex_upper = /[A-Z]/;
+    './models'
+], models => {
+    const formatCache = {};
+    const classCache = {};
+    const subClassCache = {};
+    const regexUpper = /[A-Z]/;
 
-  const helper = function Constructor() {
-  };
+    return class Helper {
+        constructor() { }
 
-  helper.format = function (format) {
-    if (!format) {
-      return '';
-    }
-    else {
-      const args = Array.prototype.slice.call(arguments, 1);
-      const key = format + args.join('.');
+        static format(template, ...args) {
+            if (!template)
+                return '';
 
-      if (m_formatCache[key]) {
-        return m_formatCache[key]
-      }
-      else {
-        const len = args.length;
-        for (let idx = 0; idx < len; idx++) {
-          const value = args[idx];
-          format = format.replace(new RegExp(('((?!\\\\)?\\{' + idx + '(?!\\\\)?\\})'), 'g'), value);
+            const key = `${template}${args.join('.')}`;
+
+            if (formatCache[key])
+                return formatCache[key];
+
+            args.forEach((value, idx) =>
+                template = template.replace(new RegExp((`((?!\\\\)?\\{${idx}(?!\\\\)?\\})`), 'g'), value));
+            template = template.replace(new RegExp(('\\\\{([0-9]+)\\\\}'), 'g'), '{$1}');
+            formatCache[key] = template;
+
+            return template;
         }
-        format = format.replace(new RegExp(('\\\\{([0-9]+)\\\\}'), 'g'), '{$1}');
-      }
-      m_formatCache[key] = format;
-      return format;
-    }
-  };
 
-  helper.getClass = name => {
-    const key = [models.name, name].join('.');
+        static getClass(name) {
+            const key = [models.name, name].join('.');
 
-    if (m_classCache[key]) {
-      return m_classCache[key];
-    }
-    else {
-      const chars = name.split('');
-      const classNames = [];
-      const len = chars.length;
+            if (classCache[key])
+                return classCache[key];
 
-      for (let idx = 0, pos = 0; idx < len; idx++) {
-        let char = chars[idx];
-        if (m_regex_upper.test(char) === true) {
-          classNames[pos++] = '-';
-          char = char.toString().toLowerCase();
+            const chars = name.split('');
+            const classNames = [];
+
+            for (let idx = 0, pos = 0; idx < chars.length; idx++) {
+                let char = chars[idx];
+                if (regexUpper.test(char)) {
+                    classNames[pos++] = '-';
+                    char = String(char).toLowerCase();
+                }
+                classNames[pos++] = char;
+            }
+
+            const className = classNames.join('');
+            classCache[key] = className;
+
+            return className;
         }
-        classNames[pos++] = char;
-      }
 
-      const className = classNames.join('');
-      m_classCache[key] = className;
-      return className;
+        static getSubClass(name) {
+            const nameSplit = name && name.length
+                ? name.split('')
+                : [];
+
+            if (nameSplit[0])
+                nameSplit[0] = nameSplit[0].toUpperCase();
+
+            const nameJoined = nameSplit.join('');
+
+            if (!subClassCache[nameJoined])
+                subClassCache[nameJoined] = Helper.getClass(`${models.name}${nameJoined}`);
+
+            return subClassCache[nameJoined];
+        }
     }
-  };
-
-  helper.getSubClass = name => {
-    if (name && name.length) {
-      const names = name.split('');
-      names[0] = names[0].toUpperCase();
-      name = names.join('');
-    }
-
-    if (!m_subClassCache[name]) {
-      m_subClassCache[name] = helper.getClass(helper.format('{0}{1}', models.name, name));
-    }
-    return m_subClassCache[name];
-  };
-
-  return helper;
 });

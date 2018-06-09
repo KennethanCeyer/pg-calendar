@@ -1,14 +1,16 @@
 define([
-  './methods/index',
-  './component/models',
-  './component/polyfills',
-], (methods,
-    models) => {
-  'use strict';
-  window[models.name] = {
-    version: models.version
-  };
+    './methods/index',
+    './component/models'
+], (
+    methods,
+    models
+) => {
+    'use strict';
 
-  const Component = methods;
-  return Component;
+    window[models.name] = {
+        version: models.version
+    };
+
+    const Component = methods;
+    return Component;
 });

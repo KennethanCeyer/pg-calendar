@@ -454,414 +454,366 @@ define("almond", function(){});
 
 
 define('component/models',[], function () {
-  var models = {
-    name: 'pignoseCalendar',
-    version: '1.4.29',
-    preference: {
-      supports: {
-        themes: ['light', 'dark', 'blue']
-      }
-    }
-  };
-  return models;
+    return {
+        name: 'pignoseCalendar',
+        version: '1.4.30',
+        preference: {
+            supports: {
+                themes: ['light', 'dark', 'blue']
+            }
+        }
+    };
 });
 //# sourceMappingURL=models.js.map
 ;
 
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 define('component/helper',['./models'], function (models) {
-  var m_formatCache = {};
-  var m_classCache = {};
-  var m_subClassCache = {};
-  var m_regex_upper = /[A-Z]/;
+    var formatCache = {};
+    var classCache = {};
+    var subClassCache = {};
+    var regexUpper = /[A-Z]/;
 
-  var helper = function Constructor() {};
-
-  helper.format = function (format) {
-    if (!format) {
-      return '';
-    } else {
-      var args = Array.prototype.slice.call(arguments, 1);
-      var key = format + args.join('.');
-
-      if (m_formatCache[key]) {
-        return m_formatCache[key];
-      } else {
-        var len = args.length;
-        for (var idx = 0; idx < len; idx++) {
-          var value = args[idx];
-          format = format.replace(new RegExp('((?!\\\\)?\\{' + idx + '(?!\\\\)?\\})', 'g'), value);
+    return function () {
+        function Helper() {
+            _classCallCheck(this, Helper);
         }
-        format = format.replace(new RegExp('\\\\{([0-9]+)\\\\}', 'g'), '{$1}');
-      }
-      m_formatCache[key] = format;
-      return format;
-    }
-  };
 
-  helper.getClass = function (name) {
-    var key = [models.name, name].join('.');
+        _createClass(Helper, null, [{
+            key: 'format',
+            value: function format(template) {
+                if (!template) return '';
 
-    if (m_classCache[key]) {
-      return m_classCache[key];
-    } else {
-      var chars = name.split('');
-      var classNames = [];
-      var len = chars.length;
+                for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+                    args[_key - 1] = arguments[_key];
+                }
 
-      for (var idx = 0, pos = 0; idx < len; idx++) {
-        var char = chars[idx];
-        if (m_regex_upper.test(char) === true) {
-          classNames[pos++] = '-';
-          char = char.toString().toLowerCase();
-        }
-        classNames[pos++] = char;
-      }
+                var key = '' + template + args.join('.');
 
-      var className = classNames.join('');
-      m_classCache[key] = className;
-      return className;
-    }
-  };
+                if (formatCache[key]) return formatCache[key];
 
-  helper.getSubClass = function (name) {
-    if (name && name.length) {
-      var names = name.split('');
-      names[0] = names[0].toUpperCase();
-      name = names.join('');
-    }
+                args.forEach(function (value, idx) {
+                    return template = template.replace(new RegExp('((?!\\\\)?\\{' + idx + '(?!\\\\)?\\})', 'g'), value);
+                });
+                template = template.replace(new RegExp('\\\\{([0-9]+)\\\\}', 'g'), '{$1}');
+                formatCache[key] = template;
 
-    if (!m_subClassCache[name]) {
-      m_subClassCache[name] = helper.getClass(helper.format('{0}{1}', models.name, name));
-    }
-    return m_subClassCache[name];
-  };
+                return template;
+            }
+        }, {
+            key: 'getClass',
+            value: function getClass(name) {
+                var key = [models.name, name].join('.');
 
-  return helper;
+                if (classCache[key]) return classCache[key];
+
+                var chars = name.split('');
+                var classNames = [];
+
+                for (var idx = 0, pos = 0; idx < chars.length; idx++) {
+                    var char = chars[idx];
+                    if (regexUpper.test(char)) {
+                        classNames[pos++] = '-';
+                        char = String(char).toLowerCase();
+                    }
+                    classNames[pos++] = char;
+                }
+
+                var className = classNames.join('');
+                classCache[key] = className;
+
+                return className;
+            }
+        }, {
+            key: 'getSubClass',
+            value: function getSubClass(name) {
+                var nameSplit = name && name.length ? name.split('') : [];
+
+                if (nameSplit[0]) nameSplit[0] = nameSplit[0].toUpperCase();
+
+                var nameJoined = nameSplit.join('');
+
+                if (!subClassCache[nameJoined]) subClassCache[nameJoined] = Helper.getClass('' + models.name + nameJoined);
+
+                return subClassCache[nameJoined];
+            }
+        }]);
+
+        return Helper;
+    }();
 });
 //# sourceMappingURL=helper.js.map
 ;
 
 
 define('shim/utils',[], function () {
-  return {
-    register: function register(name, install, lib) {
-      if (!lib) {
-        var message = 'PIGNOSE Calendar needs ' + name + ' library.\nIf you want to use built-in plugin, Import dist/pignose.calendar.full.js.\nType below code in your command line to install the library.';
+    return {
+        register: function register(name, install, lib) {
+            if (lib) return lib;
 
-        if (console && typeof console.error === 'function') {
-          console.warn(message);
-          console.warn('$ ' + install);
+            if (!console || typeof console.error !== 'function') return lib;
+
+            console.warn('PIGNOSE Calendar needs ' + name + ' library.\nIf you want to use built-in plugin, Import dist/pignose.calendar.full.js.\nType below code in your command line to install the library.');
+            console.warn('$ ' + install);
+
+            return lib;
         }
-      }
-      return lib;
-    }
-  };
+    };
 });
 //# sourceMappingURL=utils.js.map
 ;
 
 
 define('moment',['./shim/utils'], function (utils) {
-  var lib = void 0;
-  try {
-    lib = moment;
-  } catch (e) {
-    ;
-  }
-  return utils.register('moment', 'npm install moment --save', lib);
+    var lib = void 0;
+    try {
+        lib = moment;
+    } catch (e) {}
+    return utils.register('moment', 'npm install moment --save', lib);
 });
 //# sourceMappingURL=moment.js.map
 ;
 
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 define('manager/index',['../component/helper', 'moment'], function (helper, moment) {
-  var m_dateCache = {};
-  var DateManager = function Constructor(date) {
-    if (!date) {
-      throw new Error('first parameter `date` must be gave');
-    }
+    var dateCache = {};
+    return function () {
+        function DateManager(date) {
+            _classCallCheck(this, DateManager);
 
-    if (date instanceof moment === false) {
-      if (typeof date === 'string' || typeof date === 'number') {
-        date = moment(date);
-      } else {
-        throw new Error('`date` option is invalid type. (date: ' + date + ').');
-      }
-    }
+            if (!date) throw new Error('first parameter `date` must be gave');
 
-    this.year = parseInt(date.format('YYYY'), 10);
-    this.month = parseInt(date.format('MM'), 10);
-    this.prevMonth = parseInt(date.clone().add(-1, 'months').format('MM'), 10);
-    this.nextMonth = parseInt(date.clone().add(1, 'months').format('MM'), 10);
-    this.day = parseInt(date.format('DD'), 10);
-    this.firstDay = 1;
-    this.lastDay = parseInt(date.clone().endOf('month').format('DD'), 10);
-    this.weekDay = date.weekday();
-    this.date = date;
-  };
+            if (!(date instanceof moment)) {
+                if (typeof date !== 'string' && typeof date !== 'number') throw new Error('`date` option is invalid type. (date: ' + date + ').');
 
-  DateManager.prototype.toString = function () {
-    return this.date.format('YYYY-MM-DD');
-  };
+                date = moment(date);
+            }
 
-  DateManager.Convert = function (year, month, day) {
-    var date = helper.format('{0}-{1}-{2}', year, month, day);
-    if (!m_dateCache[date]) {
-      m_dateCache[date] = moment(date, 'YYYY-MM-DD');
-    }
-    return m_dateCache[date];
-  };
+            this.year = parseInt(date.format('YYYY'), 10);
+            this.month = parseInt(date.format('MM'), 10);
+            this.prevMonth = parseInt(date.clone().add(-1, 'months').format('MM'), 10);
+            this.nextMonth = parseInt(date.clone().add(1, 'months').format('MM'), 10);
+            this.day = parseInt(date.format('DD'), 10);
+            this.firstDay = 1;
+            this.lastDay = parseInt(date.clone().endOf('month').format('DD'), 10);
+            this.weekDay = date.weekday();
+            this.date = date;
+        }
 
-  return DateManager;
+        _createClass(DateManager, [{
+            key: 'toString',
+            value: function toString() {
+                return this.date.format('YYYY-MM-DD');
+            }
+        }], [{
+            key: 'Convert',
+            value: function Convert(year, month, day) {
+                var date = year + '-' + month + '-' + day;
+
+                if (!dateCache[date]) dateCache[date] = moment(date, 'YYYY-MM-DD');
+
+                return dateCache[date];
+            }
+        }]);
+
+        return DateManager;
+    }();
 });
 //# sourceMappingURL=index.js.map
 ;
 
 
 define('component/classNames',['../component/helper'], function (helper) {
-  return {
-    top: helper.getSubClass('top'),
-    header: helper.getSubClass('header'),
-    body: helper.getSubClass('body'),
-    button: helper.getSubClass('button')
-  };
+    return {
+        top: helper.getSubClass('top'),
+        header: helper.getSubClass('header'),
+        body: helper.getSubClass('body'),
+        button: helper.getSubClass('button')
+    };
 });
 //# sourceMappingURL=classNames.js.map
 ;
 
 
 define('configures/i18n',[], function () {
-  return {
-    defaultLanguage: 'en',
-    supports: ['en', 'ko', 'fr', 'ch', 'de', 'jp', 'pt', 'da', 'pl', 'es', 'cs', 'uk', 'ru'],
-    weeks: {
-      en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-      ko: ['일', '월', '화', '수', '목', '금', '토'],
-      fa: ['شنبه', 'آدینه', 'پنج', 'چهار', 'سه', 'دو', 'یک'],
-      fr: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
-      ch: ['日', '一', '二', '三', '四', '五', '六'],
-      de: ['SO', 'MO', 'DI', 'MI', 'DO', 'FR', 'SA'],
-      jp: ['日', '月', '火', '水', '木', '金', '土'],
-      pt: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-      da: ['Søn', 'Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør'],
-      pl: ['Nie', 'Pon', 'Wto', 'Śro', 'Czw', 'Pią', 'Sob'],
-      es: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
-      it: ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'],
-      cs: ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'],
-      uk: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'],
-      ru: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
-    },
-    monthsLong: {
-      en: ['January', 'February', 'March', 'April', 'May', 'Jun', 'July', 'August', 'September', 'October', 'November', 'December'],
-      ko: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-      fa: ['آذر', 'آبان', 'مهر', 'شهریور', 'مرداد', 'تیر', 'خرداد', 'اردیبهشت', 'فروردین', 'اسفند', 'بهمن', 'دی'],
-      fr: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-      ch: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-      de: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
-      jp: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-      pt: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-      da: ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'],
-      pl: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
-      es: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-      it: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'],
-      cs: ['Leden', 'Únor', 'Březen', 'Duben', 'Květen', 'Červen', 'Cervenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec'],
-      uk: ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'],
-      ru: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
-    },
-    months: {
-      en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-      ko: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-      fa: ['آذر', 'آبان', 'مهر', 'شهریور', 'مرداد', 'تیر', 'خرداد', 'اردیبهشت', 'فروردین', 'اسفند', 'بهمن', 'دی'],
-      fr: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'],
-      ch: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-      de: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
-      jp: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-      pt: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-      da: ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
-      pl: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
-      es: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dec'],
-      it: ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'],
-      cs: ['Led', 'Úno', 'Bře', 'Dub', 'Kvě', 'Čvn', 'Čvc', 'Srp', 'Zář', 'Říj', 'Lis', 'Pro'],
-      uk: ['Січ', 'Лют', 'Бер', 'Квіт', 'Трав', 'Черв', 'Лип', 'Серп', 'Вер', 'Жовт', 'Лист', 'Груд'],
-      ru: ['Янв', 'Февр', 'Март', 'Апр', 'Май', 'Июнь', 'Июль', 'Авг', 'Сент', 'Окт', 'Нояб', 'Дек']
-    },
-    controls: {
-      en: {
-        ok: 'OK',
-        cancel: 'Cancel'
-      },
-      ko: {
-        ok: '확인',
-        cancel: '취소'
-      },
-      fa: {
-        ok: 'چک کنید',
-        cancel: 'لغو'
-      },
-      fr: {
-        ok: 'Vérifier',
-        cancel: 'Annuler'
-      },
-      ch: {
-        ok: '确认',
-        cancel: '取消'
-      },
-      de: {
-        ok: 'Okay',
-        cancel: 'Abbrechen'
-      },
-      jp: {
-        ok: '確認',
-        cancel: 'キャンセル'
-      },
-      pt: {
-        ok: 'Verifique',
-        cancel: 'Cancelar'
-      },
-      da: {
-        ok: 'Bekræftelse',
-        cancel: 'aflyst'
-      },
-      pl: {
-        ok: 'Sprawdź',
-        cancel: 'Anuluj'
-      },
-      es: {
-        ok: 'Cheque',
-        cancel: 'Cancelar'
-      },
-      it: {
-        ok: 'conferma',
-        cancel: 'annullato'
-      },
-      cs: {
-        ok: 'Zkontrolujte',
-        cancel: 'Zrušit'
-      },
-      uk: {
-        ok: 'Вибрати',
-        cancel: 'Скасувати'
-      },
-      ru: {
-        ok: 'Выбрать',
-        cancel: 'Отмена'
-      }
-    }
-  };
+    return {
+        defaultLanguage: 'en',
+        supports: ['en', 'ko', 'fr', 'ch', 'de', 'nl', 'jp', 'pt', 'da', 'pl', 'es', 'cs', 'uk', 'ru'],
+        weeks: {
+            en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            ko: ['일', '월', '화', '수', '목', '금', '토'],
+            fa: ['شنبه', 'آدینه', 'پنج', 'چهار', 'سه', 'دو', 'یک'],
+            fr: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+            ch: ['日', '一', '二', '三', '四', '五', '六'],
+            de: ['SO', 'MO', 'DI', 'MI', 'DO', 'FR', 'SA'],
+            nl: ['Zo', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za'],
+            jp: ['日', '月', '火', '水', '木', '金', '土'],
+            pt: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+            da: ['Søn', 'Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør'],
+            pl: ['Nie', 'Pon', 'Wto', 'Śro', 'Czw', 'Pią', 'Sob'],
+            es: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+            it: ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'],
+            cs: ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'],
+            uk: ['Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+            ru: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб']
+        },
+        monthsLong: {
+            en: ['January', 'February', 'March', 'April', 'May', 'Jun', 'July', 'August', 'September', 'October', 'November', 'December'],
+            ko: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+            fa: ['آذر', 'آبان', 'مهر', 'شهریور', 'مرداد', 'تیر', 'خرداد', 'اردیبهشت', 'فروردین', 'اسفند', 'بهمن', 'دی'],
+            fr: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+            ch: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            de: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+            nl: ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December'],
+            jp: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            pt: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+            da: ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'],
+            pl: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
+            es: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            it: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'],
+            cs: ['Leden', 'Únor', 'Březen', 'Duben', 'Květen', 'Červen', 'Cervenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec'],
+            uk: ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'],
+            ru: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+        },
+        months: {
+            en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            ko: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+            fa: ['آذر', 'آبان', 'مهر', 'شهریور', 'مرداد', 'تیر', 'خرداد', 'اردیبهشت', 'فروردین', 'اسفند', 'بهمن', 'دی'],
+            fr: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'],
+            ch: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            de: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+            nl: ['Jan', 'Feb', 'Mrt', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
+            jp: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            pt: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            da: ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
+            pl: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
+            es: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dec'],
+            it: ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'],
+            cs: ['Led', 'Úno', 'Bře', 'Dub', 'Kvě', 'Čvn', 'Čvc', 'Srp', 'Zář', 'Říj', 'Lis', 'Pro'],
+            uk: ['Січ', 'Лют', 'Бер', 'Квіт', 'Трав', 'Черв', 'Лип', 'Серп', 'Вер', 'Жовт', 'Лист', 'Груд'],
+            ru: ['Янв', 'Февр', 'Март', 'Апр', 'Май', 'Июнь', 'Июль', 'Авг', 'Сент', 'Окт', 'Нояб', 'Дек']
+        },
+        controls: {
+            en: { ok: 'OK', cancel: 'Cancel' },
+            ko: { ok: '확인', cancel: '취소' },
+            fa: { ok: 'چک کنید', cancel: 'لغو' },
+            fr: { ok: 'Vérifier', cancel: 'Annuler' },
+            ch: { ok: '确认', cancel: '取消' },
+            de: { ok: 'Okay', cancel: 'Abbrechen' },
+            nl: { ok: 'Oké', cancel: 'Annuleren' },
+            jp: { ok: '確認', cancel: 'キャンセル' },
+            pt: { ok: 'Verifique', cancel: 'Cancelar' },
+            da: { ok: 'Bekræftelse', cancel: 'aflyst' },
+            pl: { ok: 'Sprawdź', cancel: 'Anuluj' },
+            es: { ok: 'Cheque', cancel: 'Cancelar' },
+            it: { ok: 'conferma', cancel: 'annullato' },
+            cs: { ok: 'Zkontrolujte', cancel: 'Zrušit' },
+            uk: { ok: 'Вибрати', cancel: 'Скасувати' },
+            ru: { ok: 'Выбрать', cancel: 'Отмена' }
+        }
+    };
 });
 //# sourceMappingURL=i18n.js.map
 ;
 
 
 define('component/global',['../configures/i18n'], function (languages) {
-  return {
-    language: languages.defaultLanguage,
-    languages: languages,
-    week: 0,
-    format: 'YYYY-MM-DD'
-  };
+    return {
+        language: languages.defaultLanguage,
+        languages: languages,
+        week: 0,
+        format: 'YYYY-MM-DD'
+    };
 });
 //# sourceMappingURL=global.js.map
 ;
 
 
 define('component/options',['moment', './global'], function (moment, global) {
-  return {
-    lang: null,
-    languages: global.languages,
-    theme: 'light',
-    date: moment(),
-    format: global.format,
-    enabledDates: [],
-    disabledDates: [],
-    disabledWeekdays: [],
-    disabledRanges: [],
-    schedules: [],
-    scheduleOptions: {
-      colors: {}
-    },
-    week: global.week,
-    weeks: global.languages.weeks.en,
-    monthsLong: global.languages.monthsLong.en,
-    months: global.languages.months.en,
-    controls: global.languages.controls.en,
-    pickWeeks: false,
-    initialize: true,
-    multiple: false,
-    toggle: false,
-    reverse: false,
-    buttons: false,
-    modal: false,
-    selectOver: false,
-    minDate: null,
-    maxDate: null,
+    return {
+        lang: null,
+        languages: global.languages,
+        theme: 'light',
+        date: moment(),
+        format: global.format,
+        enabledDates: [],
+        disabledDates: [],
+        disabledWeekdays: [],
+        disabledRanges: [],
+        schedules: [],
+        scheduleOptions: {
+            colors: {}
+        },
+        week: global.week,
+        weeks: global.languages.weeks.en,
+        monthsLong: global.languages.monthsLong.en,
+        months: global.languages.months.en,
+        controls: global.languages.controls.en,
+        pickWeeks: false,
+        initialize: true,
+        multiple: false,
+        toggle: false,
+        reverse: false,
+        buttons: false,
+        modal: false,
+        selectOver: false,
+        minDate: null,
+        maxDate: null,
 
-    /********************************************
-     * EVENTS
-     *******************************************/
-    init: null,
-    select: null,
-    apply: null,
-    click: null,
-    page: null,
-    prev: null,
-    next: null
-  };
+        /********************************************
+         * EVENTS
+         *******************************************/
+        init: null,
+        select: null,
+        apply: null,
+        click: null,
+        page: null,
+        prev: null,
+        next: null
+    };
 });
 //# sourceMappingURL=options.js.map
 ;
 
 
 define('jquery',['./shim/utils'], function (utils) {
-  var lib = void 0;
-  try {
-    lib = jQuery || $;
-  } catch (e) {
-    ;
-  }
-  return utils.register('jquery', 'npm install jquery --save', lib);
+    var lib = void 0;
+    try {
+        lib = jQuery || $;
+    } catch (e) {}
+    return utils.register('jquery', 'npm install jquery --save', lib);
 });
 //# sourceMappingURL=jquery.js.map
 ;
 
 
 define('methods/configure',['../component/global', '../component/models', '../component/options', '../configures/i18n', 'jquery'], function (global, models, options, language, $) {
-  return function (settings) {
-    var context = this;
-    settings;
+    return function Configure(_settings) {
+        var languages = global.languages;
 
-    context.settings = $.extend(true, {}, options, settings);
+        this.settings = $.extend(true, {}, options, _settings);
+        var settings = this.settings;
 
-    if (!context.settings.lang) {
-      context.settings.lang = global.language;
-    }
+        if (!settings.lang) settings.lang = global.language;
 
-    if (context.settings.lang !== language.defaultLanguage && $.inArray(context.settings.lang, global.languages.supports) !== -1) {
-      // weeks
-      context.settings.weeks = global.languages.weeks[context.settings.lang] || global.languages.weeks[language.defaultLanguage];
-      // monthsLong
-      context.settings.monthsLong = global.languages.monthsLong[context.settings.lang] || global.languages.monthsLong[language.defaultLanguage];
-      // months
-      context.settings.months = global.languages.months[context.settings.lang] || global.languages.months[language.defaultLanguage];
-      // controls
-      context.settings.controls = global.languages.controls[context.settings.lang] || global.languages.controls[language.defaultLanguage];
-    }
+        if (settings.lang !== language.defaultLanguage && languages.supports.includes(settings.lang)) ['weeks', 'monthsLong', 'months', 'controls'].forEach(function (key) {
+            return settings[key] = languages[key][settings.lang] || languages[key][language.defaultLanguage];
+        });
 
-    if (context.settings.theme !== 'light' && $.inArray(context.settings.theme, models.preference.supports.themes) === -1) {
-      context.settings.theme = 'light';
-    }
+        if (settings.theme !== 'light' && !models.preference.supports.themes.includes(settings.theme)) settings.theme = 'light';
 
-    if (context.settings.pickWeeks === true) {
-      if (context.settings.multiple === false) {
-        console.error('You must give true at settings.multiple options on PIGNOSE-Calendar for using in pickWeeks option.');
-      } else if (context.settings.toggle === true) {
-        console.error('You must give false at settings.toggle options on PIGNOSE-Calendar for using in pickWeeks option.');
-      }
-    }
+        if (settings.pickWeeks) if (!settings.multiple) console.error('You must give true at settings.multiple options on PIGNOSE-Calendar for using in pickWeeks option.');else if (settings.toggle) console.error('You must give false at settings.toggle options on PIGNOSE-Calendar for using in pickWeeks option.');
 
-    context.settings.week %= context.settings.weeks.length;
-  };
+        settings.week %= settings.weeks.length;
+    };
 });
 //# sourceMappingURL=configure.js.map
 ;
@@ -870,17 +822,17 @@ define('methods/configure',['../component/global', '../component/models', '../co
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 define('methods/init',['../manager/index', '../component/classNames', '../component/helper', '../component/models', '../component/global', './configure', 'jquery', 'moment'], function (DateManager, classNames, helper, models, global, methodConfigure, $, moment) {
-  var $window = $(window);
-  var $document = $(document);
+    var $window = $(window);
+    return function (options) {
+        var _this = this;
 
-  return function (options) {
-    var context = this;
+        var context = this;
 
-    context.settings = {};
-    methodConfigure.call(context, options);
+        context.settings = {};
+        methodConfigure.call(context, options);
 
-    context.global = {
-      calendarHtml: helper.format('<div class="{0} {0}-{4}">\
+        context.global = {
+            calendarHtml: helper.format('<div class="{0} {0}-{4}">\
                                     <div class="{1}">\
                                       <a href="#" class="{1}-nav {1}-prev">\
                                           <span class="icon-arrow-left {1}-icon"></span>\
@@ -896,895 +848,691 @@ define('methods/init',['../manager/index', '../component/classNames', '../compon
                                     <div class="{2}"></div>\
                                     <div class="{3}"></div>\
                                   </div>', helper.getClass(models.name), classNames.top, classNames.header, classNames.body, context.settings.theme),
-      calendarButtonsHtml: helper.format('<div class="{0}-group">\
+            calendarButtonsHtml: helper.format('<div class="{0}-group">\
                                             <a href="#" class="{0} {0}-cancel">{1}</a>\
                                             <a href="#" class="{0} {0}-apply">{2}</a>\
                                           </div>', classNames.button, context.settings.controls.cancel, context.settings.controls.ok),
-      calendarScheduleContainerHtml: helper.format('<div class="{0}-schedule-container"></div>', classNames.button),
-      calendarSchedulePinHtml: helper.format('<span class="{0}-schedule-pin {0}-schedule-pin-\\{0\\}" style="background-color: \\{1\\};"></span>', classNames.button)
-    };
-
-    var rangeClass = helper.getSubClass('unitRange');
-    var rangeFirstClass = helper.getSubClass('unitRangeFirst');
-    var rangeLastClass = helper.getSubClass('unitRangeLast');
-    var activeClass = helper.getSubClass('unitActive');
-    var activePositionClasses = [helper.getSubClass('unitFirstActive'), helper.getSubClass('unitSecondActive')];
-    var toggleActiveClass = helper.getSubClass('unitToggleActive');
-    var toggleInactiveClass = helper.getSubClass('unitToggleInactive');
-    var $calendarButton = null;
-
-    return context.each(function () {
-      var $this = $(this);
-      var local = {
-        initialize: null,
-        element: $this,
-        calendar: $(context.global.calendarHtml),
-        input: $this.is('input'),
-        renderer: null,
-        current: [null, null],
-        date: {
-          all: [],
-          enabled: [],
-          disabled: []
-        },
-        storage: {
-          activeDates: [],
-          schedules: []
-        },
-        dateManager: new DateManager(context.settings.date),
-        calendarWrapperHtml: helper.format('<div class="{0}"></div>', helper.getSubClass('wrapper')),
-        calendarWrapperOverlayHtml: helper.format('<div class="{0}"></div>', helper.getSubClass('wrapperOverlay')),
-        context: context
-      };
-      var $parent = $this;
-
-      if (context.settings.initialize === true) {
-        local.initialize = local.current[0] = local.dateManager.date.clone();
-      }
-
-      this.local = local;
-
-      if (context.settings.reverse === true) {
-        local.calendar.addClass(helper.getSubClass('reverse'));
-      } else {
-        local.calendar.addClass(helper.getSubClass('default'));
-      }
-
-      for (var i = context.settings.week; i < context.settings.weeks.length + context.settings.week; i++) {
-        if (i < 0) {
-          i = global.languages.weeks.en.length - i;
-        }
-        var week = context.settings.weeks[i % context.settings.weeks.length];
-        if (typeof week !== 'string') {
-          continue;
-        }
-        week = week.toUpperCase();
-        var $unit = $(helper.format('<div class="{0} {0}-{2}">{1}</div>', helper.getSubClass('week'), week, global.languages.weeks.en[i % global.languages.weeks.en.length].toLowerCase()));
-        $unit.appendTo(local.calendar.find('.' + classNames.header));
-      }
-
-      if (context.settings.buttons === true) {
-        $calendarButton = $(context.global.calendarButtonsHtml);
-        $calendarButton.appendTo(local.calendar);
-      }
-
-      if (local.input === true || context.settings.modal === true) {
-        var wrapperActiveClass = helper.getSubClass('wrapperActive');
-        var overlayActiveClass = helper.getSubClass('wrapperOverlayActive');
-        var $overlay = void 0;
-
-        $parent = $(local.calendarWrapperHtml);
-        $parent.bind('click', function (event) {
-          event.stopPropagation();
-        });
-
-        $this.bind('click', function (event) {
-          event.preventDefault();
-          event.stopPropagation();
-          event.stopImmediatePropagation();
-          $overlay = $('.' + helper.getSubClass('wrapperOverlay'));
-
-          if ($overlay.length < 1) {
-            $overlay = $(local.calendarWrapperOverlayHtml);
-            $overlay.appendTo('body');
-          }
-
-          $overlay.unbind('click.' + helper.getClass(models.name)).bind('click.' + helper.getClass(models.name), function (event) {
-            event.stopPropagation();
-            $parent.trigger('cancel.' + helper.getClass(models.name));
-          });
-
-          if ($parent.parent().is('body') === false) {
-            $parent.appendTo('body');
-          }
-
-          $parent.show();
-          $overlay.show();
-
-          $window.unbind('resize.' + helper.getClass(models.name)).bind('resize.' + helper.getClass(models.name), function () {
-            $parent.css({
-              marginLeft: -$parent.outerWidth() / 2,
-              marginTop: -$parent.outerHeight() / 2
-            });
-          }).triggerHandler('resize.' + helper.getClass(models.name));
-
-          $this[models.name]('set', $this.val());
-
-          setTimeout(function () {
-            $overlay.addClass(overlayActiveClass);
-            $parent.addClass(wrapperActiveClass);
-          }, 25);
-        }).bind('focus', function (event) {
-          var $this = $(this);
-          $this.blur();
-        });
-
-        $parent.unbind('cancel.' + helper.getClass(models.name) + ' ' + 'apply.' + helper.getClass(models.name)).bind('cancel.' + helper.getClass(models.name) + ' ' + 'apply.' + helper.getClass(models.name), function () {
-          $overlay.removeClass(overlayActiveClass).hide();
-          $parent.removeClass(wrapperActiveClass).hide();
-        });
-      }
-
-      var generateDateRange = function generateDateRange() {
-        if (!local.current[0] || !local.current[1]) {
-          return false;
-        }
-
-        var firstSelectDate = local.current[0].format('YYYY-MM-DD');
-        var lastSelectDate = local.current[1].format('YYYY-MM-DD');
-        var firstDate = moment(Math.max(local.current[0].valueOf(), local.dateManager.date.clone().startOf('month').valueOf()));
-        var lastDate = moment(Math.min(local.current[1].valueOf(), local.dateManager.date.clone().endOf('month').valueOf()));
-        var firstDateIsUndered = firstDate.format('YYYY-MM-DD') !== firstSelectDate;
-        var lastDateIsOvered = lastDate.format('YYYY-MM-DD') !== lastSelectDate;
-
-        if (firstDateIsUndered === false) {
-          firstDate.add(1, 'days');
-        }
-
-        if (lastDateIsOvered === false) {
-          lastDate.add(-1, 'days');
-        }
-
-        var firstDateFixed = firstDate.format('YYYY-MM-DD');
-        var lastDateFixed = lastDate.format('YYYY-MM-DD');
-
-        for (; firstDate.format('YYYY-MM-DD') <= lastDate.format('YYYY-MM-DD'); firstDate.add(1, 'days')) {
-          var date = firstDate.format('YYYY-MM-DD');
-          var isRange = true;
-          var $target = local.calendar.find(helper.format('.{0}[data-date="{1}"]', helper.getSubClass('unit'), date)).addClass(rangeClass);
-
-          if (date === firstDateFixed) {
-            $target.addClass(rangeFirstClass);
-          }
-
-          if (date === lastDateFixed) {
-            $target.addClass(rangeLastClass);
-          }
-        }
-      };
-
-      var existsBetweenRange = function existsBetweenRange(startDate, endDate, targetDate) {
-        if (targetDate) {
-          if (startDate.diff(targetDate) < 0 && endDate.diff(targetDate) > 0) {
-            return true;
-          } else {
-            return false;
-          }
-        } else {
-          return false;
-        }
-      };
-
-      var validDate = function validDate(date) {
-        if (context.settings.disabledDates.indexOf(date) !== -1) {
-          return false;
-        }
-
-        if (date.diff(context.settings.maxDate) >= 0) {
-          return false;
-        }
-
-        if (date.diff(context.settings.minDate) <= 0) {
-          return false;
-        }
-
-        for (var idx in context.settings.disabledRanges) {
-          var rangeDate = context.settings.disabledRanges[idx];
-          var startRangeDate = moment(rangeDate[0]);
-          var endRangeDate = moment(rangeDate[1]);
-
-          if (existsBetweenRange(startRangeDate, endRangeDate, date)) {
-            return false;
-          }
-        }
-
-        var weekday = date.weekday();
-        if (context.settings.disabledWeekdays.indexOf(weekday) !== -1) {
-          return false;
-        }
-
-        return true;
-      };
-
-      var validDateArea = function validDateArea(startDate, endDate) {
-        var date = void 0;
-
-        for (var idx in context.settings.disabledDates) {
-          date = moment(context.settings.disabledDates[idx]);
-          if (existsBetweenRange(startDate, endDate, date)) {
-            return false;
-          }
-        }
-
-        if (existsBetweenRange(startDate, endDate, context.settings.maxDate)) {
-          return false;
-        }
-
-        if (existsBetweenRange(startDate, endDate, context.settings.minDate)) {
-          return false;
-        }
-
-        for (var _idx in context.settings.disabledRanges) {
-          var rangeDate = context.settings.disabledRanges[_idx];
-          var startRangeDate = moment(rangeDate[0]);
-          var endRangeDate = moment(rangeDate[1]);
-
-          if (existsBetweenRange(startDate, endDate, startRangeDate) || existsBetweenRange(startDate, endDate, endRangeDate)) {
-            return false;
-          }
-        }
-
-        var startWeekday = startDate.weekday();
-        var endWeekday = endDate.weekday();
-        var tmp = void 0;
-
-        if (startWeekday > endWeekday) {
-          tmp = startWeekday;
-          startWeekday = endWeekday;
-          endWeekday = tmp;
-        }
-
-        for (var _idx2 = 0, index = 0; _idx2 < context.settings.disabledWeekdays.length && index < 7; _idx2++) {
-          index++;
-          var _week = context.settings.disabledWeekdays[_idx2];
-
-          if (_week >= startWeekday && _week <= endWeekday) {
-            return false;
-          }
-        }
-
-        return true;
-      };
-
-      local.renderer = function () {
-        local.calendar.appendTo($parent.empty());
-        local.calendar.find('.' + classNames.top + '-year').text(local.dateManager.year);
-        local.calendar.find('.' + classNames.top + '-month').text(context.settings.monthsLong[local.dateManager.month - 1]);
-        local.calendar.find(helper.format('.{0}-prev .{0}-value', classNames.top)).text(context.settings.months[local.dateManager.prevMonth - 1].toUpperCase());
-        local.calendar.find(helper.format('.{0}-next .{0}-value', classNames.top)).text(context.settings.months[local.dateManager.nextMonth - 1].toUpperCase());
-
-        if (context.settings.buttons === true && $calendarButton) {
-          var $super = $this;
-          $calendarButton.find('.' + classNames.button).bind('click', function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-            var $this = $(this);
-
-            if ($this.hasClass(classNames.button + '-apply')) {
-              $this.trigger('apply.' + models.name, local);
-              var value = '';
-              if (context.settings.toggle === true) {
-                value = local.storage.activeDates.join(', ');
-              } else if (context.settings.multiple === true) {
-                var dateValues = [];
-
-                if (local.current[0] !== null) {
-                  dateValues.push(local.current[0].format(context.settings.format));
-                }
-
-                if (local.current[1] !== null) {
-                  dateValues.push(local.current[1].format(context.settings.format));
-                }
-
-                value = dateValues.join(' ~ ');
-              } else {
-                value = local.current[0] === null ? '' : moment(local.current[0]).format(context.settings.format);
-              }
-
-              if (local.input === true) {
-                $super.val(value).triggerHandler('change');
-              }
-
-              if (typeof context.settings.apply === 'function') {
-                context.settings.apply.call(local.calendar, local.current, local);
-              }
-              $parent.triggerHandler('apply.' + helper.getClass(models.name));
-            } else {
-              $parent.triggerHandler('cancel.' + helper.getClass(models.name));
-            }
-          });
-        }
-
-        var $calendarBody = local.calendar.find('.' + classNames.body).empty();
-        var firstDate = DateManager.Convert(local.dateManager.year, local.dateManager.month, local.dateManager.firstDay);
-        var lastDate = DateManager.Convert(local.dateManager.year, local.dateManager.month, local.dateManager.lastDay);
-        var firstWeekday = firstDate.weekday() - context.settings.week;
-        var lastWeekday = lastDate.weekday() - context.settings.week;
-
-        if (firstWeekday < 0) {
-          firstWeekday += context.settings.weeks.length;
-        }
-
-        var $unitList = [],
-            currentFormat = [local.current[0] === null ? null : local.current[0].format('YYYY-MM-DD'), local.current[1] === null ? null : local.current[1].format('YYYY-MM-DD')],
-            minDate = context.settings.minDate === null ? null : moment(context.settings.minDate),
-            maxDate = context.settings.maxDate === null ? null : moment(context.settings.maxDate);
-
-        for (var _i = 0; _i < firstWeekday; _i++) {
-          var $unit = $(helper.format('<div class="{0} {0}-{1}"></div>', helper.getSubClass('unit'), global.languages.weeks.en[_i].toLowerCase()));
-          $unitList.push($unit);
-        }
-
-        var _loop = function _loop(_i2) {
-          var iDate = DateManager.Convert(local.dateManager.year, local.dateManager.month, _i2);
-          var iDateFormat = iDate.format('YYYY-MM-DD');
-          var $unit = $(helper.format('<div class="{0} {0}-date {0}-{3}" data-date="{1}"><a href="#">{2}</a></div>', helper.getSubClass('unit'), iDate.format('YYYY-MM-DD'), _i2, global.languages.weeks.en[iDate.weekday()].toLowerCase()));
-
-          if (context.settings.enabledDates.length > 0) {
-            if ($.inArray(iDateFormat, context.settings.enabledDates) === -1) {
-              $unit.addClass(helper.getSubClass('unitDisabled'));
-            }
-          } else if (context.settings.disabledWeekdays.length > 0 && $.inArray(iDate.weekday(), context.settings.disabledWeekdays) !== -1) {
-            $unit.addClass(helper.getSubClass('unitDisabled')).addClass(helper.getSubClass('unitDisabledWeekdays'));
-          } else if (minDate !== null && minDate.diff(iDate) > 0 || maxDate !== null && maxDate.diff(iDate) < 0) {
-            $unit.addClass(helper.getSubClass('unitDisabled')).addClass(helper.getSubClass('unitDisabledRange'));
-          } else if ($.inArray(iDateFormat, context.settings.disabledDates) !== -1) {
-            $unit.addClass(helper.getSubClass('unitDisabled'));
-          } else if (context.settings.disabledRanges.length > 0) {
-            var disabledRangesLength = context.settings.disabledRanges.length;
-            for (var j = 0; j < disabledRangesLength; j++) {
-              var disabledRange = context.settings.disabledRanges[j];
-              var disabledRangeLength = disabledRange.length;
-
-              if (iDate.diff(moment(disabledRange[0])) >= 0 && iDate.diff(moment(disabledRange[1])) <= 0) {
-                $unit.addClass(helper.getSubClass('unitDisabled')).addClass(helper.getSubClass('unitDisabledRange')).addClass(helper.getSubClass('unitDisabledMultipleRange'));
-                break;
-              }
-            }
-          }
-
-          if (context.settings.schedules.length > 0 && _typeof(context.settings.scheduleOptions) === 'object' && _typeof(context.settings.scheduleOptions.colors) === 'object') {
-            var currentSchedules = context.settings.schedules.filter(function (schedule) {
-              return schedule.date === iDateFormat;
-            });
-
-            var nameOfSchedules = $.unique(currentSchedules.map(function (schedule, index) {
-              return schedule.name;
-            }).sort());
-
-            if (nameOfSchedules.length > 0) {
-              //$unit.data('schedules', currentSchedules);
-              var $schedulePinContainer = $(context.global.calendarScheduleContainerHtml);
-              $schedulePinContainer.appendTo($unit);
-              nameOfSchedules.map(function (name, index) {
-                if (context.settings.scheduleOptions.colors[name]) {
-                  var color = context.settings.scheduleOptions.colors[name];
-                  var $schedulePin = $(helper.format(context.global.calendarSchedulePinHtml, name, color));
-                  $schedulePin.appendTo($schedulePinContainer);
-                }
-              });
-            }
-          }
-
-          if (context.settings.toggle === true) {
-            if ($.inArray(iDateFormat, local.storage.activeDates) !== -1 && local.storage.activeDates.length > 0) {
-              $unit.addClass(toggleActiveClass);
-            } else {
-              $unit.addClass(toggleInactiveClass);
-            }
-          } else if ($unit.hasClass(helper.getSubClass('unitDisabled')) === false) {
-            if (context.settings.multiple === true) {
-              if (currentFormat[0] && iDateFormat === currentFormat[0]) {
-                $unit.addClass(activeClass).addClass(activePositionClasses[0]);
-              }
-
-              if (currentFormat[1] && iDateFormat === currentFormat[1]) {
-                $unit.addClass(activeClass).addClass(activePositionClasses[1]);
-              }
-            } else {
-              if (currentFormat[0] && iDateFormat === currentFormat[0] && $.inArray(currentFormat[0], context.settings.disabledDates) === -1 && (context.settings.enabledDates.length < 1 || $.inArray(currentFormat[0], context.settings.enabledDates) !== -1)) {
-                $unit.addClass(activeClass).addClass(activePositionClasses[0]);
-              }
-            }
-          }
-
-          $unitList.push($unit);
-          var $super = $this;
-
-          $unit.bind('click', function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-
-            var $this = $(this);
-            var date = $this.data('date');
-            var position = 0;
-            var preventSelect = false;
-
-            if ($this.hasClass(helper.getSubClass('unitDisabled'))) {
-              preventSelect = true;
-            } else {
-              if (local.input === true && context.settings.multiple === false && context.settings.buttons === false) {
-                $super.val(moment(date).format(context.settings.format));
-                $parent.triggerHandler('apply.' + helper.getClass(models.name));
-              } else {
-                if (local.initialize !== null && local.initialize.format('YYYY-MM-DD') === date && context.settings.toggle === false) {} else {
-                  if (context.settings.toggle === true) {
-                    var match = local.storage.activeDates.filter(function (e, i) {
-                      return e === date;
-                    });
-                    local.current[position] = moment(date);
-
-                    if (match.length < 1) {
-                      local.storage.activeDates.push(date);
-                      $this.addClass(toggleActiveClass).removeClass(toggleInactiveClass);
-                    } else {
-                      var index = 0;
-                      for (var idx = 0; idx < local.storage.activeDates.length; idx++) {
-                        var targetDate = local.storage.activeDates[idx];
-
-                        if (date === targetDate) {
-                          index = idx;
-                          break;
-                        }
-                      }
-                      local.storage.activeDates.splice(index, 1);
-                      $this.removeClass(toggleActiveClass).addClass(toggleInactiveClass);
-                    }
-                  } else if ($this.hasClass(activeClass) === true && context.settings.pickWeeks === false) {
-                    if (context.settings.multiple === true) {
-                      if ($this.hasClass(activePositionClasses[0])) {
-                        position = 0;
-                      } else if (activePositionClasses[1]) {
-                        position = 1;
-                      }
-                    }
-                    $this.removeClass(activeClass).removeClass(activePositionClasses[position]);
-                    local.current[position] = null;
-                  } else {
-                    if (context.settings.pickWeeks === true) {
-                      if ($this.hasClass(activeClass) === true || $this.hasClass(rangeClass) === true) {
-                        for (var _j = 0; _j < 2; _j++) {
-                          local.calendar.find('.' + activeClass + '.' + activePositionClasses[_j]).removeClass(activeClass).removeClass(activePositionClasses[_j]);
-                        }
-
-                        local.current[0] = null;
-                        local.current[1] = null;
-                      } else {
-                        local.current[0] = moment(date).startOf('week').add(context.settings.week, 'days');
-                        local.current[1] = moment(date).endOf('week').add(context.settings.week, 'days');
-
-                        for (var _j2 = 0; _j2 < 2; _j2++) {
-                          local.calendar.find('.' + activeClass + '.' + activePositionClasses[_j2]).removeClass(activeClass).removeClass(activePositionClasses[_j2]);
-                          local.calendar.find(helper.format('.{0}[data-date="{1}"]', helper.getSubClass('unit'), local.current[_j2].format('YYYY-MM-DD'))).addClass(activeClass).addClass(activePositionClasses[_j2]);
-                        }
-                      }
-                    } else {
-                      if (context.settings.multiple === true) {
-                        if (local.current[0] === null) {
-                          position = 0;
-                        } else if (local.current[1] === null) {
-                          position = 1;
-                        } else {
-                          position = 0;
-                          local.current[1] = null;
-                          local.calendar.find('.' + activeClass + '.' + activePositionClasses[1]).removeClass(activeClass).removeClass(activePositionClasses[1]);
-                        }
-                      }
-
-                      local.calendar.find('.' + activeClass + '.' + activePositionClasses[position]).removeClass(activeClass).removeClass(activePositionClasses[position]);
-                      $this.addClass(activeClass).addClass(activePositionClasses[position]);
-                      local.current[position] = moment(date);
-                    }
-
-                    if (local.current[0] && local.current[1]) {
-                      if (local.current[0].diff(local.current[1]) > 0) {
-                        var tmp = local.current[0];
-                        local.current[0] = local.current[1];
-                        local.current[1] = tmp;
-                        tmp = null;
-
-                        local.calendar.find('.' + activeClass).each(function () {
-                          var $this = $(this);
-                          for (var _idx3 in activePositionClasses) {
-                            var className = activePositionClasses[_idx3];
-                            $this.toggleClass(className);
-                          }
-                        });
-                      }
-
-                      if (validDateArea(local.current[0], local.current[1]) === false && context.settings.selectOver === false) {
-                        local.current[0] = null;
-                        local.current[1] = null;
-                        local.calendar.find('.' + activeClass).removeClass(activeClass).removeClass(activePositionClasses[0]).removeClass(activePositionClasses[1]);
-                      }
-
-                      if (local.input === true && context.settings.buttons === false) {
-                        var dateValues = [];
-
-                        if (local.current[0] !== null) {
-                          dateValues.push(local.current[0].format(context.settings.format));
-                        }
-
-                        if (local.current[1] !== null) {
-                          dateValues.push(local.current[1].format(context.settings.format));
-                        }
-
-                        $this.val(dateValues.join(', '));
-                        $parent.trigger('apply.' + helper.getClass(models.name));
-                      }
-                    }
-                  }
-
-                  if (context.settings.multiple === true) {
-                    local.calendar.find('.' + rangeClass).removeClass(rangeClass).removeClass(rangeFirstClass).removeClass(rangeLastClass);
-                    generateDateRange.call();
-                  }
-
-                  if (context.settings.schedules.length > 0) {
-                    local.storage.schedules = context.settings.schedules.filter(function (event) {
-                      return event.date === date;
-                    });
-                  }
-                }
-              }
-            }
-
-            var classifyDate = function classifyDate(date) {
-              local.date.all.push(date);
-              if (validDate(moment(date))) {
-                local.date.enabled.push(date);
-              } else {
-                local.date.disabled.push(date);
-              }
-            };
-
-            if (local.current[0]) {
-              if (local.current[1]) {
-                var startDate = local.current[0];
-                var _date = startDate.clone();
-
-                for (; _date.format('YYYY-MM-DD') <= local.current[1].format('YYYY-MM-DD'); _date.add('1', 'days')) {
-                  classifyDate(_date.clone());
-                }
-              } else {
-                var _date2 = local.current[0];
-                classifyDate(_date2.clone());
-              }
-            }
-
-            if (preventSelect === false) {
-              local.initialize = null;
-
-              if (typeof context.settings.select === 'function') {
-                context.settings.select.call($this, local.current, local);
-              }
-            }
-
-            if (typeof context.settings.click === 'function') {
-              context.settings.click.call($this, event, local);
-            }
-          });
+            calendarScheduleContainerHtml: helper.format('<div class="{0}-schedule-container"></div>', classNames.button),
+            calendarSchedulePinHtml: helper.format('<span class="{0}-schedule-pin {0}-schedule-pin-\\{0\\}" style="background-color: \\{1\\};"></span>', classNames.button)
         };
 
-        for (var _i2 = local.dateManager.firstDay; _i2 <= local.dateManager.lastDay; _i2++) {
-          _loop(_i2);
-        }
+        var rangeClass = helper.getSubClass('unitRange');
+        var rangeFirstClass = helper.getSubClass('unitRangeFirst');
+        var rangeLastClass = helper.getSubClass('unitRangeLast');
+        var activeClass = helper.getSubClass('unitActive');
+        var activePositionClasses = [helper.getSubClass('unitFirstActive'), helper.getSubClass('unitSecondActive')];
+        var toggleActiveClass = helper.getSubClass('unitToggleActive');
+        var toggleInactiveClass = helper.getSubClass('unitToggleInactive');
+        var $calendarButton = null;
 
-        for (var _i3 = lastWeekday + 1; $unitList.length < context.settings.weeks.length * 5; _i3++) {
-          if (_i3 < 0) {
-            _i3 = global.languages.weeks.en.length - _i3;
-          }
-          var _$unit = $(helper.format('<div class="{0} {0}-{1}"></div>', helper.getSubClass('unit'), global.languages.weeks.en[_i3 % global.languages.weeks.en.length].toLowerCase()));
-          $unitList.push(_$unit);
-        }
+        return context.each(function (_, element) {
+            var $this = $(element);
+            var local = {
+                initialize: null,
+                element: $this,
+                calendar: $(context.global.calendarHtml),
+                input: $this.is('input'),
+                renderer: null,
+                current: [null, null],
+                date: {
+                    all: [],
+                    enabled: [],
+                    disabled: []
+                },
+                storage: {
+                    activeDates: [],
+                    schedules: []
+                },
+                dateManager: new DateManager(context.settings.date),
+                calendarWrapperHtml: helper.format('<div class="{0}"></div>', helper.getSubClass('wrapper')),
+                calendarWrapperOverlayHtml: helper.format('<div class="{0}"></div>', helper.getSubClass('wrapperOverlay')),
+                context: context
+            };
+            var $parent = $this;
 
-        var $row = null;
-        for (var _i4 = 0; _i4 < $unitList.length; _i4++) {
-          var element = $unitList[_i4];
-          if (_i4 % context.settings.weeks.length == 0 || _i4 + 1 >= $unitList.length) {
-            if ($row !== null) {
-              $row.appendTo($calendarBody);
+            if (context.settings.initialize) local.initialize = local.current[0] = local.dateManager.date.clone();
+
+            _this.local = local;
+
+            if (context.settings.reverse) local.calendar.addClass(helper.getSubClass('reverse'));else local.calendar.addClass(helper.getSubClass('default'));
+
+            for (var i = context.settings.week; i < context.settings.weeks.length + context.settings.week; i++) {
+                if (i < 0) i = global.languages.weeks.en.length - i;
+
+                var week = context.settings.weeks[i % context.settings.weeks.length];
+                if (typeof week !== 'string') continue;
+
+                week = week.toUpperCase();
+                var $unit = $(helper.format('<div class="{0} {0}-{2}">{1}</div>', helper.getSubClass('week'), week, global.languages.weeks.en[i % global.languages.weeks.en.length].toLowerCase()));
+                $unit.appendTo(local.calendar.find('.' + classNames.header));
             }
 
-            if (_i4 + 1 < $unitList.length) {
-              $row = $(helper.format('<div class="{0}"></div>', helper.getSubClass('row')));
+            if (context.settings.buttons) {
+                $calendarButton = $(context.global.calendarButtonsHtml);
+                $calendarButton.appendTo(local.calendar);
             }
-          }
-          $row.append(element);
-        }
 
-        local.calendar.find('.' + classNames.top + '-nav').bind('click', function (event) {
-          event.preventDefault();
-          event.stopPropagation();
-          var $this = $(this);
-          var type = 'unkown';
+            if (local.input || context.settings.modal) {
+                var wrapperActiveClass = helper.getSubClass('wrapperActive');
+                var overlayActiveClass = helper.getSubClass('wrapperOverlayActive');
+                var $overlay = void 0;
 
-          if ($this.hasClass(classNames.top + '-prev')) {
-            type = 'prev';
-            local.dateManager = new DateManager(local.dateManager.date.clone().add(-1, 'months'));
-          } else if ($this.hasClass(classNames.top + '-next')) {
-            type = 'next';
-            local.dateManager = new DateManager(local.dateManager.date.clone().add(1, 'months'));
-          }
+                $parent = $(local.calendarWrapperHtml);
+                $parent.bind('click', function (event) {
+                    return event.stopPropagation();
+                });
 
-          if (typeof context.settings.page === 'function') {
-            context.settings.page.call($this, {
-              type: type,
-              year: local.dateManager.year,
-              month: local.dateManager.month,
-              day: local.dateManager.day
-            }, local);
-          }
+                $this.bind('click', function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    event.stopImmediatePropagation();
+                    $overlay = $('.' + helper.getSubClass('wrapperOverlay'));
 
-          if (typeof context.settings[type] === 'function') {
-            context.settings[type].call($this, {
-              type: type,
-              year: local.dateManager.year,
-              month: local.dateManager.month,
-              day: local.dateManager.day
-            }, local);
-          }
+                    if (!$overlay.length) {
+                        $overlay = $(local.calendarWrapperOverlayHtml);
+                        $overlay.appendTo('body');
+                    }
 
-          local.renderer.call();
+                    $overlay.unbind('click.' + helper.getClass(models.name)).bind('click.' + helper.getClass(models.name), function (event) {
+                        event.stopPropagation();
+                        $parent.trigger('cancel.' + helper.getClass(models.name));
+                    });
+
+                    if (!$parent.parent().is('body')) $parent.appendTo('body');
+
+                    $parent.show();
+                    $overlay.show();
+
+                    $window.unbind('resize.' + helper.getClass(models.name)).bind('resize.' + helper.getClass(models.name), function () {
+                        $parent.css({
+                            marginLeft: -$parent.outerWidth() / 2,
+                            marginTop: -$parent.outerHeight() / 2
+                        });
+                    }).triggerHandler('resize.' + helper.getClass(models.name));
+
+                    $this[models.name]('set', $this.val());
+
+                    setTimeout(function () {
+                        $overlay.addClass(overlayActiveClass);
+                        $parent.addClass(wrapperActiveClass);
+                    }, 25);
+                }).bind('focus', function (event) {
+                    return $(event.currentTarget).blur();
+                });
+
+                $parent.unbind('cancel.' + helper.getClass(models.name) + ' apply.' + helper.getClass(models.name)).bind('cancel.' + helper.getClass(models.name) + ' apply.' + helper.getClass(models.name), function () {
+                    $overlay.removeClass(overlayActiveClass).hide();
+                    $parent.removeClass(wrapperActiveClass).hide();
+                });
+            }
+
+            var generateDateRange = function generateDateRange() {
+                if (!local.current[0] || !local.current[1]) return false;
+
+                var firstSelectDate = local.current[0].format('YYYY-MM-DD');
+                var lastSelectDate = local.current[1].format('YYYY-MM-DD');
+                var firstDate = moment(Math.max(local.current[0].valueOf(), local.dateManager.date.clone().startOf('month').valueOf()));
+                var lastDate = moment(Math.min(local.current[1].valueOf(), local.dateManager.date.clone().endOf('month').valueOf()));
+                var firstDateIsUndered = firstDate.format('YYYY-MM-DD') !== firstSelectDate;
+                var lastDateIsOvered = lastDate.format('YYYY-MM-DD') !== lastSelectDate;
+
+                if (!firstDateIsUndered) firstDate.add(1, 'days');
+                if (!lastDateIsOvered) lastDate.add(-1, 'days');
+
+                var firstDateFixed = firstDate.format('YYYY-MM-DD');
+                var lastDateFixed = lastDate.format('YYYY-MM-DD');
+
+                for (; firstDate.format('YYYY-MM-DD') <= lastDate.format('YYYY-MM-DD'); firstDate.add(1, 'days')) {
+                    var date = firstDate.format('YYYY-MM-DD');
+                    var $target = local.calendar.find(helper.format('.{0}[data-date="{1}"]', helper.getSubClass('unit'), date)).addClass(rangeClass);
+
+                    if (date === firstDateFixed) $target.addClass(rangeFirstClass);
+
+                    if (date === lastDateFixed) $target.addClass(rangeLastClass);
+                }
+            };
+
+            var existsBetweenRange = function existsBetweenRange(startDate, endDate, targetDate) {
+                return targetDate && startDate.diff(targetDate) < 0 && endDate.diff(targetDate) > 0;
+            };
+
+            var validDate = function validDate(date) {
+                if (context.settings.disabledDates.includes(date)) return false;
+                if (date.diff(context.settings.maxDate) >= 0) return false;
+                if (date.diff(context.settings.minDate) <= 0) return false;
+
+                for (var idx in context.settings.disabledRanges) {
+                    var rangeDate = context.settings.disabledRanges[idx];
+                    var startRangeDate = moment(rangeDate[0]);
+                    var endRangeDate = moment(rangeDate[1]);
+
+                    if (existsBetweenRange(startRangeDate, endRangeDate, date)) return false;
+                }
+
+                var weekday = date.weekday();
+                return !context.settings.disabledWeekdays.includes(weekday);
+            };
+
+            var validDateArea = function validDateArea(startDate, endDate) {
+                var date = void 0;
+
+                for (var idx in context.settings.disabledDates) {
+                    date = moment(context.settings.disabledDates[idx]);
+                    if (existsBetweenRange(startDate, endDate, date)) return false;
+                }
+
+                if (existsBetweenRange(startDate, endDate, context.settings.maxDate)) return false;
+
+                if (existsBetweenRange(startDate, endDate, context.settings.minDate)) return false;
+
+                for (var _idx in context.settings.disabledRanges) {
+                    var rangeDate = context.settings.disabledRanges[_idx];
+                    var startRangeDate = moment(rangeDate[0]);
+                    var endRangeDate = moment(rangeDate[1]);
+
+                    if (existsBetweenRange(startDate, endDate, startRangeDate) || existsBetweenRange(startDate, endDate, endRangeDate)) return false;
+                }
+
+                var startWeekday = startDate.weekday();
+                var endWeekday = endDate.weekday();
+                var tmp = void 0;
+
+                if (startWeekday > endWeekday) {
+                    tmp = startWeekday;
+                    startWeekday = endWeekday;
+                    endWeekday = tmp;
+                }
+
+                for (var _idx2 = 0, index = 0; _idx2 < context.settings.disabledWeekdays.length && index < 7; _idx2++) {
+                    index++;
+                    var _week = context.settings.disabledWeekdays[_idx2];
+
+                    if (_week >= startWeekday && _week <= endWeekday) return false;
+                }
+
+                return true;
+            };
+
+            local.renderer = function () {
+                local.calendar.appendTo($parent.empty());
+                local.calendar.find('.' + classNames.top + '-year').text(local.dateManager.year);
+                local.calendar.find('.' + classNames.top + '-month').text(context.settings.monthsLong[local.dateManager.month - 1]);
+                local.calendar.find(helper.format('.{0}-prev .{0}-value', classNames.top)).text(context.settings.months[local.dateManager.prevMonth - 1].toUpperCase());
+                local.calendar.find(helper.format('.{0}-next .{0}-value', classNames.top)).text(context.settings.months[local.dateManager.nextMonth - 1].toUpperCase());
+
+                if (context.settings.buttons && $calendarButton) {
+                    var $super = $this;
+                    $calendarButton.find('.' + classNames.button).bind('click', function (event) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        var $this = $(event.currentTarget);
+
+                        if ($this.hasClass(classNames.button + '-apply')) {
+                            $this.trigger('apply.' + models.name, local);
+                            var value = '';
+                            if (context.settings.toggle) value = local.storage.activeDates.join(', ');else if (context.settings.multiple) {
+                                var dateValues = [];
+
+                                if (local.current[0] !== null) dateValues.push(local.current[0].format(context.settings.format));
+
+                                if (local.current[1] !== null) dateValues.push(local.current[1].format(context.settings.format));
+
+                                value = dateValues.join(' ~ ');
+                            } else value = local.current[0] === null ? '' : moment(local.current[0]).format(context.settings.format);
+
+                            if (local.input) $super.val(value).triggerHandler('change');
+
+                            if (typeof context.settings.apply === 'function') context.settings.apply.call(local.calendar, local.current, local);
+
+                            $parent.triggerHandler('apply.' + helper.getClass(models.name));
+                        } else $parent.triggerHandler('cancel.' + helper.getClass(models.name));
+                    });
+                }
+
+                var $calendarBody = local.calendar.find('.' + classNames.body).empty();
+                var firstDate = DateManager.Convert(local.dateManager.year, local.dateManager.month, local.dateManager.firstDay);
+                var lastDate = DateManager.Convert(local.dateManager.year, local.dateManager.month, local.dateManager.lastDay);
+                var firstWeekday = firstDate.weekday() - context.settings.week;
+                var lastWeekday = lastDate.weekday() - context.settings.week;
+
+                if (firstWeekday < 0) firstWeekday += context.settings.weeks.length;
+
+                var $unitList = [];
+                var currentFormat = [local.current[0] === null ? null : local.current[0].format('YYYY-MM-DD'), local.current[1] === null ? null : local.current[1].format('YYYY-MM-DD')];
+                var minDate = context.settings.minDate === null ? null : moment(context.settings.minDate);
+                var maxDate = context.settings.maxDate === null ? null : moment(context.settings.maxDate);
+
+                for (var _i = 0; _i < firstWeekday; _i++) {
+                    $unitList.push($(helper.format('<div class="{0} {0}-{1}"></div>', helper.getSubClass('unit'), global.languages.weeks.en[_i].toLowerCase())));
+                }
+
+                var _loop = function _loop(_i2) {
+                    var iDate = DateManager.Convert(local.dateManager.year, local.dateManager.month, _i2);
+                    var iDateFormat = iDate.format('YYYY-MM-DD');
+                    var $unit = $(helper.format('<div class="{0} {0}-date {0}-{3}" data-date="{1}"><a href="#">{2}</a></div>', helper.getSubClass('unit'), iDate.format('YYYY-MM-DD'), _i2, global.languages.weeks.en[iDate.weekday()].toLowerCase()));
+
+                    if (context.settings.enabledDates.length && !context.settings.enabledDates.includes(iDateFormat)) $unit.addClass(helper.getSubClass('unitDisabled'));else if (context.settings.disabledWeekdays.length && context.settings.disabledWeekdays.includes(iDate.weekday())) $unit.addClass(helper.getSubClass('unitDisabled')).addClass(helper.getSubClass('unitDisabledWeekdays'));else if (minDate !== null && minDate.diff(iDate) > 0 || maxDate !== null && maxDate.diff(iDate) < 0) {
+                        $unit.addClass(helper.getSubClass('unitDisabled')).addClass(helper.getSubClass('unitDisabledRange'));
+                    } else if ($.inArray(iDateFormat, context.settings.disabledDates) !== -1) {
+                        $unit.addClass(helper.getSubClass('unitDisabled'));
+                    } else if (context.settings.disabledRanges.length) {
+                        var disabledRangesLength = context.settings.disabledRanges.length;
+                        for (var j = 0; j < disabledRangesLength; j++) {
+                            var disabledRange = context.settings.disabledRanges[j];
+                            if (iDate.diff(moment(disabledRange[0])) >= 0 && iDate.diff(moment(disabledRange[1])) <= 0) {
+                                $unit.addClass(helper.getSubClass('unitDisabled')).addClass(helper.getSubClass('unitDisabledRange')).addClass(helper.getSubClass('unitDisabledMultipleRange'));
+                                break;
+                            }
+                        }
+                    }
+
+                    if (context.settings.schedules.length && _typeof(context.settings.scheduleOptions) === 'object' && _typeof(context.settings.scheduleOptions.colors) === 'object') {
+                        var currentSchedules = context.settings.schedules.filter(function (schedule) {
+                            return schedule.date === iDateFormat;
+                        });
+                        var nameOfSchedules = $.unique(currentSchedules.map(function (schedule) {
+                            return schedule.name;
+                        }).sort());
+
+                        if (nameOfSchedules.length) {
+                            var $schedulePinContainer = $(context.global.calendarScheduleContainerHtml);
+                            $schedulePinContainer.appendTo($unit);
+                            nameOfSchedules.filter(function (name) {
+                                return context.settings.scheduleOptions.colors[name];
+                            }).map(function (name) {
+                                var color = context.settings.scheduleOptions.colors[name];
+                                var $schedulePin = $(helper.format(context.global.calendarSchedulePinHtml, name, color));
+                                $schedulePin.appendTo($schedulePinContainer);
+                            });
+                        }
+                    }
+
+                    if (context.settings.toggle) $unit.addClass(local.storage.activeDates.includes(iDateFormat) && local.storage.activeDates.length ? toggleActiveClass : toggleInactiveClass);else if (!$unit.hasClass(helper.getSubClass('unitDisabled'))) {
+                        if (context.settings.multiple) {
+                            if (currentFormat[0] && iDateFormat === currentFormat[0]) $unit.addClass(activeClass).addClass(activePositionClasses[0]);
+
+                            if (currentFormat[1] && iDateFormat === currentFormat[1]) $unit.addClass(activeClass).addClass(activePositionClasses[1]);
+                        } else {
+                            if (currentFormat[0] && iDateFormat === currentFormat[0] && $.inArray(currentFormat[0], context.settings.disabledDates) === -1 && (!context.settings.enabledDates.length || context.settings.enabledDates.includes(currentFormat[0]))) $unit.addClass(activeClass).addClass(activePositionClasses[0]);
+                        }
+                    }
+
+                    $unitList.push($unit);
+                    var $super = $this;
+
+                    $unit.bind('click', function (event) {
+                        event.preventDefault();
+                        event.stopPropagation();
+
+                        var $this = $(event.currentTarget);
+                        var date = $this.data('date');
+                        var position = 0;
+                        var preventSelect = false;
+
+                        if ($this.hasClass(helper.getSubClass('unitDisabled'))) preventSelect = true;else {
+                            if (local.input && !context.settings.multiple && !context.settings.buttons) {
+                                $super.val(moment(date).format(context.settings.format));
+                                $parent.triggerHandler('apply.' + helper.getClass(models.name));
+                            } else if (!local.initialize || local.initialize.format('YYYY-MM-DD') !== date || context.settings.toggle) {
+                                if (context.settings.toggle) {
+                                    var match = local.storage.activeDates.filter(function (activeDate) {
+                                        return activeDate === date;
+                                    });
+                                    local.current[position] = moment(date);
+
+                                    if (!match.length) {
+                                        local.storage.activeDates.push(date);
+                                        $this.addClass(toggleActiveClass).removeClass(toggleInactiveClass);
+                                    } else {
+                                        var index = 0;
+                                        for (var idx = 0; idx < local.storage.activeDates.length; idx++) {
+                                            var targetDate = local.storage.activeDates[idx];
+
+                                            if (date === targetDate) {
+                                                index = idx;
+                                                break;
+                                            }
+                                        }
+                                        local.storage.activeDates.splice(index, 1);
+                                        $this.removeClass(toggleActiveClass).addClass(toggleInactiveClass);
+                                    }
+                                } else if ($this.hasClass(activeClass) && !context.settings.pickWeeks) {
+                                    if (context.settings.multiple) {
+                                        if ($this.hasClass(activePositionClasses[0])) position = 0;else if (activePositionClasses[1]) position = 1;
+                                    }
+                                    $this.removeClass(activeClass).removeClass(activePositionClasses[position]);
+                                    local.current[position] = null;
+                                } else {
+                                    if (context.settings.pickWeeks) {
+                                        if ($this.hasClass(activeClass) || $this.hasClass(rangeClass)) {
+                                            for (var _j = 0; _j < 2; _j++) {
+                                                local.calendar.find('.' + activeClass + '.' + activePositionClasses[_j]).removeClass(activeClass).removeClass(activePositionClasses[_j]);
+                                                local.current[_j] = null;
+                                            }
+                                        } else {
+                                            local.current[0] = moment(date).startOf('week').add(context.settings.week, 'days');
+                                            local.current[1] = moment(date).endOf('week').add(context.settings.week, 'days');
+
+                                            for (var _j2 = 0; _j2 < 2; _j2++) {
+                                                local.calendar.find('.' + activeClass + '.' + activePositionClasses[_j2]).removeClass(activeClass).removeClass(activePositionClasses[_j2]);
+
+                                                local.calendar.find(helper.format('.{0}[data-date="{1}"]', helper.getSubClass('unit'), local.current[_j2].format('YYYY-MM-DD'))).addClass(activeClass).addClass(activePositionClasses[_j2]);
+                                            }
+                                        }
+                                    } else {
+                                        if (context.settings.multiple) {
+                                            if (local.current[0] === null) position = 0;else if (local.current[1] === null) position = 1;else {
+                                                position = 0;
+                                                local.current[1] = null;
+                                                local.calendar.find('.' + activeClass + '.' + activePositionClasses[1]).removeClass(activeClass).removeClass(activePositionClasses[1]);
+                                            }
+                                        }
+
+                                        local.calendar.find('.' + activeClass + '.' + activePositionClasses[position]).removeClass(activeClass).removeClass(activePositionClasses[position]);
+                                        $this.addClass(activeClass).addClass(activePositionClasses[position]);
+                                        local.current[position] = moment(date);
+                                    }
+
+                                    if (local.current[0] && local.current[1]) {
+                                        if (local.current[0].diff(local.current[1]) > 0) {
+                                            var tmp = local.current[0];
+                                            local.current[0] = local.current[1];
+                                            local.current[1] = tmp;
+
+                                            var $activeDateUnits = local.calendar.find('.' + activeClass);
+                                            activePositionClasses.forEach(function (className) {
+                                                return $activeDateUnits.toggleClass(className);
+                                            });
+                                        }
+
+                                        if (!validDateArea(local.current[0], local.current[1]) && !context.settings.selectOver) {
+                                            local.current[0] = null;
+                                            local.current[1] = null;
+                                            local.calendar.find('.' + activeClass).removeClass(activeClass).removeClass(activePositionClasses[0]).removeClass(activePositionClasses[1]);
+                                        }
+
+                                        if (local.input && !context.settings.buttons) {
+                                            var dateValues = [];
+
+                                            if (local.current[0] !== null) dateValues.push(local.current[0].format(context.settings.format));
+
+                                            if (local.current[1] !== null) dateValues.push(local.current[1].format(context.settings.format));
+
+                                            $this.val(dateValues.join(', '));
+                                            $parent.trigger('apply.' + helper.getClass(models.name));
+                                        }
+                                    }
+                                }
+
+                                if (context.settings.multiple) {
+                                    local.calendar.find('.' + rangeClass).removeClass(rangeClass).removeClass(rangeFirstClass).removeClass(rangeLastClass);
+                                    generateDateRange.call();
+                                }
+
+                                if (context.settings.schedules.length) local.storage.schedules = context.settings.schedules.filter(function (event) {
+                                    return event.date === date;
+                                });
+                            }
+                        }
+
+                        var classifyDate = function classifyDate(date) {
+                            var partialDateGroup = validDate(moment(date)) ? local.date.enabled : local.date.disabled;
+
+                            local.date.all.push(date);
+                            partialDateGroup.push(date);
+                        };
+
+                        if (local.current[0]) {
+                            if (local.current[1]) {
+                                var startDate = local.current[0];
+                                var _date = startDate.clone();
+
+                                for (; _date.format('YYYY-MM-DD') <= local.current[1].format('YYYY-MM-DD'); _date.add('1', 'days')) {
+                                    classifyDate(_date.clone());
+                                }
+                            } else classifyDate(local.current[0].clone());
+                        }
+
+                        if (!preventSelect) {
+                            local.initialize = null;
+
+                            if (typeof context.settings.select === 'function') context.settings.select.call($this, local.current, local);
+                        }
+
+                        if (typeof context.settings.click === 'function') context.settings.click.call($this, event, local);
+                    });
+                };
+
+                for (var _i2 = local.dateManager.firstDay; _i2 <= local.dateManager.lastDay; _i2++) {
+                    _loop(_i2);
+                }
+
+                for (var _i3 = lastWeekday + 1; $unitList.length < context.settings.weeks.length * 5; _i3++) {
+                    if (_i3 < 0) _i3 = global.languages.weeks.en.length - _i3;
+
+                    var _$unit = $(helper.format('<div class="{0} {0}-{1}"></div>', helper.getSubClass('unit'), global.languages.weeks.en[_i3 % global.languages.weeks.en.length].toLowerCase()));
+                    $unitList.push(_$unit);
+                }
+
+                var $row = null;
+                for (var _i4 = 0; _i4 < $unitList.length; _i4++) {
+                    var _element = $unitList[_i4];
+                    if (_i4 % context.settings.weeks.length === 0 || _i4 + 1 >= $unitList.length) {
+                        if ($row) $row.appendTo($calendarBody);
+
+                        if (_i4 + 1 < $unitList.length) $row = $(helper.format('<div class="{0}"></div>', helper.getSubClass('row')));
+                    }
+                    $row.append(_element);
+                }
+
+                local.calendar.find('.' + classNames.top + '-nav').bind('click', function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    var $this = $(event.currentTarget);
+                    var type = 'unkown';
+
+                    if ($this.hasClass(classNames.top + '-prev')) {
+                        type = 'prev';
+                        local.dateManager = new DateManager(local.dateManager.date.clone().add(-1, 'months'));
+                    } else if ($this.hasClass(classNames.top + '-next')) {
+                        type = 'next';
+                        local.dateManager = new DateManager(local.dateManager.date.clone().add(1, 'months'));
+                    }
+
+                    if (typeof context.settings.page === 'function') context.settings.page.call($this, {
+                        type: type,
+                        year: local.dateManager.year,
+                        month: local.dateManager.month,
+                        day: local.dateManager.day
+                    }, local);
+
+                    if (typeof context.settings[type] === 'function') context.settings[type].call($this, {
+                        type: type,
+                        year: local.dateManager.year,
+                        month: local.dateManager.month,
+                        day: local.dateManager.day
+                    }, local);
+
+                    local.renderer.call();
+                });
+
+                if (context.settings.multiple) {
+                    local.calendar.find('.' + rangeClass).removeClass(rangeClass).removeClass(rangeFirstClass).removeClass(rangeLastClass);
+                    generateDateRange.call();
+                }
+            };
+
+            local.renderer.call();
+            $this[0][models.name] = local;
+
+            if (typeof context.settings.init === 'function') context.settings.init.call($this, local);
         });
-
-        if (context.settings.multiple === true) {
-          local.calendar.find('.' + rangeClass).removeClass(rangeClass).removeClass(rangeFirstClass).removeClass(rangeLastClass);
-          generateDateRange.call();
-        }
-      };
-
-      local.renderer.call();
-      $this[0][models.name] = local;
-
-      if (typeof context.settings.init === 'function') {
-        context.settings.init.call($this, local);
-      }
-    });
-  };
+    };
 });
 //# sourceMappingURL=init.js.map
 ;
 
 
-define('methods/setting',['../component/global', '../configures/i18n', 'jquery'], function (global, language, $) {
-  return function (options) {
-    var settings = $.extend({
-      language: global.language,
-      languages: {},
-      week: null,
-      format: null
-    }, options);
-    var monthsCount = 12;
-    var weeksCount = 7;
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-    global.language = settings.language;
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-    if (Object.keys(settings.languages).length > 0) {
-      var _loop = function _loop(_language) {
-        var languageSetting = settings.languages[_language];
-
-        if (typeof _language !== 'string') {
-          console.error('global configuration is failed.\nMessage: language key is not a string type.', _language);
+define('component/error',[], function () {
+    return function () {
+        function Error() {
+            _classCallCheck(this, Error);
         }
 
-        if (!languageSetting.weeks) {
-          console.warn('Warning: `weeks` option of `' + _language + '` language is missing.');
-          return 'break';
+        _createClass(Error, null, [{
+            key: "languageMissing",
+            value: function languageMissing(language, option) {
+                return "Warning: `" + option + "` option of `" + language + "` language is missing.";
+            }
+        }, {
+            key: "itemInsufficient",
+            value: function itemInsufficient(name, count) {
+                return "`" + name + "` must have least " + count + " items.";
+            }
+        }, {
+            key: "itemNotEqual",
+            value: function itemNotEqual(name, count) {
+                return "`" + name + "` option over " + count + " items. It is recommended to give " + count + " items.";
+            }
+        }, {
+            key: "controlMissing",
+            value: function controlMissing(name) {
+                return "`controls." + name + "` value is missing in your language setting";
+            }
+        }, {
+            key: "invalidType",
+            value: function invalidType(name, type) {
+                return "global configuration is failed.\nMessage: You must give `" + name + "` option as `" + type + "` type.";
+            }
+        }]);
+
+        return Error;
+    }();
+});
+//# sourceMappingURL=error.js.map
+;
+
+
+define('methods/setting',['../component/global', '../component/error', '../configures/i18n', 'jquery'], function (global, error, language, $) {
+    return function (options) {
+        var settings = $.extend({
+            language: global.language,
+            languages: {},
+            week: null,
+            format: null
+        }, options);
+        var monthsCount = 12;
+        var weeksCount = 7;
+        var rules = [{ name: 'weeks', items: weeksCount }, { name: 'monthsLong', items: monthsCount }, { name: 'months', items: monthsCount }, { name: 'controls', items: 0 }];
+
+        global.language = settings.language;
+
+        if (Object.keys(settings.languages).length) {
+            settings.languages.forEach(function (languageSetting, language) {
+                if (typeof language !== 'string') console.error('global configuration is failed.\nMessage: language key is not a string type.', language);
+
+                rules.forEach(function (rule) {
+                    if (!languageSetting[rule.name]) console.warn(error.languageMissing(language, rule.name));
+
+                    if (global.languages[rule.name][language]) console.warn('`' + language + '` language is already given however it will be overwritten.');
+
+                    global.languages[rule.name][language] = languageSetting[key] || global.languages[key][language.defaultLanguage];
+
+                    if (rule.items && languageSetting[rule.name]) if (languageSetting[rule.name].length < rule.items) console.error(error.itemInsufficient(rule.name, rule.items));else if (languageSetting[rule.name].length !== rule.items) console.warn(error.itemNotEqual(rule.name, rule.items));
+                });
+
+                if (languageSetting.controls) {
+                    ['ok', 'cancel'].forEach(function (name) {
+                        if (!languageSetting.controls[name]) console.error(error.controlMissing(name));
+                    });
+                }
+
+                if (!global.languages.supports.includes(language)) global.languages.supports.push(language);
+            });
         }
 
-        if (!languageSetting.monthsLong) {
-          console.warn('Warning: `monthsLong` option of `' + _language + '` language is missing.');
-          return 'break';
-        }
+        if (settings.week) if (typeof settings.week === 'number') global.week = settings.week;else console.error(error.invalidType('week', 'number'));
 
-        if (!languageSetting.months) {
-          console.warn('Warning: `months` option of `' + _language + '` language is missing.');
-          return 'break';
-        }
-
-        if (!languageSetting.controls) {
-          console.warn('Warning: `controls` option of `' + _language + '` language is missing.');
-          return 'break';
-        }
-
-        if (languageSetting.weeks) {
-          if (languageSetting.weeks.length < weeksCount) {
-            console.error('`weeks` must have least ' + weeksCount + ' items.');
-            return 'break';
-          } else if (languageSetting.weeks.length !== weeksCount) {
-            console.warn('`weeks` option over ' + weeksCount + ' items. We recommend to give ' + weeksCount + ' items.');
-          }
-        }
-
-        if (languageSetting.monthsLong) {
-          if (languageSetting.monthsLong.length < monthsCount) {
-            console.error('`monthsLong` must have least ' + monthsCount + ' items.');
-            return 'break';
-          } else if (languageSetting.monthsLong.length !== monthsCount) {
-            console.warn('`monthsLong` option over ' + monthsCount + ' items. We recommend to give ' + monthsCount + ' items.');
-          }
-        }
-
-        if (languageSetting.months) {
-          if (languageSetting.months.length < monthsCount) {
-            console.error('`months` must have least ' + monthsCount + ' items.');
-            return 'break';
-          } else if (languageSetting.months.length !== monthsCount) {
-            console.warn('`months` option over ' + monthsCount + ' items. We recommend to give ' + monthsCount + ' items.');
-          }
-        }
-
-        if (languageSetting.controls) {
-          if (!languageSetting.controls.ok) {
-            console.error('`controls.ok` value is missing in your language setting');
-            return 'break';
-          }
-
-          if (!languageSetting.controls.cancel) {
-            console.error('`controls.cancel` value is missing in your language setting');
-            return 'break';
-          }
-        }
-
-        if (global.languages.supports.indexOf(_language) === -1) {
-          global.languages.supports.push(_language);
-        }
-
-        ['weeks', 'monthsLong', 'months', 'controls'].map(function (key) {
-          if (global.languages[key][_language]) {
-            console.warn('`' + _language + '` language is already given however it will be overwriten.');
-          }
-          global.languages[key][_language] = languageSetting[key] || global.languages[key][_language.defaultLanguage];
-        });
-      };
-
-      for (var _language in settings.languages) {
-        var _ret = _loop(_language);
-
-        if (_ret === 'break') break;
-      }
-    }
-
-    if (settings.week) {
-      if (typeof settings.week === 'number') {
-        global.week = settings.week;
-      } else {
-        console.error('global configuration is failed.\nMessage: You must give `week` option as number type.');
-      }
-    }
-
-    if (settings.format) {
-      if (typeof settings.format === 'string') {
-        global.format = settings.format;
-      } else {
-        console.error('global configuration is failed.\nMessage: You must give `format` option as string type.');
-      }
-    }
-  };
+        if (settings.format) if (typeof settings.format === 'string') global.format = settings.format;else console.error(error.invalidType('format', 'string'));
+    };
 });
 //# sourceMappingURL=setting.js.map
 ;
 
 
 define('methods/select',['../component/helper', 'jquery'], function (helper, $) {
-  return function (day) {
-    this.each(function () {
-      var local = this.local;
-      var dateManager = local.dateManager;
-      var date = helper.format('{0}-{1}-{2}', dateManager.year, dateManager.month, day);
-      $(this).find(helper.format('.{0}[data-date="{1}"]', helper.getSubClass('unit'), date)).triggerHandler('click');
-    });
-  };
+    return function (day) {
+        this.each(function (_, element) {
+            var local = element.local;
+            var dateManager = local.dateManager;
+            var date = helper.format('{0}-{1}-{2}', dateManager.year, dateManager.month, day);
+            $(element).find('.' + helper.getSubClass('unit') + '[data-date="' + date + '"]').triggerHandler('click');
+        });
+    };
 });
 //# sourceMappingURL=select.js.map
 ;
 
 
 define('methods/set',['jquery', 'moment', '../manager/index', '../component/models'], function ($, moment, DateManager, models) {
-  return function (date) {
-    if (date) {
-      var dateSplit = date.split('~').map(function (element) {
-        var format = $.trim(element);
-        return !format ? null : format;
-      });
+    return function (date) {
+        if (!date) return;
 
-      this.each(function () {
-        var $this = $(this);
-        var local = $this[0][models.name];
-        var context = local.context;
+        var dateSplit = date.split('~').map(function (element) {
+            return !$.trim(element) ? null : $.trim(element);
+        });
 
-        var dateArray = [!dateSplit[0] ? null : moment(dateSplit[0], context.settings.format), !dateSplit[1] ? null : moment(dateSplit[1], context.settings.format)];
-        local.dateManager = new DateManager(dateArray[0]);
+        this.each(function (_, element) {
+            var local = $(element)[0][models.name];
+            var context = local.context;
 
-        if (context.settings.pickWeeks === true) {
-          if (dateArray[0]) {
-            var _date = dateArray[0];
-            dateArray[0] = _date.clone().startOf('week');
-            dateArray[1] = _date.clone().endOf('week');
-          }
-        }
+            var dateArray = [!dateSplit[0] ? null : moment(dateSplit[0], context.settings.format), !dateSplit[1] ? null : moment(dateSplit[1], context.settings.format)];
+            local.dateManager = new DateManager(dateArray[0]);
 
-        if (context.settings.toggle === true) {
-          local.storage.activeDates = dateSplit;
-        } else {
-          local.current = dateArray;
-        }
-        local.renderer.call();
-      });
-    }
-  };
+            if (context.settings.pickWeeks) {
+                if (dateArray[0]) {
+                    var _date = dateArray[0];
+                    dateArray[0] = _date.clone().startOf('week');
+                    dateArray[1] = _date.clone().endOf('week');
+                }
+            }
+
+            if (context.settings.toggle) local.storage.activeDates = dateSplit;else local.current = dateArray;
+            local.renderer.call();
+        });
+    };
 });
 //# sourceMappingURL=set.js.map
 ;
 
 
 define('methods/index',['./init', './configure', './setting', './select', './set'], function (methodInit, methodConfigure, methodSetting, methodSelect, methodSet) {
-  return {
-    init: methodInit,
-    configure: methodConfigure,
-    setting: methodSetting,
-    select: methodSelect,
-    set: methodSet
-  };
+    return {
+        init: methodInit,
+        configure: methodConfigure,
+        setting: methodSetting,
+        select: methodSelect,
+        set: methodSet
+    };
 });
 //# sourceMappingURL=index.js.map
 ;
 
 
-define('component/polyfills',[], function () {
-  if (!Array.prototype.filter) {
-    Array.prototype.filter = function (func) {
-      'use strict';
+define('core',['./methods/index', './component/models'], function (methods, models) {
+    'use strict';
 
-      if (this === null) {
-        throw new TypeError();
-      }
-
-      var t = Object(this);
-      var len = t.length >>> 0;
-
-      if (typeof func !== 'function') {
-        return [];
-      }
-
-      var res = [];
-      var thisp = arguments[1];
-      for (var i = 0; i < len; i++) {
-        if (i in t) {
-          var val = t[i];
-          if (func.call(thisp, val, i, t)) {
-            res.push(val);
-          }
-        }
-      }
-      return res;
+    window[models.name] = {
+        version: models.version
     };
-  }
-});
-//# sourceMappingURL=polyfills.js.map
-;
 
-
-define('core',['./methods/index', './component/models', './component/polyfills'], function (methods, models) {
-  'use strict';
-
-  window[models.name] = {
-    version: models.version
-  };
-
-  var Component = methods;
-  return Component;
+    var Component = methods;
+    return Component;
 });
 //# sourceMappingURL=core.js.map
 ;
@@ -1793,24 +1541,20 @@ define('core',['./methods/index', './component/models', './component/polyfills']
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 define('main',['core', 'component/models'], function (component, models) {
-  'use strict';
+    'use strict';
 
-  var pignoseCalendar = function pignoseCalendar(element, options) {
-    if (typeof component[options] !== 'undefined') {
-      return component[options].apply(element, Array.prototype.slice.call(arguments, 2));
-    } else if ((typeof options === 'undefined' ? 'undefined' : _typeof(options)) === 'object' || !options) {
-      return component.init.apply(element, Array.prototype.slice.call(arguments, 1));
-    } else {
-      console.error('Argument error are occured.');
+    var pignoseCalendar = function pignoseCalendar(element, options) {
+        if (typeof component[options] !== 'undefined') return component[options].apply(element, Array.prototype.slice.call(arguments, 2));else if ((typeof options === 'undefined' ? 'undefined' : _typeof(options)) === 'object' || !options) return component.init.apply(element, Array.prototype.slice.call(arguments, 1));
+
+        console.error('Argument error are occured.');
+    };
+
+    pignoseCalendar.component = {};
+    for (var idx in models) {
+        pignoseCalendar.component[idx] = models[idx];
     }
-  };
 
-  pignoseCalendar.component = {};
-  for (var idx in models) {
-    pignoseCalendar.component[idx] = models[idx];
-  }
-
-  return pignoseCalendar;
+    return pignoseCalendar;
 });
 //# sourceMappingURL=main.js.map
 ;
@@ -1825,11 +1569,11 @@ var root = window ? window : undefined || {};
 root.moment = require('moment');
 
 $.fn[models.name] = function (options) {
-  return main.apply(main, [this, options].concat(Array.prototype.splice.call(arguments, 1)));
+    return main.apply(main, [this, options].concat(Array.prototype.splice.call(arguments, 1)));
 };
 
 for (var key in models) {
-  $.fn[models.name][key] = models[key];
+    $.fn[models.name][key] = models[key];
 }
 //# sourceMappingURL=jquery.js.map
 ;

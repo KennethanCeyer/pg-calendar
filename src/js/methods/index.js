@@ -1,19 +1,19 @@
 define([
-  './init',
-  './configure',
-  './setting',
-  './select',
-  './set',
-], (methodInit,
+    './init',
+    './configure',
+    './setting',
+    './select',
+    './set',
+], (
+    methodInit,
     methodConfigure,
     methodSetting,
     methodSelect,
-    methodSet) => {
-  return {
+    methodSet
+) => ({
     init: methodInit,
     configure: methodConfigure,
     setting: methodSetting,
     select: methodSelect,
     set: methodSet
-  };
-});
+}));
