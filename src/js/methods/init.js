@@ -133,7 +133,7 @@ define([
                             .unbind(`click.${helper.getClass(models.name)}`)
                             .bind(`click.${helper.getClass(models.name)}`, event => {
                                 event.stopPropagation();
-                                $parent.trigger('cancel.' + helper.getClass(models.name));
+                                $parent.trigger(`cancel.${helper.getClass(models.name)}`);
                             });
 
                         if (!$parent.parent().is('body'))
@@ -431,7 +431,7 @@ define([
                         event.preventDefault();
                         event.stopPropagation();
 
-                        const $this = $(event.target);
+                        const $this = $(event.currentTarget);
                         const date = $this.data('date');
                         let position = 0;
                         let preventSelect = false;
@@ -444,7 +444,7 @@ define([
                                 $parent.triggerHandler('apply.' + helper.getClass(models.name));
                             }
                             else if (
-                                !local.initialize &&
+                                local.initialize &&
                                 local.initialize.format('YYYY-MM-DD') !== date &&
                                 !context.settings.toggle
                             ) {
