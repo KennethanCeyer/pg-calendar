@@ -101,7 +101,7 @@ See our features which we are supported
 - Input type controller support
 - The toggle controll each of date buttons are supported
 - You can disable specific dates
-- Multiple languages are supported, (en, ko, fr, ch, de, jp, pt, da, pl, es, fa, it, cs, uk, ru, ka)
+- Multiple languages are supported, (ar, en, ko, fr, ch, de, jp, pt, da, pl, es, fa, it, cs, uk, ru, ka, ca)
 - Theme system supports (light, dark, blue)
 
 ## :octocat: Contributors
@@ -120,6 +120,8 @@ We welcome your support, You can support to notice by send me github issue or us
 - [@jan-vince](https://github.com/jan-vince)
 - [@SMHFandA](https://github.com/SMHFandA)
 - [@davitperaze](https://github.com/davitperaze)
+- [@ahmadalfy](https://github.com/ahmadalfy)
+- [@orioltestart](https://github.com/orioltestart)
 
 #### Join in contribution
 
