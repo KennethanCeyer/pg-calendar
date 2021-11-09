@@ -21,8 +21,6 @@
   <a href="https://www.codefactor.io/repository/github/kennethanceyer/pg-calendar"><img src="https://www.codefactor.io/repository/github/kennethanceyer/pg-calendar/badge" /></a>
   <a href="https://codeclimate.com/github/KennethanCeyer/pg-calendar/maintainability"><img src="https://api.codeclimate.com/v1/badges/e46890fbd4a5f14603b4/maintainability" /></a>
   <a href="https://codeclimate.com/github/KennethanCeyer/pg-calendar/test_coverage"><img src="https://api.codeclimate.com/v1/badges/e46890fbd4a5f14603b4/test_coverage" /></a>
-  <a href="https://david-dm.org/kennethanceyer/pg-calendar"><img src="https://david-dm.org/kennethanceyer/pg-calendar/status.svg" alt="dependencies Status"></a>
-  <a href="https://david-dm.org/kennethanceyer/pg-calendar?type=dev"><img src="https://david-dm.org/kennethanceyer/pg-calendar/dev-status.svg" alt="devDependencies Status"></a>
 </p>
 
 ## :clap: Getting started
