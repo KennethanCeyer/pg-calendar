@@ -61,7 +61,7 @@
     "jsdom": "^15.1.1",
     "less-plugin-autoprefix": "^2.0.0",
     "libumd": "^0.9.0",
-    "mocha": "^6.1.4",
+    "mocha": "^10.2.0",
     "nyc": "^14.1.1",
     "rimraf": "^2.6.3"
   },
